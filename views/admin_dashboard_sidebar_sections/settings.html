@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/public/css_files/dashboard.css">
+    <title>Responsive Dashboard Design #1 | AsmrProg</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        h1, h2 {
+            color: #f0f0f0;
+        }
+
+        /* Main Content Styling */
+        .main-content {
+            margin-left: 250px;
+            padding: 30px;
+            background: #1f1f1f;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            height: calc(100vh - 60px);
+            overflow-y: auto;
+            transition: all 0.3s ease;
+        }
+
+        .settings-container {
+            padding: 20px;
+        }
+
+        .settings-section {
+            background: #2a2a2a;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .settings-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .settings-section h2 {
+            color: #f0f0f0;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .settings-section label {
+            font-weight: bold;
+            color: #bdbdbd;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .settings-section input[type="text"],
+        .settings-section input[type="email"],
+        .settings-section select,
+        .settings-section input[type="password"],
+        .settings-section input[type="color"],
+        .settings-section input[type="number"],
+        .settings-section textarea {
+            width: 100%;
+            padding: 12px;
+            background-color: #333;
+            border: 1px solid #444;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 16px;
+            margin-bottom: 15px;
+            transition: border 0.3s ease;
+        }
+
+        .settings-section input[type="text"]:focus,
+        .settings-section input[type="email"]:focus,
+        .settings-section select:focus,
+        .settings-section input[type="password"]:focus,
+        .settings-section input[type="color"]:focus,
+        .settings-section input[type="number"]:focus,
+        .settings-section textarea:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        /* Button Styling */
+        button {
+            padding: 12px 25px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        /* Additional Features */
+        .settings-section .color-picker {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .settings-section .color-picker label {
+            margin-right: 10px;
+            font-weight: normal;
+            color: #e0e0e0;
+        }
+
+        .settings-section .color-picker input[type="color"] {
+            width: 40px;
+            height: 30px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .settings-section .range-slider {
+            margin-top: 20px;
+        }
+
+        .settings-section .range-slider label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .settings-section .range-slider input[type="range"] {
+            width: 100%;
+        }
+
+        .settings-section .range-slider span {
+            display: block;
+            margin-top: 10px;
+            text-align: center;
+            font-size: 14px;
+            color: #bdbdbd;
+        }
+
+        .settings-section .notification-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .settings-section .notification-container label {
+            margin: 5px 0;
+            color: #fff;
+        }
+
+        .settings-section .notification-container input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .settings-section .select-container {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+        }
+
+        .settings-section select {
+            padding: 12px;
+            background-color: #333;
+            border: 1px solid #444;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        /* Make the settings section scrollable */
+        .settings-container {
+            max-height: calc(100vh - 60px);
+            overflow-y: auto;
+            padding-right: 20px;
+        }
+        #connect-facebook,#connect-google,#connect-twitter{
+            margin-left: 7px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Sidebar Section -->
+        <aside>
+            <div class="toggle">
+                <div class="logo">
+                    <span class="danger">Nexon</span></h2>
+                </div>
+                <div class="close" id="close-btn">
+                    <span class="material-icons-sharp">
+                        close
+                    </span>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <a href="dashboard.html">
+                    <span class="material-icons-sharp">
+                        dashboard
+                    </span>
+                    <h3>Dashboard</h3></button>
+                </a>
+                <a href="users.html">
+                    <span class="material-icons-sharp">
+                        person_outline
+                    </span>
+                    <h3>Users</h3></button>
+                </a>
+                <a href="history.html">
+                    <span class="material-icons-sharp">
+                        receipt_long
+                    </span>
+                    <h3>History</h3>
+                </a>
+                <a href="analytics.html" class="active">
+                    <span class="material-icons-sharp">
+                        insights
+                    </span>
+                    <h3>Analytics</h3>
+                </a>
+                <a href="tickets.html">
+                    <span class="material-icons-sharp">
+                        mail_outline
+                    </span>
+                    <h3>Tickets</h3>
+                    <span class="message-count">27</span>
+                </a>
+                <a href="jobs.html">
+                    <span class="material-icons-sharp">
+                        inventory
+                    </span>
+                    <h3>Jobs</h3>
+                </a>
+                <a href="calendar.html">
+                    <span class="fa fa-calendar-o" 
+                    style="font-size: 18px;"></span>
+                    <h3>Calendar</h3>
+                </a>
+                <a href="settings.html">
+                    <span class="material-icons-sharp">
+                        settings
+                    </span>
+                    <h3>Settings</h3>
+                </a>
+                <a href="#">
+                    <span class="material-icons-sharp">
+                        add
+                    </span>
+                    <h3>New Login</h3>
+                </a>
+                <a href="logout.html">
+                    <span class="material-icons-sharp">
+                        logout
+                    </span>
+                    <h3>Logout</h3>
+                </a>
+            </div>
+        </aside>
+        <!-- End of Sidebar Section -->
+
+        <main>
+            <div class="settings-container">
+                <h1 class="diff">Settings</h1>
+        
+                <div class="settings-section">
+                    <h2>Language</h2>
+                    <label for="language-select">Select Language:</label>
+                    <select id="language-select">
+                        <option value="en">English</option>
+                        <option value="es">Spanish</option>
+                        <option value="fr">French</option>
+                        <option value="de">German</option>
+                        <option value="it">Italian</option>
+                    </select>
+                    <button id="apply-language">Apply Language</button>
+                </div>
+            
+                <div class="settings-section">
+                    <h2>Date & Time</h2>
+                    <label for="time-format">Time Format:</label>
+                    <select id="time-format">
+                        <option value="12">12 Hour</option>
+                        <option value="24">24 Hour</option>
+                    </select>
+                
+                    <label for="timezone-select">Time Zone:</label>
+                    <select id="timezone-select">
+                        <option value="GMT">GMT</option>
+                        <option value="UTC">UTC</option>
+                        <option value="PST">Pacific Standard Time</option>
+                        <option value="EST">Eastern Standard Time</option>
+                    </select>
+                    <button id="save-time-settings">Save Time Settings</button>
+                </div>
+                
+                
+                <div class="settings-section">
+                    <h2>Account Settings</h2>
+                    <label for="current-password">Current Password:</label>
+                    <input type="password" id="current-password" placeholder="Enter current password">
+                
+                    <label for="new-password">New Password:</label>
+                    <input type="password" id="new-password" placeholder="Enter new password">
+                
+                    <label for="confirm-password">Confirm New Password:</label>
+                    <input type="password" id="confirm-password" placeholder="Confirm new password">
+                
+                    <button id="save-password">Change Password</button>
+                </div>
+                
+
+                <div class="settings-section">
+                    <h2>Privacy Settings</h2>
+                    <label>
+                        <input type="checkbox" id="profile-visibility"> Make profile public
+                    </label>
+                
+                    <label>
+                        <input type="checkbox" id="data-collection"> Allow data collection for analytics
+                    </label>
+                
+                    <label>
+                        <input type="checkbox" id="two-factor-auth"> Enable Two-Factor Authentication
+                    </label>
+                
+                    <button id="save-privacy-settings">Save Privacy Settings</button>
+                </div>
+                
+                
+                <div class="settings-section">
+                    <h2>Backup Settings</h2>
+                    <label for="backup-frequency">Backup Frequency:</label>
+                    <select id="backup-frequency">
+                        <option value="daily">Daily</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                    </select>
+                
+                    <label for="backup-location">Backup Location:</label>
+                    <select id="backup-location">
+                        <option value="cloud">Cloud</option>
+                        <option value="local">Local Device</option>
+                    </select>
+                
+                    <button id="backup-settings">Start Backup</button>
+                </div>
+                
+                
+                <div class="settings-section">
+                    <h2>Security Settings</h2>
+                    <label>
+                        <input type="checkbox" id="encryption-enabled"> Enable Data Encryption
+                    </label>
+                
+                    <label>
+                        <input type="checkbox" id="max-login-attempts"> Limit Login Attempts
+                    </label>
+                
+                    <label for="login-attempts">Max Login Attempts:</label>
+                    <input type="number" id="login-attempts" value="5">
+                
+                    <button id="save-security-settings">Save Security Settings</button>
+                </div>
+                
+                <div class="settings-section">
+                    <h2>Connected Accounts</h2>
+                    <p>Connect your accounts for easy login and integration.</p>
+                    <button id="connect-facebook">
+                        <span class="fa fa-facebook"></span> Connect to Facebook
+                    </button>
+                    <button id="connect-google">
+                        <span class="fa fa-google"></span> Connect to Google
+                    </button>
+                    <button id="connect-twitter">
+                        <span class="fa fa-twitter"></span> Connect to Twitter
+                    </button>
+                </div>
+                
+                
+                <div class="settings-section">
+                    <h2>Backup & Restore</h2>
+                    <label for="restore-settings">Upload Backup File:</label>
+                    <input type="file" id="restore-settings">
+                    <button id="restore-settings-btn">Restore Settings</button>
+                
+                    <button id="download-backup">Download Settings Backup</button>
+                </div>
+                
+                
+                <div class="settings-section">
+                    <h2>Accessibility Settings</h2>
+                    <label for="font-size">Font Size:</label>
+                    <select id="font-size">
+                        <option value="small">Small</option>
+                        <option value="medium">Medium</option>
+                        <option value="large">Large</option>
+                    </select>
+                
+                    <label for="high-contrast">Enable High Contrast Mode:</label>
+                    <input type="checkbox" id="high-contrast">
+                
+                    <button id="save-accessibility-settings">Save Accessibility Settings</button>
+                </div>
+                
+                
+                <div class="settings-section">
+                    <h2>Activity Log</h2>
+                    <div id="activity-log">
+                        <p>No recent activity.</p>
+                    </div>
+                    <button id="refresh-activity-log">Refresh Log</button>
+                </div>
+                
+
+        </main>
+
+
+
+
+
+        <!-- Right Section -->
+        <div class="right-section">
+            <div class="nav">
+                <button id="menu-btn">
+                    <span class="material-icons-sharp">
+                        menu
+                    </span>
+                </button>
+                <div class="dark-mode">
+                    <span class="material-icons-sharp active">
+                        light_mode
+                    </span>
+                    <span class="material-icons-sharp">
+                        dark_mode
+                    </span>
+                </div>
+
+                <div class="profile">
+                    <div class="info">
+                        <p>Hey, <b>Akash</b></p>
+                        <small class="text-muted">Admin</small>
+                    </div>
+                    <div class="profile-photo">
+                        <img src="/public/images/profile-1.jpg">
+                    </div>
+                </div>
+
+            </div>
+            <!-- End of Nav -->
+
+            <div class="user-profile">
+                <div class="logo">
+                    <img src="/public/images/logo.jpg">
+                    <h2>Nexon</h2>
+                    <p>Fullstack Web Developer</p>
+                </div>
+            </div>
+
+            <div class="reminders">
+                <div class="header">
+                    <h2>Reminders</h2>
+                    <span class="material-icons-sharp">
+                        notifications_none
+                    </span>
+                </div>
+
+                <div class="notification">
+                    <div class="icon">
+                        <span class="material-icons-sharp">
+                            volume_up
+                        </span>
+                    </div>
+                    <div class="content">
+                        <div class="info">
+                            <h3>Workshop</h3>
+                            <small class="text_muted">
+                                08:00 AM - 12:00 PM
+                            </small>
+                        </div>
+                        <span class="material-icons-sharp">
+                            more_vert
+                        </span>
+                    </div>
+                </div>
+
+                <div class="notification deactive">
+                    <div class="icon">
+                        <span class="material-icons-sharp">
+                            edit
+                        </span>
+                    </div>
+                    <div class="content">
+                        <div class="info">
+                            <h3>Workshop</h3>
+                            <small class="text_muted">
+                                08:00 AM - 12:00 PM
+                            </small>
+                        </div>
+                        <span class="material-icons-sharp">
+                            more_vert
+                        </span>
+                    </div>
+                </div>
+
+                <div class="notification add-reminder">
+                    <div>
+                        <span class="material-icons-sharp">
+                            add
+                        </span>
+                        <h3>Add Reminder</h3>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <script>
+    // 1. Language Settings
+    document.getElementById('apply-language').addEventListener('click', () => {
+        const selectedLanguage = document.getElementById('language-select').value;
+        alert(`Language set to: ${selectedLanguage}`);
+    });
+
+    // 2. Time Settings
+    document.getElementById('save-time-settings').addEventListener('click', () => {
+        const timeFormat = document.getElementById('time-format').value;
+        const timeZone = document.getElementById('timezone-select').value;
+        alert(`Time Format: ${timeFormat} Hour\nTime Zone: ${timeZone}`);
+    });
+
+    // 3. Account Settings (Change Password)
+    document.getElementById('save-password').addEventListener('click', () => {
+        const currentPassword = document.getElementById('current-password').value;
+        const newPassword = document.getElementById('new-password').value;
+        const confirmPassword = document.getElementById('confirm-password').value;
+
+        if (newPassword === confirmPassword) {
+            alert(`Password changed successfully!`);
+        } else {
+            alert('Passwords do not match.');
+        }
+    });
+
+    // 4. Privacy Settings
+    document.getElementById('save-privacy-settings').addEventListener('click', () => {
+        const profileVisibility = document.getElementById('profile-visibility').checked ? 'Public' : 'Private';
+        const dataCollection = document.getElementById('data-collection').checked ? 'Enabled' : 'Disabled';
+        const twoFactorAuth = document.getElementById('two-factor-auth').checked ? 'Enabled' : 'Disabled';
+
+        alert(`Profile Visibility: ${profileVisibility}\nData Collection: ${dataCollection}\nTwo-Factor Authentication: ${twoFactorAuth}`);
+    });
+
+    // 5. Backup Settings
+    document.getElementById('backup-settings').addEventListener('click', () => {
+        const backupFrequency = document.getElementById('backup-frequency').value;
+        const backupLocation = document.getElementById('backup-location').value;
+        alert(`Backup Frequency: ${backupFrequency}\nBackup Location: ${backupLocation}`);
+    });
+
+    // 6. Security Settings
+    document.getElementById('save-security-settings').addEventListener('click', () => {
+        const encryption = document.getElementById('encryption-enabled').checked ? 'Enabled' : 'Disabled';
+        const maxLoginAttempts = document.getElementById('login-attempts').value;
+
+        alert(`Encryption: ${encryption}\nMax Login Attempts: ${maxLoginAttempts}`);
+    });
+
+    // 7. Connected Accounts
+    document.getElementById('connect-facebook').addEventListener('click', () => {
+        alert('Facebook connected successfully!');
+    });
+    document.getElementById('connect-google').addEventListener('click', () => {
+        alert('Google connected successfully!');
+    });
+    document.getElementById('connect-twitter').addEventListener('click', () => {
+        alert('Twitter connected successfully!');
+    });
+
+    // 8. Backup & Restore Settings
+    document.getElementById('restore-settings-btn').addEventListener('click', () => {
+        const fileInput = document.getElementById('restore-settings');
+        const file = fileInput.files[0];
+        if (file) {
+            alert(`Restoring settings from: ${file.name}`);
+        } else {
+            alert('Please select a backup file to restore.');
+        }
+    });
+
+    document.getElementById('download-backup').addEventListener('click', () => {
+        alert('Downloading settings backup...');
+    });
+
+    // 9. Accessibility Settings
+    document.getElementById('save-accessibility-settings').addEventListener('click', () => {
+        const fontSize = document.getElementById('font-size').value;
+        const highContrast = document.getElementById('high-contrast').checked ? 'Enabled' : 'Disabled';
+        
+        alert(`Font Size: ${fontSize}\nHigh Contrast: ${highContrast}`);
+    });
+
+    // 10. Activity Log
+    document.getElementById('refresh-activity-log').addEventListener('click', () => {
+        const activityLog = document.getElementById('activity-log');
+        activityLog.innerHTML = '<p>Loading recent activity...</p>';
+
+        // Simulating an activity log load
+        setTimeout(() => {
+            activityLog.innerHTML = `
+                <p>Logged in at 12:45 PM</p>
+                <p>Changed password at 1:30 PM</p>
+                <p>Profile updated at 2:15 PM</p>
+            `;
+        }, 2000);
+    });
+
+    </script>
+    <script src="/public/js_files/orders.js"></script>
+    <script src="/public/js_files/index.js"></script>
+</body>
+
+</html>

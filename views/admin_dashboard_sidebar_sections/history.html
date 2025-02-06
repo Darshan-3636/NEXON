@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+    <link rel="stylesheet" href="/public/css_files/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Responsive Dashboard Design #1 | AsmrProg</title>
+    <style>
+       main {
+    margin-left: 0px;
+    padding: 20px;
+    width: 100%;
+}
+
+/* History Section */
+.history-section {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    height: calc(97vh - 60px);
+    overflow: hidden;
+}
+
+.history-section h1 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.activity-filters {
+    margin-bottom: 20px;
+}
+
+.activity-filters label {
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+.activity-filters input {
+    padding: 8px;
+    font-size: 16px;
+}
+
+.activity-filters .filter-btn {
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.activity-filters .filter-btn:hover {
+    background-color: #45a049;
+}
+
+/* History Table Styling */
+.history-table {
+    max-height: calc(100vh - 180px);
+    overflow-y: auto;
+}
+
+.history-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.history-table th, .history-table td {
+    padding: 12px;
+    text-align: left;
+    font-size: 14px;
+    color: #555;
+}
+
+.history-table th {
+    background-color: #f5f5f5;
+}
+
+.history-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.history-table tr:hover {
+    background-color: #f0f0f0;
+}
+
+.history-table td button {
+    padding: 6px 12px;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.history-table td button.view-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.history-table td button.view-btn:hover {
+    background-color: #45a049;
+}
+
+.history-table td a {
+    color:#555 ;
+    font-weight: bold;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.history-table td a:hover {
+    color: #0073e6;
+}
+
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Sidebar Section -->
+        <aside>
+            <div class="toggle">
+                <div class="logo">
+                    <span class="danger">Nexon</span></h2>
+                </div>
+                <div class="close" id="close-btn">
+                    <span class="material-icons-sharp">
+                        close
+                    </span>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <a href="dashboard.html">
+                    <span class="material-icons-sharp">
+                        dashboard
+                    </span>
+                    <h3>Dashboard</h3></button>
+                </a>
+                <a href="users.html">
+                    <span class="material-icons-sharp">
+                        person_outline
+                    </span>
+                    <h3>Users</h3></button>
+                </a>
+                <a href="history.html">
+                    <span class="material-icons-sharp">
+                        receipt_long
+                    </span>
+                    <h3>History</h3>
+                </a>
+                <a href="analytics.html" class="active">
+                    <span class="material-icons-sharp">
+                        insights
+                    </span>
+                    <h3>Analytics</h3>
+                </a>
+                <a href="tickets.html">
+                    <span class="material-icons-sharp">
+                        mail_outline
+                    </span>
+                    <h3>Tickets</h3>
+                    <span class="message-count">27</span>
+                </a>
+                <a href="jobs.html">
+                    <span class="material-icons-sharp">
+                        inventory
+                    </span>
+                    <h3>Jobs</h3>
+                </a>
+                <a href="calendar.html">
+                    <span class="fa fa-calendar-o" 
+                    style="font-size: 18px;"></span>
+                    <h3>Calendar</h3>
+                </a>
+                <a href="settings.html">
+                    <span class="material-icons-sharp">
+                        settings
+                    </span>
+                    <h3>Settings</h3>
+                </a>
+                <a href="newlogin.html">
+                    <span class="material-icons-sharp">
+                        add
+                    </span>
+                    <h3>New Login</h3>
+                </a>
+                <a href="logout.html">
+                    <span class="material-icons-sharp">
+                        logout
+                    </span>
+                    <h3>Logout</h3>
+                </a>
+            </div>
+        </aside>
+        <!-- End of Sidebar Section -->
+        <!-- Main Content -->
+        <main>
+            <!-- History Section -->
+            <div id="history" class="history-section">
+                <h1>Business Activity History</h1>
+
+                <div class="activity-filters">
+                    <label for="filter-date">Filter by Date:</label>
+                    <input type="date" id="filter-date" name="filter-date">
+                    <button class="filter-btn">Filter</button>
+                </div>
+
+                <div class="history-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Activity ID</th>
+                                <th>Date</th>
+                                <th>Activity Type</th>
+                                <th>Description</th>
+                                <th>Amount</th>
+                                <th>Employee</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><a href="#activity-001">#001</a></td>
+                                <td>2025-01-15</td>
+                                <td>Sale</td>
+                                <td>Product sold to customer A</td>
+                                <td>$1200</td>
+                                <td>John Doe</td>
+                                <td><button class="view-btn">View</button></td>
+                            </tr>
+                            <tr>
+                                <td><a href="#activity-002">#002</a></td>
+                                <td>2025-01-16</td>
+                                <td>Purchase</td>
+                                <td>Office supplies purchased</td>
+                                <td>$200</td>
+                                <td>Jane Smith</td>
+                                <td><button class="view-btn">View</button></td>
+                            </tr>
+                            <tr>
+                                <td><a href="#activity-003">#003</a></td>
+                                <td>2025-01-18</td>
+                                <td>Refund</td>
+                                <td>Refund processed for customer B</td>
+                                <td>$100</td>
+                                <td>Sam Wilson</td>
+                                <td><button class="view-btn">View</button></td>
+                            </tr>
+                            <tr>
+                                <td><a href="#activity-004">#004</a></td>
+                                <td>2025-01-19</td>
+                                <td>Sale</td>
+                                <td>Product sold to customer C</td>
+                                <td>$300</td>
+                                <td>John Doe</td>
+                                <td><button class="view-btn">View</button></td>
+                            </tr>
+                            <tr>
+                                <td><a href="#activity-005">#005</a></td>
+                                <td>2025-01-20</td>
+                                <td>Employee Update</td>
+                                <td>Promotion for Alice Johnson</td>
+                                <td>N/A</td>
+                                <td>HR Department</td>
+                                <td><button class="view-btn">View</button></td>
+                            </tr>
+                            <tr>
+                                <td><a href="#activity-005">#006</a></td>
+                                <td>2025-01-20</td>
+                                <td>Employee Update</td>
+                                <td>Promotion for Alice Johnson</td>
+                                <td>N/A</td>
+                                <td>HR Department</td>
+                                <td><button class="view-btn">View</button></td>
+                            </tr>
+                            <tr>
+                                <td><a href="#activity-005">#007</a></td>
+                                <td>2025-01-20</td>
+                                <td>Employee Update</td>
+                                <td>Promotion for Alice Johnson</td>
+                                <td>N/A</td>
+                                <td>HR Department</td>
+                                <td><button class="view-btn">View</button></td>
+                            </tr>
+                            <tr>
+                                <td><a href="#activity-005">#008</a></td>
+                                <td>2025-01-20</td>
+                                <td>Employee Update</td>
+                                <td>Promotion for Alice Johnson</td>
+                                <td>N/A</td>
+                                <td>HR Department</td>
+                                <td><button class="view-btn">View</button></td>
+                            </tr>
+                            <tr>
+                                <td><a href="#activity-005">#009</a></td>
+                                <td>2025-01-20</td>
+                                <td>Employee Update</td>
+                                <td>Promotion for Alice Johnson</td>
+                                <td>N/A</td>
+                                <td>HR Department</td>
+                                <td><button class="view-btn">View</button></td>
+                            </tr>
+                            <tr>
+                                <td><a href="#activity-005">#010</a></td>
+                                <td>2025-01-20</td>
+                                <td>Employee Update</td>
+                                <td>Promotion for Alice Johnson</td>
+                                <td>N/A</td>
+                                <td>HR Department</td>
+                                <td><button class="view-btn">View</button></td>
+                            </tr>
+                            <tr>
+                                <td><a href="#activity-005">#011</a></td>
+                                <td>2025-01-20</td>
+                                <td>Employee Update</td>
+                                <td>Promotion for Alice Johnson</td>
+                                <td>N/A</td>
+                                <td>HR Department</td>
+                                <td><button class="view-btn">View</button></td>
+                            </tr>
+                            <tr>
+                                <td><a href="#activity-005">#012</a></td>
+                                <td>2025-01-20</td>
+                                <td>Employee Update</td>
+                                <td>Promotion for Alice Johnson</td>
+                                <td>N/A</td>
+                                <td>HR Department</td>
+                                <td><button class="view-btn">View</button></td>
+                            </tr>
+                            <tr>
+                                <td><a href="#activity-005">#013</a></td>
+                                <td>2025-01-20</td>
+                                <td>Employee Update</td>
+                                <td>Promotion for Alice Johnson</td>
+                                <td>N/A</td>
+                                <td>HR Department</td>
+                                <td><button class="view-btn">View</button></td>
+                            </tr>
+                            <tr>
+                                <td><a href="#activity-005">#014</a></td>
+                                <td>2025-01-20</td>
+                                <td>Employee Update</td>
+                                <td>Promotion for Alice Johnson</td>
+                                <td>N/A</td>
+                                <td>HR Department</td>
+                                <td><button class="view-btn">View</button></td>
+                            </tr>
+
+                            <!-- Add more records as necessary -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+        </main>
+        <!-- Right Section -->
+        <div class="right-section">
+            <div class="nav">
+                <button id="menu-btn">
+                    <span class="material-icons-sharp">
+                        menu
+                    </span>
+                </button>
+                <div class="dark-mode">
+                    <span class="material-icons-sharp active">
+                        light_mode
+                    </span>
+                    <span class="material-icons-sharp">
+                        dark_mode
+                    </span>
+                </div>
+
+                <div class="profile">
+                    <div class="info">
+                        <p>Hey, <b>Akash</b></p>
+                        <small class="text-muted">Admin</small>
+                    </div>
+                    <div class="profile-photo">
+                        <img src="/public/images/profile-1.jpg">
+                    </div>
+                </div>
+
+            </div>
+            <!-- End of Nav -->
+
+            <div class="user-profile">
+                <div class="logo">
+                    <img src="/public/images/logo.jpg">
+                    <h2>Nexon</h2>
+                    <p>Fullstack Web Developer</p>
+                </div>
+            </div>
+
+            <div class="reminders">
+                <div class="header">
+                    <h2>Reminders</h2>
+                    <span class="material-icons-sharp">
+                        notifications_none
+                    </span>
+                </div>
+
+                <div class="notification">
+                    <div class="icon">
+                        <span class="material-icons-sharp">
+                            volume_up
+                        </span>
+                    </div>
+                    <div class="content">
+                        <div class="info">
+                            <h3>Workshop</h3>
+                            <small class="text_muted">
+                                08:00 AM - 12:00 PM
+                            </small>
+                        </div>
+                        <span class="material-icons-sharp">
+                            more_vert
+                        </span>
+                    </div>
+                </div>
+
+                <div class="notification deactive">
+                    <div class="icon">
+                        <span class="material-icons-sharp">
+                            edit
+                        </span>
+                    </div>
+                    <div class="content">
+                        <div class="info">
+                            <h3>Workshop</h3>
+                            <small class="text_muted">
+                                08:00 AM - 12:00 PM
+                            </small>
+                        </div>
+                        <span class="material-icons-sharp">
+                            more_vert
+                        </span>
+                    </div>
+                </div>
+
+                <div class="notification add-reminder">
+                    <div>
+                        <span class="material-icons-sharp">
+                            add
+                        </span>
+                        <h3>Add Reminder</h3>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <script src="/public/js_files/orders.js"></script>
+    <script src="/public/js_files/index.js"></script>
+</body>
+
+</html>
