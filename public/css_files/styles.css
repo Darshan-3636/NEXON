@@ -39,7 +39,7 @@ header {
     top: 0;
     z-index: 1000;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    background: url('/public/images/construction.jpg') center/cover no-repeat;
+    background: url('../images/construction.jpg') center/cover no-repeat;
 }
 
 /* Header with Background Image */
@@ -49,7 +49,7 @@ header {
     top: 0;
     z-index: 1000;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    background: url('/public/images/construction.jpg') center/cover no-repeat;
+    background: url('../images/construction.jpg') center/cover no-repeat;
     overflow: hidden; /* Ensure the overlay doesn't overflow */
 }
 

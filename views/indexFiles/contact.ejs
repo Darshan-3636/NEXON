@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexon.Ltd</title>
+    <link rel="stylesheet" href="/css_files/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <nav>
+            <h1>Nexon</h1>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/services">Services</a></li>
+                <li><a href="/team">Team</a></li>
+                <li><a href="/contact">Contact</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="/login"  class="auth-button_login-button" id="loginButton" style="text-decoration: none; color: white;">Login</a>
+            </div>
+        </nav>
+   
+       
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-form">
+        <h2>Contact Us</h2>
+        <form method="post" action="/contact">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" placeholder="Your Name" required>
+            
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Your Email" required>
+            
+            <label for="message">Message</label>
+            <textarea id="message" name="message" placeholder="Your Message" required></textarea>
+            <br>
+            <button type="submit" class="submit-button">Send Message</button>
+        </form>
+        <% if(error.length>0){ %>
+            <div class="absolute top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-red-500 flash-message">
+                <span class="inline-block mt-1 mb-1 text-white">
+                    <%= error %>
+                </span>
+            </div>
+        <% } %>
+        <% if(success.length>0){ %>
+            <div class="absolute top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-green-500 flash-message">
+                <span class="inline-block mt-1 mb-1 text-white">
+                    <%= success %>
+                </span>
+            </div>
+            <% } %>
+    </section>
+</div>
+<br><br><br><br>
+    <footer>
+        <p>&copy; Nexon. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Wait for the DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+          // Select all flash messages
+          var flashMessages = document.querySelectorAll('.flash-message');
+      
+          // Iterate through each flash message
+          flashMessages.forEach(function(message) {
+            // Set a timeout to remove the message after 5 seconds (5000 milliseconds)
+            setTimeout(function() {
+              message.style.display = 'none';
+            }, 5000);
+          });
+        });
+      </script>
+</body>
+</html>

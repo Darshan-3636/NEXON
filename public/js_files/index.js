@@ -57,7 +57,19 @@ Orders.forEach(order => {
 
 
 
+// Wait for the DOM to be fully loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Select all flash messages
+    var flashMessages = document.querySelectorAll('.flash-message');
 
+    // Iterate through each flash message
+    flashMessages.forEach(function(message) {
+      // Set a timeout to remove the message after 5 seconds (5000 milliseconds)
+      setTimeout(function() {
+        message.style.display = 'none';
+      }, 5000);
+    });
+  });
 
 
 
