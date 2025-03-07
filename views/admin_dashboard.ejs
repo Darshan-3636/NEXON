@@ -11,6 +11,20 @@
 </head>
 
 <body>
+    <link rel="stylesheet" href="/path/to/style.css">
+
+<% if(error.length > 0) { %>
+    <div class="flash-message error">
+        <span><%= error %></span>
+    </div>
+<% } %>
+
+<% if(success.length > 0) { %>
+    <div class="flash-message success">
+        <span><%= success %></span>
+    </div>
+<% } %>
+
     <div class="container">
         <!-- Sidebar Section -->
         <aside>
@@ -99,20 +113,7 @@
         <!-- Main Content -->
         <main>    
             <h1>Admin Dashboard</h1>
-            <% if(error.length>0){ %>
-                <div class="absolute top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-red-500 flash-message">
-                    <span class="inline-block mt-1 mb-1 text-white">
-                        <br><%= error %>
-                    </span>
-                </div>
-            <% } %>
-            <% if(success.length>0){ %>
-                <div class="absolute top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-green-500 flash-message">
-                    <span class="inline-block mt-1 mb-1 text-white">
-                        <br><%= success %>
-                    </span>
-                </div>
-                <% } %>
+            
             <!-- Analyses -->
             <div class="analyse">
                 <div class="sales">

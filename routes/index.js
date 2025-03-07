@@ -4,6 +4,7 @@ const {message,registerOwner,login,logoutOwner} =  require('../controllers/index
 const upload = require('../config/multer-config');
 const isOwner = require("../middlewares/isOwner");
 const ownerModel = require('../models/owner-model');
+const productModel = require('../models/product-model')
 
 //default page routes
 router.get('/', (req, res)=>{
@@ -82,6 +83,8 @@ router.get('/admin_dashboard',isOwner, async (req, res)=>{
     let owner = await ownerModel.findOne({email:req.owner.email})
     res.render('admin_dashboard',{success, error,owner});
 })
+
+
 
 
 //logout
