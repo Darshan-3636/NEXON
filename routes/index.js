@@ -63,10 +63,16 @@ router.get('/signup_details', (req, res)=>{
 router.post('/signup_details',upload.single('profile'), isOwner , async (req, res)=>{
     try{
         let {company , phone , username} = req.body;
-
-        await ownerModel.updateOne({email:req.owner.email},{company, phone, username,picture:req.file.buffer},{new:true});
-        req.flash('success','Business created Successfully');
-        res.redirect('/admin_dashboard');
+        let companyname = await ownerModel.findOne({company})
+         if(companyname){
+            req.flash('error','Company Name Already Taken');
+            res.redirect('/signup_details')
+         } else {
+            await ownerModel.updateOne({email:req.owner.email},{company, phone, username,picture:req.file.buffer},{new:true});
+            req.flash('success','Business created Successfully');
+            res.redirect('/admin_dashboard');
+         }
+        
     }
     catch(err){
         req.flash('error',`Something went wrong`);

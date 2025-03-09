@@ -11,8 +11,6 @@
     <link rel="stylesheet" href="/css_files/dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
-    <script src="https://cdn.tailwindcss.com"></script>
     <title>Responsive Dashboard Design #1 | AsmrProg</title>
     <style>
         :root {
@@ -305,23 +303,46 @@
             color: #999;
             }
 
+            .flash-message {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 12px;
+    border-radius: 6px;
+    color: white;
+}
+
+.flash-message.error {
+    background-color: #ef4444; /* Red-500 */
+}
+
+.flash-message.success {
+    background-color: #22c55e; /* Green-500 */
+}
+
+.flash-message span {
+    display: inline-block;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+
+
         </style>
 </head>
 
 <body>
-    
-    <% if(error.length>0){ %>
-        <div class="absolute top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-red-500 flash-message">
-            <span class="inline-block mt-1 mb-1 text-white">
-                <%= error %>
-            </span>
+
+    <% if(error.length > 0) { %>
+        <div class="flash-message error">
+            <span><%= error %></span>
         </div>
     <% } %>
-    <% if(success.length>0){ %>
-        <div class="absolute top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-green-500 flash-message">
-            <span class="inline-block mt-1 mb-1 text-white">
-                <%= success %>
-            </span>
+    
+    <% if(success.length > 0) { %>
+        <div class="flash-message success">
+            <span><%= success %></span>
         </div>
     <% } %>
     <div class="container">
