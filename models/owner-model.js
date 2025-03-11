@@ -10,7 +10,7 @@ const ownerSchema =  mongoose.Schema({
         default:"owner"
     },
     company:String, // sign up details done
-    product:[{
+    products:[{
         type:mongoose.Schema.Types.ObjectId,
         default:[],
         ref:"product"

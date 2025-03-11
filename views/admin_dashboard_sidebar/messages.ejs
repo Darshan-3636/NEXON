@@ -6,84 +6,142 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
     <link rel="stylesheet" href="/css_files/dashboard.css">
-    <title>Logout</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
-         body {
-      margin: 0;
-      padding: 0;
+/* Main Section Styles */
+main {
+    flex: 1;
+    padding: 20px;
+    background-color: #f4f7fa;
+    min-height: 100vh;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.users-section {
+    width: 100%; /* Take full width of the main section */
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-height: 100vh; /* Set max height for the box */
+    overflow: hidden; /* Hide overflow of content */
+    position: relative; /* Allow sticky positioning for heading */
+}
+
+.users-section h1 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+    position: sticky; /* Keep the heading fixed */
+    top: 0; /* Fix the heading at the top */
+    background-color: #fff; /* Match background with the section */
+    padding-top: 10px; /* Add top padding for better spacing */
+    z-index: 1; /* Ensure it stays on top of the table */
+}
+
+.users-table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+    max-height: calc(80vh - 60px); /* Allow space for heading */
+    overflow-y: auto; /* Enable vertical scrolling for the table */
+    display: block; /* Make the table block element to enable scrolling */
+}
+
+.users-table table {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.users-table th,
+.users-table td {
+    padding: 12px;
+    text-align: left;
+    font-size: 14px;
+    color: #555;
+}
+
+.users-table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+}
+
+.users-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.users-table tr:hover {
+    background-color: #f0f0f0;
+}
+
+.users-table td button {
+    margin: 0 5px;
+    padding: 6px 12px;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.edit-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.delete-btn {
+    background-color: #F44336;
+    color: white;
+}
+
+.edit-btn:hover {
+    background-color: #45a049;
+}
+
+.delete-btn:hover {
+    background-color: #e53935;
+}
+
+/* Status Indicator Styles */
+.status {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.status.active {
+    background-color: #4CAF50; /* Green for active */
+}
+
+.status.inactive {
+    background-color: #F44336; /* Red for inactive */
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+    .users-section h1 {
+        font-size: 20px;
     }
 
-    .logout-container {
-      text-align: center;
-      background: linear-gradient(145deg, #1e1e1e, #292929);
-      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.1);
-      padding: 30px;
-      border-radius: 15px;
-      animation: fadeIn 0.5s ease-in-out;
+    .users-table th, .users-table td {
+        font-size: 12px;
     }
 
-    .logout-container h1 {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-      color: #ff6b6b;
-      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    .users-table td button {
+        font-size: 12px;
+        padding: 4px 8px;
     }
+}
 
-    .logout-container p {
-      font-size: 1.2rem;
-      margin-bottom: 20px;
-      color: #ddd;
-    }
-
-    .logout-container .logout-btn {
-      background: linear-gradient(145deg, #ff4d4d, #ff1a1a);
-      color: #fff;
-      padding-top: 10px;
-      padding-bottom: 10px;
-      padding-right: 10px;
-      border: none;
-      border-radius: 8px;
-      font-size: 1.2rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-    .logout-container .logout-btn:hover {
-      background: linear-gradient(145deg, #ff1a1a, #ff4d4d);
-      transform: translateY(-3px);
-      box-shadow: 0 6px 12px rgba(255, 107, 107, 0.4);
-    }
-
-    .logout-container .logout-btn:active {
-      transform: translateY(1px);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
-
-    .logout-container .logout-btn i {
-      margin-right: 10px;
-      animation: bounce 1s infinite;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: scale(0.9);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-
-    @keyframes bounce {
-      0%, 100% {
-        transform: translateY(0);
-      }
-      50% {
-        transform: translateY(-5px);
-      }
-    }
     </style>
+    <title>Responsive Dashboard Design | message Section</title>
 </head>
 
 <body>
@@ -92,7 +150,7 @@
         <aside>
             <div class="toggle">
                 <div class="logo">
-                    <span class="danger">Nexon</span></h2>
+                    <span class="danger">Nexon</span>
                 </div>
                 <div class="close" id="close-btn">
                     <span class="material-icons-sharp">
@@ -178,20 +236,34 @@
         </aside>
         <!-- End of Sidebar Section -->
 
-
-
+        <!-- Users Section -->
         <main>
-            <div class="logout-container">
-                <h1>Logout</h1>
-                <p>Are you sure you want to log out?</p>
-                <a href="/logout">
-                <button class="logout-btn" onclick="logout()">
-                  <i class="fas fa-sign-out-alt"></i> Logout
-                </button></a>
-              </div>
+            <div class="users-section">
+                <h1>MESSAGES</h1>
+                <div class="users-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>message</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% messages.forEach(function(message){ %>
+                                <tr>
+                                    <td><%= message.name %></td>
+                                    <td><%= message.email %></td>
+                                    <td><%= message.message %>r</td>
+                                    
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </main>
-
-
+        <!-- End of Users Section -->
 
 
         <!-- Right Section -->
@@ -290,17 +362,9 @@
             </div>
 
         </div>
-
     </div>
-    <script>
-        function logout() {
-          // Add logout functionality here
-          // Example: Redirect to login page
-          alert('You have been logged out.');
-          window.location.href = '/views/login.html';
-        }
-      </script>
-    <script src="/public/js_files/index.js"></script>
+    <script src="/js_files/orders.js"></script>
+    <script src="/js_files/index.js"></script>
 </body>
 
 </html>
