@@ -44,6 +44,26 @@ router.get('/tickets',isOwner , async (req, res)=>{
     res.render('admin_dashboard_sidebar/tickets',{orders})
 })
 
+//accept and decline orders
+
+router.get('/acceptOrder/:oid',isOwner , async (req, res)=>{
+    await orderModel.updateOne({_id:req.params.oid},{orderStatus:"accepted"},{new:true})
+    req.flash('success','Order Accepted');
+    res.redirect('/owners/tickets');
+})
+
+router.get('/declineOrder/:oid',isOwner , async (req, res)=>{
+    await orderModel.updateOne({_id:req.params.oid},{orderStatus:"cancelled"},{new:true})
+    req.flash('error','Order Cancelled');
+    res.redirect('/owners/tickets');
+})
+
+router.get('/waitlistOrder/:oid',isOwner , async (req, res)=>{
+    await orderModel.updateOne({_id:req.params.oid},{orderStatus:"pending"},{new:true})
+    req.flash('error','Order Wait listed');
+    res.redirect('/owners/tickets');
+})
+
 router.get('/jobs',isOwner , (req, res)=>{
     res.render('admin_dashboard_sidebar/jobs')
 })

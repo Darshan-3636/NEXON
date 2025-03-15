@@ -149,6 +149,26 @@
     .dots:hover {
         color: #429f23;
     }
+    
+    .edit-btn {
+    border-radius: 5px;
+    padding: 5px;
+    background-color: #4CAF50;
+    color: white;
+  }
+
+  .delete-btn {
+    border-radius: 5px;
+    padding: 5px;
+    background-color: #F44336;
+    color: white;
+  }
+  .waitlist-btn {
+    border-radius: 5px;
+    padding: 5px;
+    background-color: #ebdc08;
+    color: white;
+  }
     </style>
 </head>
 
@@ -303,7 +323,24 @@
           <td><%= order.quantity %></td>
           <td><%= new Date(order.date).toLocaleString('en-IN', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: true }) %></td>
           <td class="status-<%= order.orderStatus %>"><%= order.orderStatus %></td>
-          <td class="status-<%= order.orderStatus %>"><%= order.orderStatus %></td>
+          <% if(order.orderStatus === "pending"){%>
+          <td>
+            <button class="edit-btn"><a href="/owners/acceptOrder/<%= order._id %>">Accept</a></button>
+            <button class="delete-btn"><a href="/owners/declineOrder/<%= order._id %>">Decline</a></button>
+          </td>
+          <% } %>
+          <% if(order.orderStatus === "accepted"){%>
+          <td>
+            <button class="waitlist-btn"><a href="/owners/waitlistOrder/<%= order._id %>">Wait List</a></button>
+            <button class="delete-btn"><a href="/owners/declineOrder/<%= order._id %>">Decline</a></button>
+          </td>
+          <% } %>
+          <% if(order.orderStatus === "cancelled"){%>
+          <td>
+            <button class="edit-btn"><a href="/owners/acceptOrder/<%= order._id %>">Accept</a></button>
+            <button class="waitlist-btn"><a href="/owners/waitlistOrder/<%= order._id %>">Wait List</a></button>
+          </td>
+          <% } %>
         </tr>
       <% }) %>  
     </tbody>
