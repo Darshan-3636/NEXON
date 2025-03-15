@@ -38,7 +38,7 @@ if (savedTheme === 'dark') {
 }
 
 // Populate table rows dynamically
-Orders.forEach(order => {
+orders.forEach(order => {
     const tr = document.createElement('tr');
     const trContent = `
         <td>${order.productName}</td>

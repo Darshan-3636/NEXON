@@ -251,12 +251,14 @@ main {
                         </thead>
                         <tbody>
                             <% messages.forEach(function(message){ %>
-                                <tr>
-                                    <td><%= message.name %></td>
-                                    <td><%= message.email %></td>
-                                    <td><%= message.message %>r</td>
-                                    
-                                </tr>
+                                <% if(message.company === ownerCompany){%>
+                                    <tr>
+                                        <td><%= message.name %></td>
+                                        <td><%= message.email %></td>
+                                        <td><%= message.message %></td>
+                                        
+                                    </tr>
+                                <% }%>
                             <% }) %>
                         </tbody>
                     </table>

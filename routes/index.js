@@ -4,7 +4,7 @@ const {message,registerOwner,login,logoutOwner} =  require('../controllers/index
 const upload = require('../config/multer-config');
 const isOwner = require("../middlewares/isOwner");
 const ownerModel = require('../models/owner-model');
-const productModel = require('../models/product-model')
+const productModel = require('../models/product-model');
 
 //default page routes
 router.get('/', (req, res)=>{
@@ -15,10 +15,11 @@ router.get('/about', (req, res)=>{
     res.render('indexFiles/about');
 });
 
-router.get('/contact', (req, res)=>{
+router.get('/contact', async (req, res)=>{
     let success = req.flash('success');
     let error = req.flash('error');
-    res.render('indexFiles/contact',{error,success});
+    let companies = await ownerModel.find().select('company')
+    res.render('indexFiles/contact',{error,success,companies});
 });
 
 router.post('/contact',message);
@@ -60,25 +61,64 @@ router.get('/signup_details', (req, res)=>{
     res.render('signup_details',{error, success})
 })
 
-router.post('/signup_details',upload.single('profile'), isOwner , async (req, res)=>{
-    try{
-        let {company , phone , username} = req.body;
-        let companyname = await ownerModel.findOne({company})
-         if(companyname){
-            req.flash('error','Company Name Already Taken');
-            res.redirect('/signup_details')
-         } else {
-            await ownerModel.updateOne({email:req.owner.email},{company, phone, username,picture:req.file.buffer},{new:true});
-            req.flash('success','Business created Successfully');
-            res.redirect('/admin_dashboard');
-         }
+router.post('/signup_details', upload.single('profile'), isOwner, async (req, res) => {
+    try {
+        const { company, phone, username } = req.body;
+
+        // Check if the company name already exists
+        const companyExists = await ownerModel.findOne({ company });
+
+        if (companyExists) {
+            req.flash('error', 'Company Name Already Taken');
+            return res.redirect('/signup_details');
+        } 
         
+        const userExists = await ownerModel.findOne({ username });
+
+        if (userExists) {
+            req.flash('error', 'UserName Already Taken');
+            return res.redirect('/signup_details');
+        } 
+        
+        const phoneExists = await ownerModel.findOne({ phone });
+
+        if (phoneExists) {
+            req.flash('error', 'Phone Number Already Exists');
+            return res.redirect('/signup_details');
+        } 
+
+        // Validate that the company name is not empty or invalid
+        if (!company || company.trim() === "") {
+            req.flash('error', 'Company Name Cannot Be Empty');
+            return res.redirect('/signup_details');
+        }
+        
+        if (!username || username.trim() === "") {
+            req.flash('error', 'Username Cannot Be Empty');
+            return res.redirect('/signup_details');
+        }
+        
+        if (!phone || phone.trim() === "") {
+            req.flash('error', 'Phone Number Cannot Be Empty');
+            return res.redirect('/signup_details');
+        }
+
+        // Update the owner details in the database
+        await ownerModel.updateOne(
+            { email: req.owner.email },
+            { company, phone, username, picture: req.file.buffer },
+            { new: true }
+        );
+
+        req.flash('success', 'Business created successfully');
+        res.redirect('/admin_dashboard');
+    } catch (err) {
+        console.error('Error:', err); // Log the error for debugging
+        req.flash('error', 'Something went wrong');
+        res.redirect('/login');
     }
-    catch(err){
-        req.flash('error',`Something went wrong`);
-        res.redirect('/login')
-    }
-})
+});
+
 
 
 //admin_dashboard

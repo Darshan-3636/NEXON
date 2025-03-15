@@ -173,6 +173,24 @@
             </div>
         </aside>
         <!-- End of Sidebar Section -->
+
+        <% 
+        let totalRevenue = 0;
+        let totalOrders = 0;
+        let currentMonth = new Date().getMonth(); // Get current month (0-11)
+
+        orders.forEach(order => {
+            let orderMonth = new Date(order.date).getMonth(); // Extract month from order date
+
+            if (orderMonth === currentMonth) {
+                totalOrders++; // Count total orders for this month
+
+                if (order.orderStatus === "Accepted") { 
+                    totalRevenue += order.totalAmount; // Sum revenue for accepted orders
+                }
+            }
+        });
+        %>
         <main>
             <div id="analytics" class="analytics-section">
                 <h1>Business Analytics</h1>
@@ -180,11 +198,11 @@
                 <div class="overview">
                     <div class="card">
                         <h3>Total Revenue</h3>
-                        <p class="amount">$45,250</p>
+                        <p class="amount"><%= totalRevenue.toFixed(2) %></p>
                     </div>
                     <div class="card">
                         <h3>Total Orders</h3>
-                        <p class="amount">320</p>
+                        <p class="amount"><%= totalOrders %></p>
                     </div>
                     <div class="card">
                         <h3>Total Customers</h3>
@@ -231,7 +249,7 @@
                 <small class="text-muted">Admin</small>
             </div>
             <div class="profile-photo">
-                <img src="/public/images/profile-1.jpg">
+                <img src="/images/profile-1.jpg">
             </div>
         </div>
 
@@ -240,7 +258,7 @@
 
     <div class="user-profile">
         <div class="logo">
-            <img src="/public/images/logo.jpg">
+            <img src="/images/logo.jpg">
             <h2>Nexon</h2>
             <p>Fullstack Web Developer</p>
         </div>
@@ -297,7 +315,8 @@
                 <span class="material-icons-sharp">
                     add
                 </span>
-                <h3>Add Reminder</h3>
+                <pre>Add Reminder</pre>
+
             </div>
         </div>
 
@@ -306,78 +325,136 @@
 </div>
 
     </div>
+    <div id="orders-data" data-orders='<%- JSON.stringify(orders) %>'></div>
     <script>
+        
+        // Get the orders data from the server
+        
+        const orders = JSON.parse(document.getElementById('orders-data').dataset.orders);
+    
+        // Process order statuses for Pie Chart
+        const orderStatusCounts = {
+            'Accepted': 0,
+            'Pending': 0,
+            'Cancelled': 0
+        };
+    
+            orders.forEach(order => {
+        const status = order.orderStatus.toLowerCase(); // Convert to lowercase for consistency
+        if (status === 'accepted') {
+            orderStatusCounts['Accepted']++;
+        } else if (status === 'pending') {
+            orderStatusCounts['Pending']++;
+        } else if (status === 'cancelled') {
+            orderStatusCounts['Cancelled']++;
+        }
+        });
+
+    
+        // Initialize the Orders Pie Chart (Order Status Overview)
+        const ordersChart = document.getElementById('ordersChart').getContext('2d');
+        new Chart(ordersChart, {
+            type: 'pie',
+            data: {
+                labels: ['Accepted Orders', 'Pending Orders', 'Cancelled Orders'],
+                datasets: [{
+                    label: 'Orders Overview',
+                    data: [orderStatusCounts['Accepted'], orderStatusCounts['Pending'], orderStatusCounts['Cancelled']],
+                    backgroundColor: ['#4CAF50', '#FFC107', '#F44336'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'top' },
+                    tooltip: { enabled: true }
+                }
+            }
+        });
+    
+        // Process monthly sales data for Bar Chart
+        const monthlySales = {};
+        const monthLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    
+        // Initialize all months with zero sales
+        monthLabels.forEach(month => {
+            monthlySales[month] = 0;
+        });
+    
+
+        // Initialize sales tracking for each year dynamically
+        orders.forEach(order => {
+            if (order.quantity && order.productid && order.productid.price) {
+                const totalAmount = order.quantity * order.productid.price;
+                if (order.date) {
+                    const orderDate = new Date(order.date);
+                    const year = orderDate.getFullYear();
+                    const monthName = monthLabels[orderDate.getMonth()];
+                    
+                    // Ensure the year exists in monthlySales
+                    if (!monthlySales[year]) {
+                        monthlySales[year] = {};
+                        monthLabels.forEach(month => {
+                            monthlySales[year][month] = 0;
+                        });
+                    }
+
+                    // Add total amount to the correct month & year
+                    monthlySales[year][monthName] += totalAmount;
+                }
+            }
+        });
+
+        // Convert monthlySales into an array for Chart.js
+        const currentYear = new Date().getFullYear();
+        const salesChartData = monthlySales[currentYear] ? Object.values(monthlySales[currentYear]) : new Array(12).fill(0);
+
+    
+        // Extract dynamic data for the bar chart
+        // const salesChartData = Object.values(monthlySales);
+        
         // Initialize the Sales Bar Chart (Sales Revenue by Month)
-const salesChart = document.getElementById('salesChart').getContext('2d');
-const salesData = new Chart(salesChart, {
-    type: 'bar',
-    data: {
-        labels: ['January', 'February', 'March', 'April', 'May'], // Monthly Labels
-        datasets: [{
-            label: 'Sales Revenue ($)',
-            data: [12000, 15000, 13000, 14000, 17000], // Data points for each month
-            backgroundColor: 'rgba(75, 192, 192, 0.6)', // Bar color
-            borderColor: 'rgba(75, 192, 192, 1)', // Border color
-            borderWidth: 1
-        }]
-    },
-    options: {
-        responsive: true,
-        scales: {
-            y: {
-                beginAtZero: true, // Starts the Y-axis from 0
-                title: {
-                    display: true,
-                    text: 'Revenue ($)'
+        const salesChart = document.getElementById('salesChart').getContext('2d');
+        new Chart(salesChart, {
+            type: 'bar',
+            data: {
+                labels: monthLabels, 
+                datasets: [{
+                    label: 'Sales Revenue ($)',
+                    data: salesChartData,
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Revenue ($)'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Month'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: { position: 'top' },
+                    tooltip: { enabled: true }
                 }
-            },
-            x: {
-                title: {
-                    display: true,
-                    text: 'Month'
-                }
             }
-        },
-        plugins: {
-            legend: {
-                position: 'top', // Position of the legend
-            },
-            tooltip: {
-                enabled: true // Tooltip functionality to display data on hover
-            }
-        }
-    }
-});
-
-// Initialize the Orders Pie Chart (Order Status Overview)
-const ordersChart = document.getElementById('ordersChart').getContext('2d');
-const ordersData = new Chart(ordersChart, {
-    type: 'pie',
-    data: {
-        labels: ['Completed Orders', 'Pending Orders', 'Cancelled Orders'], // Order status categories
-        datasets: [{
-            label: 'Orders Overview',
-            data: [230, 50, 40], // Data for each order status category
-            backgroundColor: ['#4CAF50', '#FFC107', '#F44336'], // Color for each slice of the pie chart
-            borderWidth: 1
-        }]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            legend: {
-                position: 'top', // Position of the legend
-            },
-            tooltip: {
-                enabled: true // Tooltip functionality to display data on hover
-            }
-        }
-    }
-});
-
+        });
+    
     </script>
-    <script src="/public/js_files/orders.js"></script>
-    <script src="/public/js_files/index.js"></script>
+    
+    <script src="/js_files/index.js"></script>
 </body>
 
 </html>

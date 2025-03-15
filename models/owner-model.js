@@ -16,7 +16,7 @@ const ownerSchema =  mongoose.Schema({
         ref:"product"
     }],
     picture:Buffer, //sign-up details
-    phone:Number //sign-up details done
+    phone:String //sign-up details done
 })
 
 module.exports = mongoose.model('owner',ownerSchema)

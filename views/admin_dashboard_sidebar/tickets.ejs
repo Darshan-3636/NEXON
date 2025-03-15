@@ -128,11 +128,11 @@
       color: #2a9d8f;
       font-weight: bold;
     }
-    .status-open {
+    .status-accepted {
       color: #2a9d8f;
       font-weight: bold;
     }
-    .status-closed {
+    .status-cancelled {
       color: #e63946;
       font-weight: bold;
     }
@@ -243,26 +243,41 @@
           </div>
         </aside>
         <!-- End of Sidebar Section -->
-
+        <% let totalOrders = 0 %>
+        <% let pendingOrders = 0 %>
+        <% let acceptedOrders = 0 %>
+        <% let cancelledOrders = 0 %>
+        <% orders.forEach(function(order){ %>
+          <% totalOrders += 1
+          if(order.orderStatus === "pending"){
+            pendingOrders += 1
+          }
+          if(order.orderStatus === "accepted"){
+            acceptedOrders += 1
+          }
+          if(order.orderStatus === "cancelled"){
+            cancelledOrders += 1
+          } %>
+        <% })%>
         <main>
             <div class="tickets-container">
                 <!-- Stats Box -->
                 <div class="stats-box">
                   <div class="stat">
-                    <h2>120</h2>
-                    <p>Total Tickets</p>
+                    <h2><%= totalOrders %></h2>
+                    <p>Total Orders</p>
                   </div>
                   <div class="stat">
-                    <h2>90</h2>
-                    <p>Closed Tickets</p>
+                    <h2><%= acceptedOrders %></h2>
+                    <p>Accepted Orders</p>
                   </div>
                   <div class="stat">
-                    <h2>25</h2>
-                    <p>Pending Tickets</p>
+                    <h2><%= pendingOrders %></h2>
+                    <p>Pending Orders</p>
                   </div>
                   <div class="stat">
-                    <h2>5</h2>
-                    <p>Deleted Tickets</p>
+                    <h2><%= cancelledOrders %></h2>
+                    <p>Deleted Orders</p>
                   </div>
                 </div>
             
@@ -272,194 +287,25 @@
 <table>
     <thead>
       <tr>
-        <th>Task <span class="arrow">▼</span></th>
-        <th>Requested By <span class="arrow">▼</span></th>
-        <th>Subject <span class="arrow">▼</span></th>
-        <th>Assigned To <span class="arrow">▼</span></th>
-        <th>Priority <span class="arrow">▼</span></th>
+        <th>Customer Email <span class="arrow">▼</span></th>
+        <th>Order<span class="arrow">▼</span></th>
+        <th>Quantity <span class="arrow">▼</span></th>
+        <th>Date & Time<span class="arrow">▼</span></th>
         <th>Status <span class="arrow">▼</span></th>
-        <th>Create Date <span class="arrow">▼</span></th>
-        <th>Close Date <span class="arrow">▼</span></th>
-        <th>Action <span class="arrow">▼</span></th>
+        <th>Actions <span class="arrow">▼</span></th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>Fix Login Issue</td>
-        <td>John Doe</td>
-        <td>User cannot log in</td>
-        <td>Jane Smith</td>
-        <td class="priority-high">High</td>
-        <td class="status-open">Open</td>
-        <td>2025-01-20</td>
-        <td>-</td>
-        <td><span class="dots">...</span></td>
-      </tr>
-      <tr>
-        <td>Update Homepage</td>
-        <td>Mary Jane</td>
-        <td>Redesign banner</td>
-        <td>Paul Adams</td>
-        <td class="priority-medium">Medium</td>
-        <td class="status-pending">Pending</td>
-        <td>2025-01-15</td>
-        <td>-</td>
-        <td><span class="dots">...</span></td>
-      </tr>
-      <tr>
-        <td>Database Backup</td>
-        <td>Michael Lee</td>
-        <td>Schedule backup</td>
-        <td>Sara Connor</td>
-        <td class="priority-low">Low</td>
-        <td class="status-closed">Closed</td>
-        <td>2025-01-10</td>
-        <td>2025-01-12</td>
-        <td><span class="dots">...</span></td>
-      </tr>
+      <% orders.forEach(function(order){ %>
         <tr>
-          <td>Fix Login Issue</td>
-          <td>John Doe</td>
-          <td>User cannot log in</td>
-          <td>Jane Smith</td>
-          <td class="priority-high">High</td>
-          <td class="status-open">Open</td>
-          <td>2025-01-20</td>
-          <td>-</td>
-          <td><span class="dots">...</span></td>
+          <td><%= order.userid.email %></td>
+          <td><%= order.productid.name %></td>
+          <td><%= order.quantity %></td>
+          <td><%= new Date(order.date).toLocaleString('en-IN', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: true }) %></td>
+          <td class="status-<%= order.orderStatus %>"><%= order.orderStatus %></td>
+          <td class="status-<%= order.orderStatus %>"><%= order.orderStatus %></td>
         </tr>
-        <tr>
-          <td>Update Homepage</td>
-          <td>Mary Jane</td>
-          <td>Redesign banner</td>
-          <td>Paul Adams</td>
-          <td class="priority-medium">Medium</td>
-          <td class="status-pending">Pending</td>
-          <td>2025-01-15</td>
-          <td>-</td>
-          <td><span class="dots">...</span></td>
-        </tr>
-        <tr>
-          <td>Database Backup</td>
-          <td>Michael Lee</td>
-          <td>Schedule backup</td>
-          <td>Sara Connor</td>
-          <td class="priority-low">Low</td>
-          <td class="status-closed">Closed</td>
-          <td>2025-01-10</td>
-          <td>2025-01-12</td>
-          <td><span class="dots">...</span></td>
-        </tr>
-        <tr>
-          <td>Fix Contact Form</td>
-          <td>Olivia Brown</td>
-          <td>Submit button not working</td>
-          <td>David Williams</td>
-          <td class="priority-medium">Medium</td>
-          <td class="status-open">Open</td>
-          <td>2025-01-18</td>
-          <td>-</td>
-          <td><span class="dots">...</span></td>
-        </tr>
-        <tr>
-          <td>Improve Search Functionality</td>
-          <td>Chris Wilson</td>
-          <td>Search results not accurate</td>
-          <td>Emily Davis</td>
-          <td class="priority-high">High</td>
-          <td class="status-pending">Pending</td>
-          <td>2025-01-12</td>
-          <td>-</td>
-          <td><span class="dots">...</span></td>
-        </tr>
-        <tr>
-          <td>Mobile Compatibility Fix</td>
-          <td>Daniel Thomas</td>
-          <td>Page layout breaks on mobile</td>
-          <td>Amy Clark</td>
-          <td class="priority-low">Low</td>
-          <td class="status-closed">Closed</td>
-          <td>2025-01-05</td>
-          <td>2025-01-08</td>
-          <td><span class="dots">...</span></td>
-        </tr>
-        <tr>
-          <td>SEO Optimization</td>
-          <td>Rachel Martinez</td>
-          <td>Optimize page speed</td>
-          <td>Jack Evans</td>
-          <td class="priority-medium">Medium</td>
-          <td class="status-pending">Pending</td>
-          <td>2025-01-09</td>
-          <td>-</td>
-          <td><span class="dots">...</span></td>
-        </tr>
-        <tr>
-          <td>Update Privacy Policy</td>
-          <td>Mark Johnson</td>
-          <td>Revise terms for GDPR compliance</td>
-          <td>Karen Lee</td>
-          <td class="priority-high">High</td>
-          <td class="status-open">Open</td>
-          <td>2025-01-22</td>
-          <td>-</td>
-          <td><span class="dots">...</span></td>
-        </tr>
-        <tr>
-          <td>Fix Checkout Bug</td>
-          <td>Jessica Scott</td>
-          <td>Payment gateway error</td>
-          <td>Michael Moore</td>
-          <td class="priority-medium">Medium</td>
-          <td class="status-closed">Closed</td>
-          <td>2025-01-17</td>
-          <td>2025-01-18</td>
-          <td><span class="dots">...</span></td>
-        </tr>
-        <tr>
-          <td>Update Product Images</td>
-          <td>Kevin White</td>
-          <td>High-quality images needed</td>
-          <td>Laura Hall</td>
-          <td class="priority-low">Low</td>
-          <td class="status-open">Open</td>
-          <td>2025-01-16</td>
-          <td>-</td>
-          <td><span class="dots">...</span></td>
-        </tr>
-        <tr>
-          <td>Implement Two-factor Authentication</td>
-          <td>Oliver Harris</td>
-          <td>Security improvement</td>
-          <td>Charlie Allen</td>
-          <td class="priority-high">High</td>
-          <td class="status-pending">Pending</td>
-          <td>2025-01-14</td>
-          <td>-</td>
-          <td><span class="dots">...</span></td>
-        </tr>
-        <tr>
-          <td>Enhance Admin Dashboard</td>
-          <td>Emma Clark</td>
-          <td>Improve user interface</td>
-          <td>Sophia Wright</td>
-          <td class="priority-medium">Medium</td>
-          <td class="status-closed">Closed</td>
-          <td>2025-01-11</td>
-          <td>2025-01-13</td>
-          <td><span class="dots">...</span></td>
-        </tr>
-        <tr>
-          <td>Fix Payment Issue</td>
-          <td>Lucas Lee</td>
-          <td>Payment failed for multiple users</td>
-          <td>Grace Johnson</td>
-          <td class="priority-high">High</td>
-          <td class="status-pending">Pending</td>
-          <td>2025-01-19</td>
-          <td>-</td>
-          <td><span class="dots">...</span></td>
-        </tr>
+      <% }) %>  
     </tbody>
   </table>
 </div></div>
@@ -560,8 +406,8 @@
             </div>
     </div>
     </div>
-    <script src="/public/js_files/orders.js"></script>
-    <script src="/public/js_files/index.js"></script>
+    <script src="/js_files/orders.js"></script>
+    <script src="/js_files/index.js"></script>
 </body>
 
 </html>

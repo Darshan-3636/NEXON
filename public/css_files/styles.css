@@ -216,7 +216,7 @@ header nav ul li a:hover {
     gap: 1rem;
 }
 
-.contact-form input, .contact-form textarea {
+.contact-form input, .contact-form textarea , .contact-form select {
     width: 100%;
     padding: 0.75rem;
     border: 1px solid #ddd;

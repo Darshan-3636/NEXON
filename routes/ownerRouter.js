@@ -5,6 +5,8 @@ const upload = require('../config/multer-config');
 const ownerModel = require('../models/owner-model')
 const productModel =  require('../models/product-model');
 const messageModel = require('../models/message-model')
+const orderModel = require('../models/order-model');
+const userModel  = require('../models/user-model')
 
 router.get('/users' , isOwner, (req ,res)=>{
     res.render('admin_dashboard_sidebar/users')
@@ -14,12 +16,32 @@ router.get('/history',isOwner, (req, res)=>{
     res.render('admin_dashboard_sidebar/history')
 })
 
-router.get('/analytics',isOwner ,(req, res)=>{
-    res.render('admin_dashboard_sidebar/analytics')
+router.get('/analytics',isOwner , async (req, res)=>{
+    
+    const Raworders = await orderModel.find().populate('productid'); // Assuming productid is linked to a product model
+    
+    const orders = Raworders.filter(order => 
+        order.productid && order.productid.ownerid.toString() === req.owner._id.toString()
+    );
+    const processedOrders = orders.map(order => ({
+        userid: order.userid,
+        productid: order.productid,
+        quantity: order.quantity,
+        date: order.date,
+        orderStatus: order.orderStatus.charAt(0).toUpperCase() + order.orderStatus.slice(1), // Capitalize order status
+        totalAmount: order.productid.price * order.quantity  // Assuming `productid.price` exists
+    }));
+
+    res.render('admin_dashboard_sidebar/analytics',{ orders: processedOrders})
 })
 
-router.get('/tickets',isOwner , (req, res)=>{
-    res.render('admin_dashboard_sidebar/tickets')
+router.get('/tickets',isOwner , async (req, res)=>{
+    const Raworders = await orderModel.find().populate('productid').populate('userid');
+    
+    const orders = Raworders.filter(order => 
+        order.productid && order.productid.ownerid.toString() === req.owner._id.toString()
+    );
+    res.render('admin_dashboard_sidebar/tickets',{orders})
 })
 
 router.get('/jobs',isOwner , (req, res)=>{
@@ -40,9 +62,10 @@ router.get('/new_emp',isOwner , (req, res)=>{
 
 router.get('/messages',isOwner , async (req, res)=>{
     let messages = await messageModel.find().select('-_id');
+    let ownerCompany = req.owner.company;
     let error = req.flash('error');
     let success = req.flash('success');
-    res.render('admin_dashboard_sidebar/messages',{error, success, messages})
+    res.render('admin_dashboard_sidebar/messages',{error, success, messages,ownerCompany})
 })
 
 

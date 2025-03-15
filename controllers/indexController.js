@@ -3,22 +3,27 @@ const ownerModel =  require('../models/owner-model');
 const bcrypt = require('bcrypt');
 const {generateOwnerToken} = require('../utils/generateOwnerToken')
 
+module.exports.message = async (req, res) => {
+    try {
+        const { name, email, message, company } = req.body;
 
-module.exports.message = async(req , res)=>{
-    try{
-        let {name , email , message} = req.body;
-        await messageModel.create({
-            name ,
-            email,
-            message
-        })
-        req.flash('success',"message sent successfully");
+        // Validation for required fields
+        if (!name || !email || !message || !company) {
+            req.flash('error', 'All fields are required.');
+            return res.redirect('/contact');
+        }
+
+        // Create a new message entry in MongoDB
+        await messageModel.create({ name, email, message, company });
+
+        req.flash('success', 'Message sent successfully');
+        res.redirect('/contact');
+    } catch (err) {
+        console.error('Error:', err); // Log the error for debugging
+        req.flash('error', 'Something went wrong while sending your message.');
         res.redirect('/contact');
     }
-    catch (err){
-        req.flash('error',"something went wrong")
-    }
-}
+};
 
 //login 
 
@@ -38,7 +43,7 @@ module.exports.login = async (req , res)=>{
                     req.flash('success','Logged in Successfully');
                     res.redirect('/admin_dashboard');
                 }else{
-                    req.flash('error',`${result}`);
+                    req.flash('error','Incorrect Email or Password');
                     res.redirect('/login');
                 }
             });

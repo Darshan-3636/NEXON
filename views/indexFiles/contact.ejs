@@ -40,6 +40,15 @@
             
             <label for="message">Message</label>
             <textarea id="message" name="message" placeholder="Your Message" required></textarea>
+
+            <label for="Company">Company</label>
+            <select name="company" id="select" required>
+                <option value="" disabled selected>Select a company</option>
+                <% companies.forEach(function(company){ %> 
+                    <option value="<%= company.company %>"><%= company.company %></option>
+                <% }) %> 
+            </select>
+            
             <br>
             <button type="submit" class="submit-button">Send Message</button>
         </form>
