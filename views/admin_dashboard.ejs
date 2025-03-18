@@ -252,7 +252,7 @@
                 <div class="profile">
                     <div class="info">
                         <p>Hey, <b><%= owner.username %></b></p>
-                        <small class="text-muted">Admin</small>
+                        <small class="text-muted"><%= owner.role %></small>
                     </div>
                     <div class="profile-photo">
                         <img src="data:image/jpeg;base64,<%= owner.picture.toString('base64') %>" alt="">

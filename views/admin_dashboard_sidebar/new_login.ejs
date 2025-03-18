@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+    <link rel="stylesheet" href="/css_files/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+/* Main Section Styles */
+        main {
+            flex: 1;
+            padding: 20px;
+            background-color: #f4f7fa;
+            min-height: 100vh;
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+        }
+
+        .login-options{
+            margin-bottom: 3px;
+        }
+        .login-section {
+            
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .login-container {
+            margin:auto;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 14px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 440px;
+            backdrop-filter: blur(8px);
+            transform: translateY(0);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .login-header img {
+            width: 70px;
+            height: 70px;
+            margin-bottom: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(14, 165, 233, 0.1);
+        }
+
+        .login-header h2 {
+            color: #010508;
+            font-size: 1.8rem;
+            margin-bottom: 0.75rem;
+            font-weight: 700;
+        }
+
+        .login-header p {
+            color: #030810;
+        }
+
+        .form-group {
+            margin-bottom: 1.75rem;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.75rem;
+            color: #030708;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid #e0f2fe;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.2s;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #040709;
+            box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
+            background: white;
+        }
+
+        button {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(to right, #040e12, #03080a);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent);
+            transform: translateX(-100%);
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.2);
+        }
+
+        button:hover::after {
+            transform: translateX(100%);
+            transition: transform 0.6s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .flash-message {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 12px;
+            border-radius: 6px;
+            color: white;
+        }
+
+        .flash-message.error {
+            background-color: #ef4444; /* Red-500 */
+        }
+
+        .flash-message.success {
+            background-color: #22c55e; /* Green-500 */
+        }
+
+        .flash-message span {
+            display: inline-block;
+            margin-top: 4px;
+            margin-bottom: 4px;
+        }
+
+
+    </style>
+    <title>Responsive Dashboard Design | Users Section</title>
+</head>
+
+<body>
+    <% if(error.length > 0) { %>
+        <div class="flash-message error">
+            <span><%= error %></span>
+        </div>
+    <% } %>
+    
+    <% if(success.length > 0) { %>
+        <div class="flash-message success">
+            <span><%= success %></span>
+        </div>
+    <% } %>
+    <div class="container">
+        <!-- Sidebar Section -->
+        <aside>
+            <div class="toggle">
+                <div class="logo">
+                    <span class="danger">Nexon</span>
+                </div>
+                <div class="close" id="close-btn">
+                    <span class="material-icons-sharp">
+                        close
+                    </span>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <a href="/admin_dashboard">
+                    <span class="material-icons-sharp">
+                        dashboard
+                    </span>
+                    <h3>Dashboard</h3></button>
+                </a>
+                <a href="/owners/users">
+                    <span class="material-icons-sharp">
+                        person_outline
+                    </span>
+                    <h3>Users</h3></button>
+                </a>
+                <a href="/owners/history">
+                    <span class="material-icons-sharp">
+                        receipt_long
+                    </span>
+                    <h3>History</h3>
+                </a>
+                <a href="/owners/analytics" class="active">
+                    <span class="material-icons-sharp">
+                        insights
+                    </span>
+                    <h3>Analytics</h3>
+                </a>
+                <a href="/owners/tickets">
+                    <span class="material-icons-sharp">
+                        mail_outline
+                    </span>
+                    <h3>Tickets</h3>
+                    <span class="message-count">27</span>
+                </a>
+                <a href="/owners/jobs">
+                    <span class="material-icons-sharp">
+                        inventory
+                    </span>
+                    <h3>Jobs</h3>
+                </a>
+                <a href="/owners/calendar">
+                    <span class="fa fa-calendar-o" 
+                    style="font-size: 18px;"></span>
+                    <h3>Calendar</h3>
+                </a>
+                <a href="/owners/settings">
+                    <span class="material-icons-sharp">
+                        settings
+                    </span>
+                    <h3>Settings</h3>
+                </a>
+                <a href="/owners/new_emp">
+                    <span class="material-icons-sharp">
+                        add
+                    </span>
+                    <h3>New Login</h3>
+                </a>
+                <a href="/owners/createProduct">
+                    <span class="material-icons-sharp">
+                        add
+                    </span>
+                    <h3>Create Product</h3>
+                </a>
+                <a href="/owners/Messages">
+                    <span class="material-icons-sharp">
+                        message
+                    </span>
+                    <h3>Messages</h3>
+                </a>
+                <a href="/logoutPage">
+                    <span class="material-icons-sharp">
+                        logout
+                    </span>
+                    <h3>Logout</h3>
+                </a>
+            </div>
+        </aside>
+        <!-- End of Sidebar Section -->
+
+        <!-- Users Section -->
+        
+            
+                <div class="login-container">
+                    <div class="login-header">
+                        <img src="/images/logo.jpg">
+                        <h2>Create New Employee</h2>
+                        <p>Note : Allows complete access your Business dashboard</p>
+                    </div>
+                    
+                    <form action="/new_login" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" name="email" id="email" required placeholder="name@company.com" >
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Username</label>
+                            <input type="text" name="username" id="username" required placeholder="username" >
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" name="password" id="password" required placeholder="Enter your password" >
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password">Phone</label>
+                            <input type="number" name="phone" id="password" required placeholder="Enter your Phone Number">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Profile Picture</label>
+                            <input name="image" type="file" value="Select File" required>
+                        </div>
+
+                        <div class="login-options" id="employee-login">
+                            <button type="submit">Create Employee</button>
+                        </div>
+
+                    </form>
+                </div>
+            
+    
+        
+        <!-- End of Users Section -->
+
+
+        <!-- Right Section -->
+        <div class="right-section">
+            <div class="nav">
+                <button id="menu-btn">
+                    <span class="material-icons-sharp">
+                        menu
+                    </span>
+                </button>
+                <div class="dark-mode">
+                    <span class="material-icons-sharp active">
+                        light_mode
+                    </span>
+                    <span class="material-icons-sharp">
+                        dark_mode
+                    </span>
+                </div>
+
+                <div class="profile">
+                    <div class="info">
+                        <p>Hey, <b>Akash</b></p>
+                        <small class="text-muted">Admin</small>
+                    </div>
+                    <div class="profile-photo">
+                        <img src="/images/profile-1.jpg">
+                    </div>
+                </div>
+
+            </div>
+            <!-- End of Nav -->
+
+            <div class="user-profile">
+                <div class="logo">
+                    <img src="/images/logo.jpg">
+                    <h2>Nexon</h2>
+                    <p>Fullstack Web Developer</p>
+                </div>
+            </div>
+
+            <div class="reminders">
+                <div class="header">
+                    <h2>Reminders</h2>
+                    <span class="material-icons-sharp">
+                        notifications_none
+                    </span>
+                </div>
+
+                <div class="notification">
+                    <div class="icon">
+                        <span class="material-icons-sharp">
+                            volume_up
+                        </span>
+                    </div>
+                    <div class="content">
+                        <div class="info">
+                            <h3>Workshop</h3>
+                            <small class="text_muted">
+                                08:00 AM - 12:00 PM
+                            </small>
+                        </div>
+                        <span class="material-icons-sharp">
+                            more_vert
+                        </span>
+                    </div>
+                </div>
+
+                <div class="notification deactive">
+                    <div class="icon">
+                        <span class="material-icons-sharp">
+                            edit
+                        </span>
+                    </div>
+                    <div class="content">
+                        <div class="info">
+                            <h3>Workshop</h3>
+                            <small class="text_muted">
+                                08:00 AM - 12:00 PM
+                            </small>
+                        </div>
+                        <span class="material-icons-sharp">
+                            more_vert
+                        </span>
+                    </div>
+                </div>
+
+                <div class="notification add-reminder">
+                    <div>
+                        <span class="material-icons-sharp">
+                            add
+                        </span>
+                        <h3>Add Reminder</h3>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <script src="/js_files/orders.js"></script>
+    <script src="/js_files/index.js"></script>
+</body>
+
+</html>

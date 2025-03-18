@@ -179,6 +179,7 @@
         let totalOrders = 0;
         let currentMonth = new Date().getMonth(); // Get current month (0-11)
 
+
         orders.forEach(order => {
             let orderMonth = new Date(order.date).getMonth(); // Extract month from order date
 
@@ -198,7 +199,7 @@
                 <div class="overview">
                     <div class="card">
                         <h3>Total Revenue</h3>
-                        <p class="amount"><%= totalRevenue.toFixed(2) %></p>
+                        <p class="amount">₹ <%= totalRevenue.toFixed(2) %></p>
                     </div>
                     <div class="card">
                         <h3>Total Orders</h3>
@@ -206,11 +207,7 @@
                     </div>
                     <div class="card">
                         <h3>Total Customers</h3>
-                        <p class="amount">150</p>
-                    </div>
-                    <div class="card">
-                        <h3>Active Employees</h3>
-                        <p class="amount">25</p>
+                        <p class="amount"><%= totalCustomers %></p>
                     </div>
                 </div>
 
@@ -327,9 +324,7 @@
     </div>
     <div id="orders-data" data-orders='<%- JSON.stringify(orders) %>'></div>
     <script>
-        
         // Get the orders data from the server
-        
         const orders = JSON.parse(document.getElementById('orders-data').dataset.orders);
     
         // Process order statuses for Pie Chart
@@ -339,17 +334,16 @@
             'Cancelled': 0
         };
     
-            orders.forEach(order => {
-        const status = order.orderStatus.toLowerCase(); // Convert to lowercase for consistency
-        if (status === 'accepted') {
-            orderStatusCounts['Accepted']++;
-        } else if (status === 'pending') {
-            orderStatusCounts['Pending']++;
-        } else if (status === 'cancelled') {
-            orderStatusCounts['Cancelled']++;
-        }
+        orders.forEach(order => {
+            const status = order.orderStatus.toLowerCase(); // Convert to lowercase for consistency
+            if (status === 'accepted') {
+                orderStatusCounts['Accepted']++;
+            } else if (status === 'pending') {
+                orderStatusCounts['Pending']++;
+            } else if (status === 'cancelled') {
+                orderStatusCounts['Cancelled']++;
+            }
         });
-
     
         // Initialize the Orders Pie Chart (Order Status Overview)
         const ordersChart = document.getElementById('ordersChart').getContext('2d');
@@ -373,7 +367,7 @@
             }
         });
     
-        // Process monthly sales data for Bar Chart
+        // Process monthly sales data for Bar Chart (only for accepted orders)
         const monthlySales = {};
         const monthLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     
@@ -382,10 +376,12 @@
             monthlySales[month] = 0;
         });
     
-
+        // Filter orders to include only accepted orders
+        const acceptedOrders = orders.filter(order => order.orderStatus.toLowerCase() === 'accepted');
+    
         // Initialize sales tracking for each year dynamically
-        orders.forEach(order => {
-            if (order.quantity && order.productid && order.productid.price) {
+        acceptedOrders.forEach(order => {
+            if (order.quantity && order.productid?.price) {
                 const totalAmount = order.quantity * order.productid.price;
                 if (order.date) {
                     const orderDate = new Date(order.date);
@@ -399,21 +395,17 @@
                             monthlySales[year][month] = 0;
                         });
                     }
-
+    
                     // Add total amount to the correct month & year
                     monthlySales[year][monthName] += totalAmount;
                 }
             }
         });
-
+    
         // Convert monthlySales into an array for Chart.js
         const currentYear = new Date().getFullYear();
         const salesChartData = monthlySales[currentYear] ? Object.values(monthlySales[currentYear]) : new Array(12).fill(0);
-
     
-        // Extract dynamic data for the bar chart
-        // const salesChartData = Object.values(monthlySales);
-        
         // Initialize the Sales Bar Chart (Sales Revenue by Month)
         const salesChart = document.getElementById('salesChart').getContext('2d');
         new Chart(salesChart, {
@@ -421,7 +413,7 @@
             data: {
                 labels: monthLabels, 
                 datasets: [{
-                    label: 'Sales Revenue ($)',
+                    label: 'Sales Revenue (₹)',
                     data: salesChartData,
                     backgroundColor: 'rgba(75, 192, 192, 0.6)',
                     borderColor: 'rgba(75, 192, 192, 1)',
@@ -435,7 +427,7 @@
                         beginAtZero: true,
                         title: {
                             display: true,
-                            text: 'Revenue ($)'
+                            text: 'Revenue (₹)'
                         }
                     },
                     x: {
@@ -453,6 +445,7 @@
         });
     
     </script>
+    
     
     <script src="/js_files/index.js"></script>
 </body>

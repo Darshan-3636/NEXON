@@ -6,7 +6,7 @@ const ownerModel = require('../models/owner-model')
 const productModel =  require('../models/product-model');
 const messageModel = require('../models/message-model')
 const orderModel = require('../models/order-model');
-const userModel  = require('../models/user-model')
+const userModel  = require('../models/user-model');
 
 router.get('/users' , isOwner, (req ,res)=>{
     res.render('admin_dashboard_sidebar/users')
@@ -21,7 +21,7 @@ router.get('/analytics',isOwner , async (req, res)=>{
     const Raworders = await orderModel.find().populate('productid'); // Assuming productid is linked to a product model
     
     const orders = Raworders.filter(order => 
-        order.productid && order.productid.ownerid.toString() === req.owner._id.toString()
+        order.productid && order.productid.ownerid.toString() === req.owner.ownerid.toString()
     );
     const processedOrders = orders.map(order => ({
         userid: order.userid,
@@ -32,19 +32,21 @@ router.get('/analytics',isOwner , async (req, res)=>{
         totalAmount: order.productid.price * order.quantity  // Assuming `productid.price` exists
     }));
 
-    res.render('admin_dashboard_sidebar/analytics',{ orders: processedOrders})
+    const totalCustomers = [...new Set(orders.map(order => order.userid.toString()))].length;
+
+    res.render('admin_dashboard_sidebar/analytics',{ orders: processedOrders, totalCustomers})
 })
 
 router.get('/tickets',isOwner , async (req, res)=>{
     const Raworders = await orderModel.find().populate('productid').populate('userid');
     
     const orders = Raworders.filter(order => 
-        order.productid && order.productid.ownerid.toString() === req.owner._id.toString()
+        order.productid && order.productid.ownerid.toString() === req.owner.ownerid.toString()
     );
     res.render('admin_dashboard_sidebar/tickets',{orders})
 })
 
-//accept and decline orders
+//accept , wait list and decline orders
 
 router.get('/acceptOrder/:oid',isOwner , async (req, res)=>{
     await orderModel.updateOne({_id:req.params.oid},{orderStatus:"accepted"},{new:true})
@@ -77,7 +79,9 @@ router.get('/settings',isOwner , (req, res)=>{
 })
 
 router.get('/new_emp',isOwner , (req, res)=>{
-    res.send('page not found 404 ;)')
+    let error = req.flash('error');
+    let success = req.flash('success');
+    res.render('admin_dashboard_sidebar/new_login',{error, success})
 })
 
 router.get('/messages',isOwner , async (req, res)=>{
@@ -125,10 +129,6 @@ router.post('/create', isOwner, upload.single('image'), async (req, res)=>{
         res.redirect('/owners/createproduct')
     }
 })
-
-
-
-
 
 
 module.exports = router;

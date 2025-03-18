@@ -5,6 +5,8 @@ const upload = require('../config/multer-config');
 const isOwner = require("../middlewares/isOwner");
 const ownerModel = require('../models/owner-model');
 const productModel = require('../models/product-model');
+const empModel = require('../models/emp-model');
+const bcrypt = require('bcrypt');
 
 //default page routes
 router.get('/', (req, res)=>{
@@ -119,6 +121,76 @@ router.post('/signup_details', upload.single('profile'), isOwner, async (req, re
     }
 });
 
+router.post('/new_login', upload.single('image'), isOwner, async (req, res) => {
+    try {
+        const { password, email , phone, username } = req.body;
+
+        
+        const userExists = await empModel.findOne({ username });
+
+        if (userExists) {
+            req.flash('error', 'UserName Already Taken');
+            return res.redirect('/owners/new_emp');
+        } 
+        
+        const emailExists = await empModel.findOne({ email });
+
+        if (emailExists) {
+            req.flash('error', 'Email Already Taken');
+            return res.redirect('/owners/new_emp');
+        } 
+        
+        const phoneExists = await empModel.findOne({ phone });
+
+        if (phoneExists) {
+            req.flash('error', 'Phone Number Already Exists');
+            return res.redirect('/owners/new_emp');
+        } 
+       
+        
+        if (!username || username.trim() === "") {
+            req.flash('error', 'Username Cannot Be Empty');
+            return res.redirect('/owners/new_emp');
+        }
+        
+        if (!email || email.trim() === "") {
+            req.flash('error', 'Email Cannot Be Empty');
+            return res.redirect('/owners/new_emp');
+        }
+        
+        if (!phone || phone.trim() === "") {
+            req.flash('error', 'Phone Number Cannot Be Empty');
+            return res.redirect('/owners/new_emp');
+        }
+
+        bcrypt.genSalt(10,(err,salt)=>{
+            bcrypt.hash(password, salt, async (err,hash)=>{
+                if(err){
+                    req.flash('error',`${err}`);
+                    res.redirect('/owners/new_emp');
+                }else{
+                    await empModel.create({
+                        email,
+                        password:hash, 
+                        phone, 
+                        username, 
+                        picture: req.file.buffer,
+                        company:req.owner.company,
+                        ownerid:req.owner._id
+                        },
+                    )
+                    req.flash('success', 'Employee created successfully');
+                    res.redirect('/owners/new_emp');
+                }
+            })
+        })        
+    } catch (err) {
+        console.error('Error:', err); // Log the error for debugging
+        req.flash('error', 'Something went wrong');
+        res.redirect('/owners/new_emp');
+    }
+});
+
 
 
 //admin_dashboard
@@ -126,8 +198,8 @@ router.post('/signup_details', upload.single('profile'), isOwner, async (req, re
 router.get('/admin_dashboard',isOwner, async (req, res)=>{
     let success = req.flash('success')
     let error = req.flash('error')
-    let owner = await ownerModel.findOne({email:req.owner.email})
-    res.render('admin_dashboard',{success, error,owner});
+    // let owner = await ownerModel.findOne({_id:req.owner._id})
+    res.render('admin_dashboard',{success, error,owner:req.owner});
 })
 
 

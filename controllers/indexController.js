@@ -1,7 +1,9 @@
 const messageModel = require('../models/message-model');
 const ownerModel =  require('../models/owner-model');
 const bcrypt = require('bcrypt');
-const {generateOwnerToken} = require('../utils/generateOwnerToken')
+const {generateOwnerToken} = require('../utils/generateOwnerToken');
+const empModel = require('../models/emp-model');
+const { generateEmpToken } = require('../utils/generateEmpToken');
 
 module.exports.message = async (req, res) => {
     try {
@@ -32,23 +34,37 @@ module.exports.login = async (req , res)=>{
         let {email , password} = req.body;
 
         let owner = await ownerModel.findOne({email});
-        if(!owner){
+        let emp = await empModel.findOne({email})
+        if(!owner && !emp){
             req.flash('error','Incorrect Email or Password');
-            res.redirect('/register')
+            res.redirect('/login')
         }else{
-            bcrypt.compare(password, owner.password, function(err, result) {
-                if(result){
-                    let ownerToken = generateOwnerToken(owner);
-                    res.cookie("ownerToken",ownerToken);
-                    req.flash('success','Logged in Successfully');
-                    res.redirect('/admin_dashboard');
-                }else{
-                    req.flash('error','Incorrect Email or Password');
-                    res.redirect('/login');
-                }
-            });
-        }
-    }
+            if(owner){
+                bcrypt.compare(password, owner.password, function(err, result) {
+                    if(result){
+                        let ownerToken = generateOwnerToken(owner);
+                        res.cookie("ownerToken",ownerToken);
+                        req.flash('success','Logged in Successfully');
+                        res.redirect('/admin_dashboard');
+                    }else{
+                        req.flash('error','Incorrect Email or Password');
+                        res.redirect('/login');
+                    }
+                });
+            }else{
+                bcrypt.compare(password, emp.password, function(err, result) {
+                    if(result){
+                        let ownerToken = generateEmpToken(emp);
+                        res.cookie("ownerToken",ownerToken);
+                        req.flash('success','Logged in Successfully');
+                        res.redirect('/admin_dashboard');
+                    }else{
+                        req.flash('error','Incorrect Email or Password');
+                        res.redirect('/login');
+                    }
+                });
+            }
+    }}
     catch{
         req.flash('error',"Something went wrong")
         res.render('/')
