@@ -13,6 +13,7 @@ module.exports = async (req, res , next )=>{
             let owner =  await ownerModel.findOne({email:decoded.email}).select("-password");
             if(owner){
                 req.owner = {
+                    "_id":owner._id,
                     "ownerid":owner._id,
                     "username":owner.username,
                     "email":owner.email,
@@ -25,6 +26,7 @@ module.exports = async (req, res , next )=>{
             }else {
                 let emp = await empModel.findOne({email:decoded.email}).select("-password");
                 req.owner = {
+                    "_id":emp._id,
                     "ownerid":emp.ownerid,
                     "username":emp.username,
                     "email":emp.email,

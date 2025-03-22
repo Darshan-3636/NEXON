@@ -34,7 +34,6 @@ router.get('/team', (req, res)=>{
     res.render('indexFiles/team');
 });
 
-
 //login
 
 router.get('/login',(req, res)=>{
@@ -121,6 +120,7 @@ router.post('/signup_details', upload.single('profile'), isOwner, async (req, re
     }
 });
 
+//create new employee route 
 router.post('/new_login', upload.single('image'), isOwner, async (req, res) => {
     try {
         const { password, email , phone, username } = req.body;
@@ -191,8 +191,6 @@ router.post('/new_login', upload.single('image'), isOwner, async (req, res) => {
     }
 });
 
-
-
 //admin_dashboard
 
 router.get('/admin_dashboard',isOwner, async (req, res)=>{
@@ -202,13 +200,84 @@ router.get('/admin_dashboard',isOwner, async (req, res)=>{
     res.render('admin_dashboard',{success, error,owner:req.owner});
 })
 
+//calender
+router.post('/calendar', isOwner, async (req, res) => { 
+    try {
+        const { title, start, description, backgroundColor, borderColor } = req.body;
+
+        // Ensure start is correctly formatted
+        const eventDate = new Date(start);
+
+        if (!start || isNaN(eventDate.getTime())) {
+            req.flash('error', 'Invalid date format');
+            return res.redirect('/owners/calendar');
+        }
+
+        const newEvent = { 
+            title, 
+            start: eventDate.toISOString(),  // Store date in correct format
+            description, 
+            backgroundColor, 
+            borderColor 
+        };
+
+        const owner = await ownerModel.findById(req.owner.ownerid);
+        if (!owner) {
+            req.flash('error', 'Owner not found');
+            return res.redirect('/owners/calendar');
+        }
+
+        owner.events.push(newEvent);
+        await owner.save();
+
+        req.flash('success', 'Created New Event');
+        res.redirect('/owners/calendar');
+    } catch (err) {
+        req.flash('error', `Error: ${err.message}`);
+        res.redirect('/owners/calendar');
+    }
+});
+
+router.get('/deleteEvent/:eid', isOwner , async (req, res)=>{
+    let owner = await ownerModel.findOne({_id:req.owner.ownerid})
+    let eventId = req.params.eid;
+    try{
+        //check owner
+        if(!owner){
+            req.flash('error','owner Not found');
+            return res.redirect('/login')
+        }
+
+        //check event
+        const eventExists = owner.events.some(event => event._id.toString() === eventId);
+        if (!eventExists) {
+            req.flash('error',"Event Doesn't Exists")
+            return res.redirect('/owners/calendar');
+        }
+
+        //remove event
+        await ownerModel.findByIdAndUpdate(
+            req.owner.ownerid,
+            { $pull: { events: { _id: eventId } } },
+            { new: true }
+        );
+        req.flash('success','Event removed');
+        res.redirect('/owners/calendar')
+    }
+    catch(err){
+        req.flash('error',err.message);
+        res.redirect('/owners/calendar')
+    }
+})
 
 
-
+router.get('/test',isOwner,(req, res)=>{
+    res.send(req.owner)
+})
 //logout
 
-router.get('/logoutPage',(req, res)=>{
-    res.render('admin_dashboard_sidebar/logout')
+router.get('/logoutPage',isOwner,(req, res)=>{
+    res.render('admin_dashboard_sidebar/logout',{owner:req.owner})
 })
 
 router.get('/logout', logoutOwner)

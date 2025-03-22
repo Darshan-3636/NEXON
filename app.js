@@ -36,6 +36,10 @@ app.use(flash());
 // app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs'); 
 
+app.get('/health', (req, res) => {
+    res.status(200).send('OK');
+});
+
 app.use('/', indexRouter);
 app.use('/owners', isOwner , ownerRouter);
 

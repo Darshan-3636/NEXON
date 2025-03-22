@@ -170,7 +170,7 @@ main {
                     <span class="material-icons-sharp">
                         person_outline
                     </span>
-                    <h3>Users</h3></button>
+                    <h3>Employees</h3></button>
                 </a>
                 <a href="/owners/history">
                     <span class="material-icons-sharp">
@@ -251,14 +251,12 @@ main {
                         </thead>
                         <tbody>
                             <% messages.forEach(function(message){ %>
-                                <% if(message.company === ownerCompany){%>
                                     <tr>
                                         <td><%= message.name %></td>
                                         <td><%= message.email %></td>
                                         <td><%= message.message %></td>
                                         
                                     </tr>
-                                <% }%>
                             <% }) %>
                         </tbody>
                     </table>
@@ -287,11 +285,11 @@ main {
 
                 <div class="profile">
                     <div class="info">
-                        <p>Hey, <b>Akash</b></p>
-                        <small class="text-muted">Admin</small>
+                        <p>Hey, <b><%= owner.username %></b></p>
+                        <small class="text-muted"><%= owner.role %></small>
                     </div>
                     <div class="profile-photo">
-                        <img src="/public/images/profile-1.jpg">
+                        <img src="data:image/jpeg;base64,<%= owner.picture.toString('base64') %>" alt="">
                     </div>
                 </div>
 
@@ -300,7 +298,7 @@ main {
 
             <div class="user-profile">
                 <div class="logo">
-                    <img src="/public/images/logo.jpg">
+                    <img src="/images/logo.jpg">
                     <h2>Nexon</h2>
                     <p>Fullstack Web Developer</p>
                 </div>

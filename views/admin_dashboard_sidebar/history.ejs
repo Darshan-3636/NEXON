@@ -145,7 +145,7 @@
                     <span class="material-icons-sharp">
                         person_outline
                     </span>
-                    <h3>Users</h3></button>
+                    <h3>Employees</h3></button>
                 </a>
                 <a href="/owners/history">
                     <span class="material-icons-sharp">
@@ -216,11 +216,11 @@
             <div id="history" class="history-section">
                 <h1>Business Activity History</h1>
 
-                <div class="activity-filters">
+                <!-- <div class="activity-filters">
                     <label for="filter-date">Filter by Date:</label>
                     <input type="date" id="filter-date" name="filter-date">
                     <button class="filter-btn">Filter</button>
-                </div>
+                </div> -->
 
                 <div class="history-table">
                     <table>
@@ -389,11 +389,11 @@
 
                 <div class="profile">
                     <div class="info">
-                        <p>Hey, <b>Akash</b></p>
-                        <small class="text-muted">Admin</small>
+                        <p>Hey, <b><%= owner.username %></b></p>
+                        <small class="text-muted"><%= owner.role %></small>
                     </div>
                     <div class="profile-photo">
-                        <img src="/public/images/profile-1.jpg">
+                        <img src="data:image/jpeg;base64,<%= owner.picture.toString('base64') %>" alt="">
                     </div>
                 </div>
 
@@ -402,7 +402,7 @@
 
             <div class="user-profile">
                 <div class="logo">
-                    <img src="/public/images/logo.jpg">
+                    <img src="/images/logo.jpg">
                     <h2>Nexon</h2>
                     <p>Fullstack Web Developer</p>
                 </div>

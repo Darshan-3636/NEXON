@@ -10,170 +10,194 @@
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css" rel="stylesheet" />
     <title>Responsive Dashboard Design #1 | AsmrProg</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        body {
-            display: flex;
-            height: 100vh;
-            justify-content: center;
-            align-items: center;
-        }
+body {
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    font-family: Arial, sans-serif;
+}
 
-        .calendar-container {
-            display: flex;
-            width: 100%;
-            height: 100%;
-            max-width: 1400px;
-        }
+.calendar-container {
+    display: flex;
+    width: 90%;
+    max-width: 1400px;
+    height: 90vh;
+    gap: 10px;
+}
 
-        #calendar {
-            width: 70%;
-            height: 95%;
-            background-color: #222222;
-            border-radius: 8px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            padding: 20px;
-            font-size: 1.1em;
-            color: #ffffff;
-            transition: transform 0.3s ease;
-        }
+/* Calendar with darker grey background */
+#calendar {
+    margin-top: 30px;
+    flex: 2;
+    max-height: 90vh;
+    height: 100%;
+    background-color: #252525; /* Darker grey */
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    font-size: 1.1em;
+    color: #ffffff;
+}
 
-        #calendar .fc-toolbar {
-            background-color: #333333;
-            color: #ffffff;
-        }
+/* Calendar day styles */
+#calendar .fc-daygrid-day {
+    background-color: #ffffff; /* Slightly darker grey */
+    border: 1px solid #000000;
+}
 
-        #calendar .fc-daygrid-day-number {
-            color: #ffffff !important;
-            font-size: 1.5em;
-        }
+.fc-col-header-cell {
+    color: white !important; /* Change text color to white */
+    font-weight: bold; /* Make the text stand out */
+}
 
-        #calendar .fc-daygrid-day {
-            background-color: #2E2E2E;
-            border: 1px solid #444;
-        }
+.fc-col-header {
+    background-color: white !important; /* Change background to white */
+}
 
-        #calendar .fc-daygrid-day:hover {
-            background-color: #444;
-        }
+/* Event box with darker grey */
+.event-box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: hsl(0, 0%, 4%); /* Slightly darker grey */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-height: 80vh; /* Ensure it doesn't take up too much space */
+    overflow-y: auto; /* Add scrolling if necessary */
+    width: 100%; /* Adjust width if needed */
+    padding: 10px;
+    box-sizing: border-box;
+}
 
-        #calendar:hover {
-            transform: translateY(-10px);
-        }
+/* Event box title */
+.event-box h3 {
+    color: #fffefe;
+    text-align: center;
+    margin-bottom: 15px;
+}
 
-        /* Event Box Styles */
-        .event-box {
-            margin-left: 8px;
-            display: flex;
-            flex-direction: column;
-            height: 95%;
-            padding: 20px;
-            background-color: #222222;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
+/* Event list with medium grey background */
+.event-list {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 10px;
+    background-color: #ffffff; /* Medium grey */
+    border-radius: 8px;
+}
 
-        .event-box:hover {
-            transform: translateY(-10px);
-        }
+/* Individual event items */
+.event-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #e6e6e6; /* Light grey for contrast */
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #bbb;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
 
-        .event-box h3 {
-            margin-bottom: 20px;
-            color: #ff5722;
-            font-size: 1.8em;
-            font-weight: bold;
-            text-align: center;
-        }
+.event-item:hover {
+    background-color: #d1d1d1;
+    
+}
 
-        .event-list {
-            flex-grow: 1;
-            overflow-y: auto; 
-            margin-bottom: 20px;
-            width: 98%;
-        }
+/* Delete icon */
+.delete-icon {
+    display: none;
+    cursor: pointer;
+    font-size: 1.2em;
+    color: red;
+    transition: color 0.3s ease;
+}
 
-        .event-item {
-            padding: 10px;
-            background-color: #333333;
-            border: 1px solid #333333;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+.event-item:hover .delete-icon {
+    display: inline-block;
+}
 
-        .event-item:hover {
-            background-color: #555;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
-            transform: translateX(5px);
-        }
+.delete-icon:hover {
+    color: darkred;
+}
 
-        .event-item p {
-            margin: 5px 0;
-            color: #bbb;
-            font-size: 1em;
-        }
+/* Event form styling */
+#eventform {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 
-        .event-title {
-            font-weight: bold;
-            color: #fff;
-        }
+#eventform input, #eventform textarea {
+    background-color: #e6e6e6;
+    color: #333;
+    border: 1px solid #bbb;
+    padding: 8px;
+    border-radius: 5px;
+}
 
-        .fc-button-primary {
-            background-color: #009688 !important;
-            border-color: #009688 !important;
-        }
+/* Add event button */
+#submit {
+    background-color: #0be02eb7;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.2em;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
 
-        .fc-button-primary:hover {
-            background-color: #00796B !important;
-            border-color: #00796B !important;
-        }
+#submit:hover {
+    background-color: #3dda0d;
+}
 
-        /* Event Icon */
-        .event-icon {
-            margin-right: 10px;
-            font-size: 18px;
-        }
-        /* Highlight for the current day */
-        .fc-daygrid-day.fc-day-today {
-            background-color: #686762 !important;
-            color: #000 !important;
-            font-weight: bold;
-        }
-        /* Allow event title to wrap onto two lines if necessary */
-        .fc-event-title {
-            white-space: normal; /* Allow wrapping */
-            word-wrap: break-word; /* Break long words if necessary */
-            word-break: break-word; /* Ensure that words break if needed */
-            font-size: 14px; /* Adjust font size as needed */
-        }
+/* Flash messages */
+.flash-message {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 12px;
+    border-radius: 6px;
+    color: white;
+}
 
-        /* Style for the Add Event Button */
-        .add-event-btn {
-            background-color: #4CAF50; /* Green background */
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 1.2em;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-            text-align: center;
-            transition: background-color 0.3s ease;
-        }
+.flash-message.error {
+    background-color: #dc3545;
+}
 
-        .add-event-btn:hover {
-            background-color: #45a049;
-        }
+.flash-message.success {
+    background-color: #28a745;
+}
 
 
     </style>
 </head>
 
 <body>
+    <% if(error.length > 0) { %>
+        <div class="flash-message error">
+            <span><%= error %></span>
+        </div>
+    <% } %>
+    
+    <% if(success.length > 0) { %>
+        <div class="flash-message success">
+            <span><%= success %></span>
+        </div>
+    <% } %>
     <div class="container">
         <!-- Sidebar Section -->
         <aside>
@@ -264,21 +288,12 @@
             </div>
         </aside>
         <!-- End of Sidebar Section -->
-
+        
         <main>
             <div class="calendar-container">
                 <!-- FullCalendar Section -->
                 <div id="calendar"></div>
-
-                <!-- Event Box Section -->
-                <div class="event-box">
-                    <h3>Upcoming Events</h3>
-                    <ul class="event-list" id="event-list">
-                        <!-- Events will be dynamically added here -->
-                    </ul>
-
-                    <button id="add-event-btn" class="add-event-btn">+ Add Event</button>
-                </div>
+               
             </div>
         </main>
 
@@ -301,179 +316,119 @@
 
                 <div class="profile">
                     <div class="info">
-                        <p>Hey, <b>Akash</b></p>
-                        <small class="text-muted">Admin</small>
+                        <p>Hey, <b><%= owner.username %></b></p>
+                        <small class="text-muted"><%= owner.role %></small>
                     </div>
                     <div class="profile-photo">
-                        <img src="/public//images/profile-1.jpg">
+                        <img src="data:image/jpeg;base64,<%= owner.picture.toString('base64') %>" alt="">
                     </div>
                 </div>
+                
             </div>
 
             <!-- End of Nav -->
-
-            <div class="user-profile">
-                <div class="logo">
-                    <img src="/public/images/logo.jpg">
-                    <h2>Nexon</h2>
-                    <p>Fullstack Web Developer</p>
-                </div>
+            <div class="event-box">
+                <h3>Upcoming Events (Current Month)</h3>
+                <ul class="event-list" id="event-list">
+                    <% owner.events.forEach(event => { %>
+                        <% let eventDate = new Date(event.start); %>
+                        <% let now = new Date(); %>
+                        <% if (eventDate.getMonth() === now.getMonth() && eventDate.getFullYear() === now.getFullYear()) { %>
+                            <li class="event-item" data-event-id="<%= event._id %>">
+                                <strong>
+                                    <%= new Date(event.start).toLocaleString('en-IN', { 
+                                        year: 'numeric', month: '2-digit', day: '2-digit', 
+                                        hour: '2-digit', minute: '2-digit', hour12: true 
+                                    }) %>
+                                </strong> 
+                                <br> <%= event.title %>
+                                <span class="delete-icon" title="Delete Event"><a href="/deleteEvent/<%= event._id %>">🗑️</a></span>  
+                            </li>
+                        <% } %>
+                    <% }); %>
+                </ul>
+                <br>
+                <form id="eventform" method="post" action="/calendar">
+                    <input type="text" name="title" id="event-title" placeholder="Event Title" required>
+                    <input type="datetime-local" name="start" id="event-datetime" required>
+                    <textarea name="description" id="event-description" placeholder="Event Description"></textarea>
+                    <button id="submit" type="submit">Add Event</button>
+                </form>
             </div>
 
-            <div class="reminders">
-                <div class="header">
-                    <h2>Reminders</h2>
-                    <span class="material-icons-sharp">
-                        notifications_none
-                    </span>
-                </div>
-
-                <div class="notification">
-                    <div class="icon">
-                        <span class="material-icons-sharp">
-                            volume_up
-                        </span>
-                    </div>
-                    <div class="content">
-                        <div class="info">
-                            <h3>Workshop</h3>
-                            <small class="text_muted">
-                                08:00 AM - 12:00 PM
-                            </small>
-                        </div>
-                        <span class="material-icons-sharp">
-                            more_vert
-                        </span>
-                    </div>
-                </div>
-
-                <div class="notification deactive">
-                    <div class="icon">
-                        <span class="material-icons-sharp">
-                            edit
-                        </span>
-                    </div>
-                    <div class="content">
-                        <div class="info">
-                            <h3>Workshop</h3>
-                            <small class="text_muted">
-                                08:00 AM - 12:00 PM
-                            </small>
-                        </div>
-                        <span class="material-icons-sharp">
-                            more_vert
-                        </span>
-                    </div>
-                </div>
-
-                <div class="notification add-reminder">
-                    <div>
-                        <span class="material-icons-sharp">
-                            add
-                        </span>
-                        <h3>Add Reminder</h3>
-                    </div>
-                </div>
-        </div>
+           
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/locales-all.min.js"></script>
 
+    <div id="events-data" data-events='<%= JSON.stringify(owner.events || []) %>'></div>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-    var calendarEl = document.getElementById('calendar');
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-        locale: 'en',
-        events: [
-            { title: 'Company Team Meeting', start: '2025-01-25T09:30:00', description: 'Discussion of project progress and updates.', backgroundColor: '#007BFF', borderColor: '#007BFF', id: 'event-1' },
-            { title: 'Client Presentation', start: '2025-01-26T14:00:00', description: 'Presenting our quarterly performance to the client.', backgroundColor: '#FF5733', borderColor: '#FF5733', id: 'event-2' },
-            { title: 'Office Holiday', start: '2025-01-29T00:00:00', description: 'Office closed for the national holiday.', backgroundColor: '#8E44AD', borderColor: '#8E44AD', id: 'event-3' },
-            { title: 'Sales Call with ABC Corp.', start: '2025-01-30T11:00:00', description: 'Discussion of partnership opportunities.', backgroundColor: '#FFEB3B', borderColor: '#FFEB3B', id: 'event-4' },
-            { title: 'Project Deadline', start: '2025-02-01T23:59:00', description: 'Deadline for submitting the final report.', backgroundColor: '#2ECC71', borderColor: '#2ECC71', id: 'event-5' },
-            { title: 'Code Review', start: '2025-02-05T10:00:00', description: 'Reviewing the latest code updates with the team.', backgroundColor: '#FFC107', borderColor: '#FFC107', id: 'event-6' }
-        ],
-        headerToolbar: { left: 'prev,next today', center: 'title', right: 'dayGridMonth,timeGridWeek,timeGridDay' },
-    });
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+        var eventsData = document.getElementById('events-data').dataset.events;
+        var events = JSON.parse(eventsData || '[]');
 
-    calendar.render();
-
-    // Function to update the upcoming events list
-    function updateUpcomingEvents(events) {
-        var eventList = document.getElementById('event-list');
-        eventList.innerHTML = ''; // Clear the current list
-
-        // Loop through each event and add to the upcoming events section
-        events.forEach(function (event) {
-            var eventItem = document.createElement('li');
-            eventItem.classList.add('event-item');
-            eventItem.dataset.eventId = event.id; // Store event id for reference
-
-            var eventTitle = document.createElement('span');
-            eventTitle.classList.add('event-title');
-            eventTitle.textContent = event.title;
-
-            var eventTime = document.createElement('p');
-            eventTime.textContent = event.start.toLocaleString();
-
-            var eventDescription = document.createElement('p');
-            eventDescription.textContent = event.extendedProps.description;
-
-            eventItem.appendChild(eventTitle);
-            eventItem.appendChild(eventTime);
-            eventItem.appendChild(eventDescription);
-
-            eventList.appendChild(eventItem);
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            locale: 'en',
+            events: events,
+            headerToolbar: { left: 'prev,next today', center: 'title', right: 'dayGridMonth,timeGridWeek,timeGridDay' },
         });
-    }
 
-    // Event listener for clicking on an event in the upcoming events section
-    document.getElementById('event-list').addEventListener('click', function (e) {
-        var clickedItem = e.target.closest('.event-item');
-        if (clickedItem) {
-            var eventId = clickedItem.dataset.eventId;
+        calendar.render();
 
-            // Find the corresponding event from the calendar
-            var event = calendar.getEventById(eventId);
+        document.getElementById('eventform').addEventListener('submit', async function (e) {
+            e.preventDefault();
 
-            // Scroll the calendar to the event date and highlight it
-            calendar.gotoDate(event.start);
-            event.setProp('classNames', ['highlighted-event']);
-        }
-    });
+            const title = document.getElementById('event-title').value;
+            const startInput = document.getElementById('event-datetime').value;
+            const description = document.getElementById('event-description').value;
 
-    // Add event button click handler
-    document.getElementById('add-event-btn').addEventListener('click', function () {
-        var eventTitle = prompt("Enter event title:");
-        var eventDescription = prompt("Enter event description:");
-        var eventDate = prompt("Enter event date (YYYY-MM-DD):");
+            if (!startInput) {
+                alert('Please enter a valid date and time.');
+                return;
+            }
 
-        if (eventTitle && eventDescription && eventDate) {
-            // Create a new event object
-            var newEvent = {
-                title: eventTitle,
-                start: new Date(eventDate),
-                description: eventDescription,
-                backgroundColor: '#FFC107',  // Default color, you can change this
-                borderColor: '#FFC107',      // Default border color
-                id: 'event-' + new Date().getTime() // Unique ID based on timestamp
+            const start = new Date(startInput).toISOString();
+
+            const newEvent = { 
+                title, 
+                start,  
+                description, 
+                backgroundColor: '#FFC107', 
+                borderColor: '#FFC107' 
             };
 
-            // Add the new event to FullCalendar
-            calendar.addEvent(newEvent);
+            const response = await fetch('/calendar', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newEvent)
+            });
 
-            // Update the upcoming events list
-            updateUpcomingEvents(calendar.getEvents());
-        }
+            if (response.ok) {
+                location.reload();
+            }
+        });
+
     });
 
-    // Call the updateUpcomingEvents function to populate the events immediately
-    updateUpcomingEvents(calendar.getEvents());
-});
+    // Wait for the DOM to be fully loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Select all flash messages
+    var flashMessages = document.querySelectorAll('.flash-message');
 
+    // Iterate through each flash message
+    flashMessages.forEach(function(message) {
+      // Set a timeout to remove the message after 5 seconds (5000 milliseconds)
+      setTimeout(function() {
+        message.style.display = 'none';
+      }, 5000);
+    });
+  });
     </script>
-    <script src="/public/js_files/orders.js"></script>
-    <script src="/public/js_files/index.js"></script>
+    <script src="/js_files/orders.js"></script>
+    <script src="/js_files/index.js"></script>
 </body>
 
 </html>

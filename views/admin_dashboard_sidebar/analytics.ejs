@@ -108,7 +108,7 @@
                     <span class="material-icons-sharp">
                         person_outline
                     </span>
-                    <h3>Users</h3></button>
+                    <h3>Employees</h3></button>
                 </a>
                 <a href="/owners/history">
                     <span class="material-icons-sharp">
@@ -242,11 +242,11 @@
 
         <div class="profile">
             <div class="info">
-                <p>Hey, <b>Akash</b></p>
-                <small class="text-muted">Admin</small>
+                <p>Hey, <b><%= owner.username %></b></p>
+                <small class="text-muted"><%= owner.role %></small>
             </div>
             <div class="profile-photo">
-                <img src="/images/profile-1.jpg">
+                <img src="data:image/jpeg;base64,<%= owner.picture.toString('base64') %>" alt="">
             </div>
         </div>
 

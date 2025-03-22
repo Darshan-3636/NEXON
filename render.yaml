@@ -1,0 +1,21 @@
+services:
+  - name: nexon-dashboard
+    type: web
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    plan: free
+    healthCheckPath: /health  
+    envVars:
+      - key: PORT
+        value: 3000
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_KEY
+        sync: false
+    autoDeploy: true
+
+databases:
+  - name: nexon-mongo
+    plan: free
+    ipAllowList: ["0.0.0.0/0"]  

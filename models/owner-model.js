@@ -16,7 +16,18 @@ const ownerSchema =  mongoose.Schema({
         ref:"product"
     }],
     picture:Buffer, //sign-up details
-    phone:String //sign-up details done
-})
-
+    phone:String, //sign-up details done
+    events: [ 
+        {
+            _id: { type: mongoose.Schema.Types.ObjectId, auto: true }, // Add unique ID to each event
+            title: String,
+            start: {
+                type:Date,
+            },
+            description: String,
+            backgroundColor: { type: String, default: '#007BFF' },
+            borderColor: { type: String, default: '#007BFF' }
+        }
+    ]
+});
 module.exports = mongoose.model('owner',ownerSchema)

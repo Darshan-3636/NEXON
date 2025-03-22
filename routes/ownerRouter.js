@@ -9,11 +9,11 @@ const orderModel = require('../models/order-model');
 const userModel  = require('../models/user-model');
 
 router.get('/users' , isOwner, (req ,res)=>{
-    res.render('admin_dashboard_sidebar/users')
+    res.render('admin_dashboard_sidebar/users',{owner:req.owner})
 })
 
 router.get('/history',isOwner, (req, res)=>{
-    res.render('admin_dashboard_sidebar/history')
+    res.render('admin_dashboard_sidebar/history',{owner:req.owner})
 })
 
 router.get('/analytics',isOwner , async (req, res)=>{
@@ -34,7 +34,7 @@ router.get('/analytics',isOwner , async (req, res)=>{
 
     const totalCustomers = [...new Set(orders.map(order => order.userid.toString()))].length;
 
-    res.render('admin_dashboard_sidebar/analytics',{ orders: processedOrders, totalCustomers})
+    res.render('admin_dashboard_sidebar/analytics',{owner:req.owner,orders: processedOrders, totalCustomers})
 })
 
 router.get('/tickets',isOwner , async (req, res)=>{
@@ -43,7 +43,7 @@ router.get('/tickets',isOwner , async (req, res)=>{
     const orders = Raworders.filter(order => 
         order.productid && order.productid.ownerid.toString() === req.owner.ownerid.toString()
     );
-    res.render('admin_dashboard_sidebar/tickets',{orders})
+    res.render('admin_dashboard_sidebar/tickets',{owner:req.owner , orders})
 })
 
 //accept , wait list and decline orders
@@ -67,29 +67,38 @@ router.get('/waitlistOrder/:oid',isOwner , async (req, res)=>{
 })
 
 router.get('/jobs',isOwner , (req, res)=>{
-    res.render('admin_dashboard_sidebar/jobs')
+    res.render('admin_dashboard_sidebar/jobs',{owner:req.owner})
 })
 
-router.get('/calendar',isOwner , (req, res)=>{
-    res.render('admin_dashboard_sidebar/calendar')
-})
+
+
+router.get('/calendar', isOwner, async (req, res) => {
+    try {
+        let error = req.flash('error')
+        let success = req.flash('success')
+        const owner = await ownerModel.findById(req.owner.ownerid);
+        res.render('admin_dashboard_sidebar/calendar', { owner, error , success });
+    } catch (err) {
+        req.flash('error',`${err}`)
+        res.redirect('/admin_dashboard');
+    }
+});
 
 router.get('/settings',isOwner , (req, res)=>{
-    res.render('admin_dashboard_sidebar/settings')
+    res.render('admin_dashboard_sidebar/settings',{owner:req.owner})
 })
 
 router.get('/new_emp',isOwner , (req, res)=>{
     let error = req.flash('error');
     let success = req.flash('success');
-    res.render('admin_dashboard_sidebar/new_login',{error, success})
+    res.render('admin_dashboard_sidebar/new_login',{owner:req.owner, error, success})
 })
 
 router.get('/messages',isOwner , async (req, res)=>{
-    let messages = await messageModel.find().select('-_id');
-    let ownerCompany = req.owner.company;
+    let messages = await messageModel.find({company:req.owner.company}).select('-_id');
     let error = req.flash('error');
     let success = req.flash('success');
-    res.render('admin_dashboard_sidebar/messages',{error, success, messages,ownerCompany})
+    res.render('admin_dashboard_sidebar/messages',{owner:req.owner , error, success, messages})
 })
 
 
@@ -99,7 +108,7 @@ router.get('/messages',isOwner , async (req, res)=>{
 router.get('/createproduct',isOwner , (req, res)=>{
     let error = req.flash('error');
     let success = req.flash('success');
-    res.render('admin_dashboard_sidebar/createProduct',{error, success})
+    res.render('admin_dashboard_sidebar/createProduct',{owner:req.owner,error, success})
 })
 
 router.post('/create', isOwner, upload.single('image'), async (req, res)=>{
