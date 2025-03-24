@@ -20,7 +20,8 @@ module.exports = async (req, res , next )=>{
                     "role":owner.role,
                     "company":owner.company,
                     "picture":owner.picture,
-                    "phone":owner.phone
+                    "phone":owner.phone,
+                    "events":owner.events
                 }
                 next();
             }else {
@@ -33,7 +34,8 @@ module.exports = async (req, res , next )=>{
                     "role":emp.role,
                     "company":emp.company,
                     "picture":emp.picture,
-                    "phone":emp.phone
+                    "phone":emp.phone,
+                    "events":emp.events
                 }
                 next();
             } 

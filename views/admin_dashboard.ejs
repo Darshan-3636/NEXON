@@ -122,14 +122,31 @@
         <!-- Main Content -->
         <main>    
             <h1>Admin Dashboard</h1>
-            
+            <% 
+            let totalRevenue = 0;
+            let totalOrders = 0;
+            let currentMonth = new Date().getMonth(); // Get current month (0-11)
+    
+    
+            orders.forEach(order => {
+                let orderMonth = new Date(order.date).getMonth(); // Extract month from order date
+    
+                if (orderMonth === currentMonth) {
+                    totalOrders++; // Count total orders for this month
+    
+                    if (order.orderStatus === "Completed") { 
+                        totalRevenue += order.totalAmount; // Sum revenue for completed orders
+                    }
+                }
+            });
+            %>
             <!-- Analyses -->
             <div class="analyse">
                 <div class="sales">
                     <div class="status">
                         <div class="info">
-                            <h3>Total Sales</h3>
-                            <h1>$65,024</h1>
+                            <h3>Total Revenue</h3>
+                            <h1><%= totalRevenue %></h1>
                         </div>
                         <div class="progresss">
                             <svg>
@@ -144,8 +161,8 @@
                 <div class="visits">
                     <div class="status">
                         <div class="info">
-                            <h3>Site Visit</h3>
-                            <h1>24,981</h1>
+                            <h3>Total Orders</h3>
+                            <h1><%= totalOrders %></h1>
                         </div>
                         <div class="progresss">
                             <svg>
@@ -160,8 +177,8 @@
                 <div class="searches">
                     <div class="status">
                         <div class="info">
-                            <h3>Searches</h3>
-                            <h1>14,147</h1>
+                            <h3>Total Customers</h3>
+                            <h1><%= totalCustomers %></h1>
                         </div>
                         <div class="progresss">
                             <svg>
@@ -178,32 +195,18 @@
 
             <!-- New Users Section -->
             <div class="new-users">
-                <h2>New Users</h2>
+                <h2>Employees</h2>
                 <div class="user-list">
+                    
+                    <% emps.slice(0,4).forEach(function(emp){ %>
+                        <div class="user">
+                            <img src="data:image/jpeg;base64,<%= emp.picture.toString('base64') %>" alt="">
+                            <h2><%= emp.username %></h2>
+                        </div>
+                    <% }) %>
+                    
                     <div class="user">
-                        <img src="/images/akash.webp.jpg">
-                        <h2>Akash</h2>
-                        <p>54 Min Ago</p>
-                    </div>
-                    <div class="user">
-                        <img src="/images/raj.webp.jpg">
-                        <h2>Raj</h2>
-                        <p>3 Hours Ago</p>
-                    </div>
-                    <div class="user">
-                        <img src="/images/darshan.webp.jpg">
-                        <h2>Darshan</h2>
-                        <p>6 Hours Ago</p>
-                    </div>
-                    <div class="user">
-                        <img src="/images/veer.webp.jpg">
-                        <h2>Veer</h2>
-                        <p>9 Hours Ago</p>
-                    </div>
-                    <div class="user">
-                        <img src="/images/addmore.webp.jpg">
-                        <h2>Add</h2>
-                        <p>New User</p>
+                        <h2><a href="/owners/users">View All</a></h2>
                     </div>
                 </div>
             </div>
@@ -272,58 +275,59 @@
 
             <div class="reminders">
                 <div class="header">
-                    <h2>Reminders</h2>
-                    <span class="material-icons-sharp">
-                        notifications_none
-                    </span>
+                    <h2>Today's Events</h2>
+                    
                 </div>
 
-                <div class="notification">
-                    <div class="icon">
-                        <span class="material-icons-sharp">
-                            volume_up
-                        </span>
-                    </div>
-                    <div class="content">
-                        <div class="info">
-                            <h3>Workshop</h3>
-                            <small class="text_muted">
-                                08:00 AM - 12:00 PM
-                            </small>
+                <% 
+                const today = new Date();
+                const formattedToday = today.toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+            
+                owner.events.forEach(function(event) { 
+                    const eventDate = new Date(event.start).toISOString().split('T')[0]; // Extract event date
+            
+                    if (eventDate === formattedToday) { 
+            %>
+                    <div class="notification">
+                        <div class="icon">
+                            <span class="material-icons-sharp">
+                                event
+                            </span>
                         </div>
-                        <span class="material-icons-sharp">
-                            more_vert
-                        </span>
-                    </div>
-                </div>
-
-                <div class="notification deactive">
-                    <div class="icon">
-                        <span class="material-icons-sharp">
-                            edit
-                        </span>
-                    </div>
-                    <div class="content">
-                        <div class="info">
-                            <h3>Workshop</h3>
-                            <small class="text_muted">
-                                08:00 AM - 12:00 PM
-                            </small>
+                        <div class="content">
+                            <div class="info">
+                                <h3><%= event.title %></h3>
+                                <small class="text_muted">
+                                    <%= event.formattedToday %>
+                                </small>
+                            </div>
+                            <a href="/deleteEvent/<%= event._id %>">
+                                <span class="material-icons-sharp">
+                                delete
+                            </span>
+                            </a>
                         </div>
-                        <span class="material-icons-sharp">
-                            more_vert
-                        </span>
                     </div>
-                </div>
+            <% 
+                    }
+                }); 
+            %>
+            
+                
 
+
+                <a href="/owners/calendar">
                 <div class="notification add-reminder">
+                
                     <div>
                         <span class="material-icons-sharp">
                             add
                         </span>
-                        <h3>Add Reminder</h3>
+                        <h3>Add Event</h3>
                     </div>
                 </div>
+                </a>
+                
 
             </div>
 
@@ -332,6 +336,21 @@
 
     </div>
     <script src="/js_files/orders.js"></script>
+    <script >
+    // Wait for the DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Select all flash messages
+            var flashMessages = document.querySelectorAll('.flash-message');
+        
+            // Iterate through each flash message
+            flashMessages.forEach(function(message) {
+              // Set a timeout to remove the message after 5 seconds (5000 milliseconds)
+              setTimeout(function() {
+                message.style.display = 'none';
+              }, 5000);
+            });
+          });
+    </script>
     <script src="/js_files/index.js"></script>
 </body>
 

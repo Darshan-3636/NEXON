@@ -128,7 +128,7 @@
       color: #2a9d8f;
       font-weight: bold;
     }
-    .status-accepted {
+    .status-completed {
       color: #2a9d8f;
       font-weight: bold;
     }
@@ -265,15 +265,15 @@
         <!-- End of Sidebar Section -->
         <% let totalOrders = 0 %>
         <% let pendingOrders = 0 %>
-        <% let acceptedOrders = 0 %>
+        <% let completedOrders = 0 %>
         <% let cancelledOrders = 0 %>
         <% orders.forEach(function(order){ %>
           <% totalOrders += 1
           if(order.orderStatus === "pending"){
             pendingOrders += 1
           }
-          if(order.orderStatus === "accepted"){
-            acceptedOrders += 1
+          if(order.orderStatus === "completed"){
+            completedOrders += 1
           }
           if(order.orderStatus === "cancelled"){
             cancelledOrders += 1
@@ -288,8 +288,8 @@
                     <p>Total Orders</p>
                   </div>
                   <div class="stat">
-                    <h2><%= acceptedOrders %></h2>
-                    <p>Accepted Orders</p>
+                    <h2><%= completedOrders %></h2>
+                    <p>Completed Orders</p>
                   </div>
                   <div class="stat">
                     <h2><%= pendingOrders %></h2>
@@ -325,19 +325,12 @@
           <td class="status-<%= order.orderStatus %>"><%= order.orderStatus %></td>
           <% if(order.orderStatus === "pending"){%>
           <td>
-            <button class="edit-btn"><a href="/owners/acceptOrder/<%= order._id %>">Accept</a></button>
-            <button class="delete-btn"><a href="/owners/declineOrder/<%= order._id %>">Decline</a></button>
-          </td>
-          <% } %>
-          <% if(order.orderStatus === "accepted"){%>
-          <td>
-            <button class="waitlist-btn"><a href="/owners/waitlistOrder/<%= order._id %>">Wait List</a></button>
+            <button class="edit-btn"><a href="/owners/completeOrder/<%= order._id %>">Completed</a></button>
             <button class="delete-btn"><a href="/owners/declineOrder/<%= order._id %>">Decline</a></button>
           </td>
           <% } %>
           <% if(order.orderStatus === "cancelled"){%>
           <td>
-            <button class="edit-btn"><a href="/owners/acceptOrder/<%= order._id %>">Accept</a></button>
             <button class="waitlist-btn"><a href="/owners/waitlistOrder/<%= order._id %>">Wait List</a></button>
           </td>
           <% } %>
@@ -387,59 +380,63 @@
             </div>
 
             <div class="reminders">
-                <div class="header">
-                    <h2>Reminders</h2>
-                    <span class="material-icons-sharp">
-                        notifications_none
-                    </span>
-                </div>
+              <div class="header">
+                  <h2>Today's Events</h2>
+                  
+              </div>
 
-                <div class="notification">
-                    <div class="icon">
-                        <span class="material-icons-sharp">
-                            volume_up
-                        </span>
-                    </div>
-                    <div class="content">
-                        <div class="info">
-                            <h3>Workshop</h3>
-                            <small class="text_muted">
-                                08:00 AM - 12:00 PM
-                            </small>
-                        </div>
-                        <span class="material-icons-sharp">
-                            more_vert
-                        </span>
-                    </div>
-                </div>
+              <% 
+              const today = new Date();
+              const formattedToday = today.toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+          
+              owner.events.forEach(function(event) { 
+                  const eventDate = new Date(event.start).toISOString().split('T')[0]; // Extract event date
+          
+                  if (eventDate === formattedToday) { 
+          %>
+                  <div class="notification">
+                      <div class="icon">
+                          <span class="material-icons-sharp">
+                              event
+                          </span>
+                      </div>
+                      <div class="content">
+                          <div class="info">
+                              <h3><%= event.title %></h3>
+                              <small class="text_muted">
+                                  <%= event.formattedToday %>
+                              </small>
+                          </div>
+                          <a href="/deleteEvent/<%= event._id %>">
+                              <span class="material-icons-sharp">
+                              delete
+                          </span>
+                          </a>
+                      </div>
+                  </div>
+          <% 
+                  }
+              }); 
+          %>
+          
+              
 
-                <div class="notification deactive">
-                    <div class="icon">
-                        <span class="material-icons-sharp">
-                            edit
-                        </span>
-                    </div>
-                    <div class="content">
-                        <div class="info">
-                            <h3>Workshop</h3>
-                            <small class="text_muted">
-                                08:00 AM - 12:00 PM
-                            </small>
-                        </div>
-                        <span class="material-icons-sharp">
-                            more_vert
-                        </span>
-                    </div>
-                </div>
 
-                <div class="notification add-reminder">
-                    <div>
-                        <span class="material-icons-sharp">
-                            add
-                        </span>
-                        <h3>Add Reminder</h3>
-                    </div>
-                </div>
+              <a href="/owners/calendar">
+              <div class="notification add-reminder">
+              
+                  <div>
+                      <span class="material-icons-sharp">
+                          add
+                      </span>
+                      <h3>Add Event</h3>
+                  </div>
+              </div>
+              </a>
+              
+
+          </div>
+
             </div>
     </div>
     </div>

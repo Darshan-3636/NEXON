@@ -38,3 +38,4 @@ function loadOrders() {
 
 // Load orders when the page loads
 window.onload = loadOrders;
+

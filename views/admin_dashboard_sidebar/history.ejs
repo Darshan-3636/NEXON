@@ -410,60 +410,62 @@
 
             <div class="reminders">
                 <div class="header">
-                    <h2>Reminders</h2>
-                    <span class="material-icons-sharp">
-                        notifications_none
-                    </span>
+                    <h2>Today's Events</h2>
+                    
                 </div>
 
-                <div class="notification">
-                    <div class="icon">
-                        <span class="material-icons-sharp">
-                            volume_up
-                        </span>
-                    </div>
-                    <div class="content">
-                        <div class="info">
-                            <h3>Workshop</h3>
-                            <small class="text_muted">
-                                08:00 AM - 12:00 PM
-                            </small>
+                <% 
+                const today = new Date();
+                const formattedToday = today.toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+            
+                owner.events.forEach(function(event) { 
+                    const eventDate = new Date(event.start).toISOString().split('T')[0]; // Extract event date
+            
+                    if (eventDate === formattedToday) { 
+            %>
+                    <div class="notification">
+                        <div class="icon">
+                            <span class="material-icons-sharp">
+                                event
+                            </span>
                         </div>
-                        <span class="material-icons-sharp">
-                            more_vert
-                        </span>
-                    </div>
-                </div>
-
-                <div class="notification deactive">
-                    <div class="icon">
-                        <span class="material-icons-sharp">
-                            edit
-                        </span>
-                    </div>
-                    <div class="content">
-                        <div class="info">
-                            <h3>Workshop</h3>
-                            <small class="text_muted">
-                                08:00 AM - 12:00 PM
-                            </small>
+                        <div class="content">
+                            <div class="info">
+                                <h3><%= event.title %></h3>
+                                <small class="text_muted">
+                                    <%= event.formattedToday %>
+                                </small>
+                            </div>
+                            <a href="/deleteEvent/<%= event._id %>">
+                                <span class="material-icons-sharp">
+                                delete
+                            </span>
+                            </a>
                         </div>
-                        <span class="material-icons-sharp">
-                            more_vert
-                        </span>
                     </div>
-                </div>
+            <% 
+                    }
+                }); 
+            %>
+            
+                
 
+
+                <a href="/owners/calendar">
                 <div class="notification add-reminder">
+                
                     <div>
                         <span class="material-icons-sharp">
                             add
                         </span>
-                        <h3>Add Reminder</h3>
+                        <h3>Add Event</h3>
                     </div>
                 </div>
+                </a>
+                
 
             </div>
+
 
         </div>
     </div>

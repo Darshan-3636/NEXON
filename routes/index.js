@@ -7,6 +7,7 @@ const ownerModel = require('../models/owner-model');
 const productModel = require('../models/product-model');
 const empModel = require('../models/emp-model');
 const bcrypt = require('bcrypt');
+const orderModel = require('../models/order-model');
 
 //default page routes
 router.get('/', (req, res)=>{
@@ -176,7 +177,7 @@ router.post('/new_login', upload.single('image'), isOwner, async (req, res) => {
                         username, 
                         picture: req.file.buffer,
                         company:req.owner.company,
-                        ownerid:req.owner._id
+                        ownerid:req.owner.ownerid
                         },
                     )
                     req.flash('success', 'Employee created successfully');
@@ -194,10 +195,27 @@ router.post('/new_login', upload.single('image'), isOwner, async (req, res) => {
 //admin_dashboard
 
 router.get('/admin_dashboard',isOwner, async (req, res)=>{
+    let emps = await empModel.find({ownerid:req.owner.ownerid})
+
+     const Raworders = await orderModel.find().populate('productid'); // Assuming productid is linked to a product model
+        
+        const orders = Raworders.filter(order => 
+            order.productid && order.productid.ownerid.toString() === req.owner.ownerid.toString()
+        );
+        const processedOrders = orders.map(order => ({
+            userid: order.userid,
+            productid: order.productid,
+            quantity: order.quantity,
+            date: order.date,
+            orderStatus: order.orderStatus.charAt(0).toUpperCase() + order.orderStatus.slice(1), // Capitalize order status
+            totalAmount: order.productid.price * order.quantity  // Assuming `productid.price` exists
+        }));
+    
+        const totalCustomers = [...new Set(orders.map(order => order.userid.toString()))].length;
+
     let success = req.flash('success')
     let error = req.flash('error')
-    // let owner = await ownerModel.findOne({_id:req.owner._id})
-    res.render('admin_dashboard',{success, error,owner:req.owner});
+    res.render('admin_dashboard',{success, error,owner:req.owner,emps,orders: processedOrders, totalCustomers});
 })
 
 //calender
@@ -221,14 +239,19 @@ router.post('/calendar', isOwner, async (req, res) => {
             borderColor 
         };
 
-        const owner = await ownerModel.findById(req.owner.ownerid);
-        if (!owner) {
-            req.flash('error', 'Owner not found');
-            return res.redirect('/owners/calendar');
+        const owner = await ownerModel.findById(req.owner._id);
+        const emp = await empModel.findById(req.owner._id);
+        if (owner) {
+            owner.events.push(newEvent);
+            await owner.save();
+            console.log("it works in owner")
+        } else  {
+            emp.events.push(newEvent);
+            await emp.save();
+            console.log("it works in emp")
         }
 
-        owner.events.push(newEvent);
-        await owner.save();
+        
 
         req.flash('success', 'Created New Event');
         res.redirect('/owners/calendar');
@@ -252,7 +275,7 @@ router.get('/deleteEvent/:eid', isOwner , async (req, res)=>{
         const eventExists = owner.events.some(event => event._id.toString() === eventId);
         if (!eventExists) {
             req.flash('error',"Event Doesn't Exists")
-            return res.redirect('/owners/calendar');
+            return res.redirect(req.get("Referrer") || "/");
         }
 
         //remove event
@@ -262,11 +285,13 @@ router.get('/deleteEvent/:eid', isOwner , async (req, res)=>{
             { new: true }
         );
         req.flash('success','Event removed');
-        res.redirect('/owners/calendar')
+        return res.redirect(req.get("Referrer") || "/");
+
     }
     catch(err){
         req.flash('error',err.message);
-        res.redirect('/owners/calendar')
+        return res.redirect(req.get("Referrer") || "/");
+
     }
 })
 
@@ -277,6 +302,7 @@ router.get('/test',isOwner,(req, res)=>{
 //logout
 
 router.get('/logoutPage',isOwner,(req, res)=>{
+    
     res.render('admin_dashboard_sidebar/logout',{owner:req.owner})
 })
 

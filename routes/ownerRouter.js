@@ -8,11 +8,11 @@ const messageModel = require('../models/message-model')
 const orderModel = require('../models/order-model');
 const userModel  = require('../models/user-model');
 
-router.get('/users' , isOwner, (req ,res)=>{
+router.get('/users' , isOwner, async (req ,res)=>{
     res.render('admin_dashboard_sidebar/users',{owner:req.owner})
 })
 
-router.get('/history',isOwner, (req, res)=>{
+router.get('/history',isOwner, async (req, res)=>{
     res.render('admin_dashboard_sidebar/history',{owner:req.owner})
 })
 
@@ -48,8 +48,8 @@ router.get('/tickets',isOwner , async (req, res)=>{
 
 //accept , wait list and decline orders
 
-router.get('/acceptOrder/:oid',isOwner , async (req, res)=>{
-    await orderModel.updateOne({_id:req.params.oid},{orderStatus:"accepted"},{new:true})
+router.get('/completeOrder/:oid',isOwner , async (req, res)=>{
+    await orderModel.updateOne({_id:req.params.oid},{orderStatus:"completed"},{new:true})
     req.flash('success','Order Accepted');
     res.redirect('/owners/tickets');
 })
@@ -66,7 +66,7 @@ router.get('/waitlistOrder/:oid',isOwner , async (req, res)=>{
     res.redirect('/owners/tickets');
 })
 
-router.get('/jobs',isOwner , (req, res)=>{
+router.get('/jobs',isOwner , async (req, res)=>{
     res.render('admin_dashboard_sidebar/jobs',{owner:req.owner})
 })
 
@@ -76,19 +76,18 @@ router.get('/calendar', isOwner, async (req, res) => {
     try {
         let error = req.flash('error')
         let success = req.flash('success')
-        const owner = await ownerModel.findById(req.owner.ownerid);
-        res.render('admin_dashboard_sidebar/calendar', { owner, error , success });
+        res.render('admin_dashboard_sidebar/calendar', { owner:req.owner, error , success });
     } catch (err) {
         req.flash('error',`${err}`)
         res.redirect('/admin_dashboard');
     }
 });
 
-router.get('/settings',isOwner , (req, res)=>{
+router.get('/settings',isOwner , async (req, res)=>{
     res.render('admin_dashboard_sidebar/settings',{owner:req.owner})
 })
 
-router.get('/new_emp',isOwner , (req, res)=>{
+router.get('/new_emp',isOwner , async (req, res)=>{
     let error = req.flash('error');
     let success = req.flash('success');
     res.render('admin_dashboard_sidebar/new_login',{owner:req.owner, error, success})
@@ -105,7 +104,7 @@ router.get('/messages',isOwner , async (req, res)=>{
 
 // create product route
 
-router.get('/createproduct',isOwner , (req, res)=>{
+router.get('/createproduct',isOwner ,async  (req, res)=>{
     let error = req.flash('error');
     let success = req.flash('success');
     res.render('admin_dashboard_sidebar/createProduct',{owner:req.owner,error, success})
