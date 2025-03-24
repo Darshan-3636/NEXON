@@ -8,6 +8,7 @@ const productModel = require('../models/product-model');
 const empModel = require('../models/emp-model');
 const bcrypt = require('bcrypt');
 const orderModel = require('../models/order-model');
+const todoModel = require('../models/todo-model')
 
 //default page routes
 router.get('/', (req, res)=>{
@@ -192,6 +193,13 @@ router.post('/new_login', upload.single('image'), isOwner, async (req, res) => {
     }
 });
 
+//remove employee
+router.get('/removeemp/:eid', isOwner , async (req,res)=>{
+    await empModel.deleteOne({_id:req.params.eid})
+    req.flash('success','Employee Removed');
+    res.redirect('/owners/users');
+})
+
 //admin_dashboard
 
 router.get('/admin_dashboard',isOwner, async (req, res)=>{
@@ -210,12 +218,16 @@ router.get('/admin_dashboard',isOwner, async (req, res)=>{
             orderStatus: order.orderStatus.charAt(0).toUpperCase() + order.orderStatus.slice(1), // Capitalize order status
             totalAmount: order.productid.price * order.quantity  // Assuming `productid.price` exists
         }));
+
+        const latestOrders = processedOrders
+        .sort((a, b) => new Date(b.date) - new Date(a.date))
+        .slice(0, 3);
     
         const totalCustomers = [...new Set(orders.map(order => order.userid.toString()))].length;
 
     let success = req.flash('success')
     let error = req.flash('error')
-    res.render('admin_dashboard',{success, error,owner:req.owner,emps,orders: processedOrders, totalCustomers});
+    res.render('admin_dashboard',{success, error,owner:req.owner,emps,orders: processedOrders, totalCustomers,latestOrders});
 })
 
 //calender

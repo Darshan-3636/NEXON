@@ -139,6 +139,13 @@ main {
         padding: 4px 8px;
     }
 }
+.profile img {
+    width: 100px; /* Adjust width as needed */
+    height: 100px; /* Adjust height to maintain aspect ratio */
+    border-radius: 20%; /* Optional: Makes the image circular */
+    object-fit: cover; /* Ensures the image covers the area properly */
+}
+
 
     </style>
     <title>Responsive Dashboard Design | Users Section</title>
@@ -244,196 +251,28 @@ main {
                     <table>
                         <thead>
                             <tr>
-                                <th>User ID</th>
-                                <th>Name</th>
+                                <th>Profile</th>
+                                <th>Username</th>
                                 <th>Email</th>
                                 <th>Role</th>
-                                <!-- <th>Status</th> -->
-                                <th>Last Login</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
+                            <% emps.forEach(function(emp){ %>
                             <tr>
-                                <td><a href="profile.html?user=002">001</a></td>
-                                <td>Jane Smith</td>
-                                <td>janesmith@example.com</td>
-                                <td>User</td>
-                                <!-- <td><span class="status inactive"></span> Inactive</td> -->
-                                <td>2025-01-18 09:20</td>
+                                <td><div class="profile">
+                                    <img src="data:image/jpeg;base64,<%= emp.picture.toString('base64') %>" alt="">
+                                </div>
+                                </td>
+                                <td><%= emp.username %></td>
+                                <td><%= emp.email %></td>
+                                <td><%= emp.role %></td>
                                 <td>
-                                    <button class="edit-btn">Edit</button>
-                                    <button class="delete-btn">Delete</button>
+                                    <button class="delete-btn"><a href="/removeemp/<%= emp._id %>">Delete</a></button>
                                 </td>
                             </tr>
-                            <tr>
-                                <td><a href="profile.html?user=002">002</a></td>
-                                <td>Jane Smith</td>
-                                <td>janesmith@example.com</td>
-                                <td>User</td>
-                                <!-- <td><span class="status inactive"></span> Inactive</td> -->
-                                <td>2025-01-18 09:20</td>
-                                <td>
-                                    <button class="edit-btn">Edit</button>
-                                    <button class="delete-btn">Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><a href="profile.html?user=003">003</a></td>
-                                <td>Sam Wilson</td>
-                                <td>samwilson@example.com</td>
-                                <td>Editor</td>
-                                <!-- <td><span class="status active"></span> Active</td> -->
-                                <td>2025-01-15 17:55</td>
-                                <td>
-                                    <button class="edit-btn">Edit</button>
-                                    <button class="delete-btn">Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><a href="profile.html?user=004">004</a></td>
-                                <td>Amy Lee</td>
-                                <td>amylee@example.com</td>
-                                <td>User</td>
-                                <!-- <td><span class="status active"></span> Active</td> -->
-                                <td>2025-01-21 10:40</td>
-                                <td>
-                                    <button class="edit-btn">Edit</button>
-                                    <button class="delete-btn">Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><a href="profile.html?user=005">005</a></td>
-                                <td>Michael Brown</td>
-                                <td>michaelbrown@example.com</td>
-                                <td>Admin</td>
-                                <!-- <td><span class="status active"></span> Active</td> -->
-                                <td>2025-01-10 08:30</td>
-                                <td>
-                                    <button class="edit-btn">Edit</button>
-                                    <button class="delete-btn">Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><a href="profile.html?user=006">006</a></td>
-                                <td>Chris Green</td>
-                                <td>chrisgreen@example.com</td>
-                                <td>Editor</td>
-                                <!-- <td><span class="status inactive"></span> Inactive</td> -->
-                                <td>2025-01-12 15:25</td>
-                                <td>
-                                    <button class="edit-btn">Edit</button>
-                                    <button class="delete-btn">Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><a href="profile.html?user=007">007</a></td>
-                                <td>Olivia White</td>
-                                <td>oliviawhite@example.com</td>
-                                <td>User</td>
-                                <!-- <td><span class="status active"></span> Active</td> -->
-                                <td>2025-01-14 13:40</td>
-                                <td>
-                                    <button class="edit-btn">Edit</button>
-                                    <button class="delete-btn">Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><a href="profile.html?user=008">008</a></td>
-                                <td>James Black</td>
-                                <td>jamesblack@example.com</td>
-                                <td>Admin</td>
-                                <!-- <td><span class="status inactive"></span> Inactive</td> -->
-                                <td>2025-01-09 07:20</td>
-                                <td>
-                                    <button class="edit-btn">Edit</button>
-                                    <button class="delete-btn">Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><a href="profile.html?user=009">009</a></td>
-                                <td>Emma Clark</td>
-                                <td>emmaclark@example.com</td>
-                                <td>Editor</td>
-                                <!-- <td><span class="status active"></span> Active</td> -->
-                                <td>2025-01-07 16:10</td>
-                                <td>
-                                    <button class="edit-btn">Edit</button>
-                                    <button class="delete-btn">Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><a href="profile.html?user=010">010</a></td>
-                                <td>William Harris</td>
-                                <td>williamharris@example.com</td>
-                                <td>User</td>
-                                <!-- <td><span class="status inactive"></span> Inactive</td> -->
-                                <td>2025-01-04 19:00</td>
-                                <td>
-                                    <button class="edit-btn">Edit</button>
-                                    <button class="delete-btn">Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><a href="profile.html?user=010">011</a></td>
-                                <td>William Harris</td>
-                                <td>williamharris@example.com</td>
-                                <td>User</td>
-                                <!-- <td><span class="status inactive"></span> Inactive</td> -->
-                                <td>2025-01-04 19:00</td>
-                                <td>
-                                    <button class="edit-btn">Edit</button>
-                                    <button class="delete-btn">Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><a href="profile.html?user=010">012</a></td>
-                                <td>William Harris</td>
-                                <td>williamharris@example.com</td>
-                                <td>User</td>
-                                <!-- <td><span class="status inactive"></span> Inactive</td> -->
-                                <td>2025-01-04 19:00</td>
-                                <td>
-                                    <button class="edit-btn">Edit</button>
-                                    <button class="delete-btn">Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><a href="profile.html?user=010">013</a></td>
-                                <td>William Harris</td>
-                                <td>williamharris@example.com</td>
-                                <td>User</td>
-                                <!-- <td><span class="status inactive"></span> Inactive</td> -->
-                                <td>2025-01-04 19:00</td>
-                                <td>
-                                    <button class="edit-btn">Edit</button>
-                                    <button class="delete-btn">Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><a href="profile.html?user=010">014</a></td>
-                                <td>William Harris</td>
-                                <td>williamharris@example.com</td>
-                                <td>User</td>
-                                <!-- <td><span class="status inactive"></span> Inactive</td> -->
-                                <td>2025-01-04 19:00</td>
-                                <td>
-                                    <button class="edit-btn">Edit</button>
-                                    <button class="delete-btn">Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><a href="profile.html?user=010">015</a></td>
-                                <td>William Harris</td>
-                                <td>williamharris@example.com</td>
-                                <td>User</td>
-                                <!-- <td><span class="status inactive"></span> Inactive</td> -->
-                                <td>2025-01-04 19:00</td>
-                                <td>
-                                    <button class="edit-btn">Edit</button>
-                                    <button class="delete-btn">Delete</button>
-                                </td>
-                            </tr>
+                            <% }) %>
                         </tbody>
                     </table>
                 </div>

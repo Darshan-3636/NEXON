@@ -7,9 +7,11 @@ const productModel =  require('../models/product-model');
 const messageModel = require('../models/message-model')
 const orderModel = require('../models/order-model');
 const userModel  = require('../models/user-model');
+const empModel = require('../models/emp-model');
 
 router.get('/users' , isOwner, async (req ,res)=>{
-    res.render('admin_dashboard_sidebar/users',{owner:req.owner})
+    const emps = await empModel.find({ownerid:req.owner.ownerid});
+    res.render('admin_dashboard_sidebar/users',{owner:req.owner,emps})
 })
 
 router.get('/history',isOwner, async (req, res)=>{

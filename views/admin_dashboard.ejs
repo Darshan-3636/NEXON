@@ -214,21 +214,31 @@
 
             <!-- Recent Orders Table -->
             <div class="recent-orders">
-                <h2>Recent Orders</h2>
+                <h2>Latest Orders</h2>
                 <table>
                     <thead>
                         <tr>
-                            <th>Course Name</th>
-                            <th>Course Number</th>
-                            <th>Payment</th>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
                             <th>Status</th>
+                            <th>Date</th>
                             <th></th>
                         </tr>
                     </thead>
-                    <tbody id="orders-table">
+                    <tbody>
+                        <% latestOrders.forEach(function(order){ %>
+                            <tr>
+                            <td><%= order.productid.name %></td>
+                            <td><%= order.productid.price %></td>
+                            <td><%= order.quantity %></td>
+                            <td><%= order.orderStatus %></td>
+                            <td><%= new Date(order.date).toLocaleString('en-IN', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: true }) %></td>
+                            </tr>
+                        <% }) %>
                     </tbody>
                 </table>
-                <a href="#">Show All</a>
+                <a href="/owners/tickets">Show All</a>
             </div>
             <!-- End of Recent Orders -->
 
