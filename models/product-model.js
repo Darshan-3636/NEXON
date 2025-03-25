@@ -20,7 +20,6 @@ const productSchema = mongoose.Schema({
         type:String,
         default:"white"
     },
-    company:String,
     ownerid:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"owner"

@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+
+    <style>
+        body {
+    background: #f8f9fa;
+    margin-top: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .container-p-y {
+            padding: 20px 0;
+        }
+
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        .list-group-item {
+            border: none;
+            padding: 1rem 1.5rem;
+            font-size: 0.9rem;
+            color: #495057;
+            transition: all 0.3s ease;
+        }
+
+        .list-group-item.active {
+            background-color: #007bff !important;
+            color: #fff !important;
+            font-weight: 600;
+        }
+
+        .list-group-item:hover {
+            background-color: #f8f9fa;
+            color: #007bff;
+        }
+
+        .ui-w-80 {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .btn-outline-primary {
+            border-color: #007bff;
+            color: #007bff;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .btn-default {
+            background-color: #f8f9fa;
+            border-color: #ddd;
+            color: #495057;
+            transition: all 0.3s ease;
+        }
+
+        .btn-default:hover {
+            background-color: #e9ecef;
+        }
+
+        .form-control {
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            padding: 0.75rem 1rem;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+
+        .alert-warning {
+            background-color: #fff3cd;
+            border-color: #ffeeba;
+            color: #856404;
+            padding: 0.75rem 1.25rem;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        .alert-warning a {
+            color: #856404;
+            text-decoration: underline;
+        }
+
+        .alert-warning a:hover {
+            color: #5a3d03;
+        }
+
+        .text-light {
+            color: #6c757d !important;
+            font-size: 0.8rem;
+        }
+
+        .switcher {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .switcher-input {
+            margin-right: 0.5rem;
+        }
+
+        .switcher-label {
+            font-size: 0.9rem;
+            color: #495057;
+        }
+
+        .btn-facebook {
+            background-color: #3b5998;
+            color: #fff;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-facebook:hover {
+            background-color: #344e86;
+        }
+
+        .btn-twitter {
+            background-color: #1da1f2;
+            color: #fff;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-twitter:hover {
+            background-color: #1991db;
+        }
+
+        .btn-instagram {
+            background-color: #e4405f;
+            color: #fff;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-instagram:hover {
+            background-color: #d32a4a;
+        }
+
+        .btn-google {
+            background-color: #dd4b39;
+            color: #fff;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-google:hover {
+            background-color: #c23321;
+        }
+
+        .btn-linkedin {
+            background-color: #0077b5;
+            color: #fff;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-linkedin:hover {
+            background-color: #005f8d;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .mt-3 {
+            margin-top: 1rem;
+        }
+
+        .mb-4 {
+            margin-bottom: 1.5rem;
+        }
+
+        .border-light {
+            border-color: #e9ecef !important;
+        }
+
+        .media {
+            display: flex;
+            align-items: center;
+        }
+
+        .media-body {
+            margin-left: 1rem;
+        }
+
+        .custom-select {
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            padding: 0.75rem 1rem;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .custom-select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+
+        .account-settings-fileinput {
+            position: absolute;
+            visibility: hidden;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+        }
+        .profile-photo {
+            width: 150px; /* Adjust as needed */
+            height: 150px;
+            border-radius: 20%; /* Makes it circular */
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid #ddd; /* Optional border */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional shadow */
+        }
+
+        .profile-photo img {
+            width: 150%;
+            height: 150%;
+            object-fit: cover; /* Ensures the image fills the space without distortion */
+            border-radius: 20%; /* Ensures the image remains circular */
+        }
+        .flash-message {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 12px;
+    border-radius: 6px;
+    color: white;
+}
+
+.flash-message.error {
+    background-color: #ef4444; /* Red-500 */
+}
+
+.flash-message.success {
+    background-color: #22c55e; /* Green-500 */
+}
+
+.flash-message span {
+    display: inline-block;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+.profile img {
+    width: 100px; /* Adjust width as needed */
+    height: 100px; /* Adjust height to maintain aspect ratio */
+    border-radius: 20%; /* Optional: Makes the image circular */
+    object-fit: cover; /* Ensures the image covers the area properly */
+}
+
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <% if(error.length > 0) { %>
+        <div class="flash-message error">
+            <span><%= error %></span>
+        </div>
+    <% } %>
+    
+    <% if(success.length > 0) { %>
+        <div class="flash-message success">
+            <span><%= success %></span>
+        </div>
+    <% } %>
+    <div class="container light-style flex-grow-1 container-p-y">
+        <h4 class="font-weight-bold py-3 mb-4">
+            Account settings
+        </h4>
+        <div class="card overflow-hidden">
+            
+            <div class="row no-gutters row-bordered row-border-light">
+                <div class="col-md-3 pt-0">
+                    <div class="list-group list-group-flush account-settings-links">
+                        <a class="list-group-item list-group-item-action active" data-toggle="list"
+                            href="#account-general">General</a>
+                        <a class="list-group-item list-group-item-action" data-toggle="list"
+                            href="#account-change-password">Change password</a>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="tab-content">
+                        <div class="tab-pane fade active show" id="account-general">
+                            <div class="card-body media align-items-center">
+                                <div class="profile-photo">
+                                    <img src="data:image/jpeg;base64,<%= owner.picture.toString('base64') %>" alt="">
+                                </div><br>
+                            </div>
+                                <form action="/updatepicture" enctype="multipart/form-data" method="post">
+                                    <input type="file" name="image" id="upload-photo">
+                                    <input type="submit" class="btn btn-outline-primary" value="Upload new photo">
+                                </form>
+                            
+                            <hr class="border-light m-0">
+                            <form action="/updateprofile" method="post">
+                                
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label class="form-label">Username</label>
+                                        <input type="text" name="username" class="form-control mb-1" id="username" value="<%= owner.username %>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">E-mail</label>
+                                        <input type="text" name="email" class="form-control mb-1" id="email" value="<%= owner.email %>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Phone</label>
+                                        <input type="text" name="phone" class="form-control mb-1" id="email" value="<%= owner.phone.trim() %>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Company</label>
+                                        <input type="text" name="company" class="form-control" id="company" value="<%= owner.company %>">
+                                    </div>
+                                    <div class="text-right mt-3">
+                                        
+                                        <input type="submit" class="btn btn-primary" value="Save Changes">&nbsp;
+                                        <input type="reset">
+                                    </div>
+                                </div>
+                            </form>
+                            
+                        </div>
+                        <div class="tab-pane fade" id="account-change-password">
+                            <form action="/updatepass" method="post">
+                                <div class="card-body pb-2">
+                                    <div class="form-group">
+                                        <label class="form-label">Current password</label>
+                                        <input type="password" name="currentpassword" class="form-control" id="current-password" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">New password</label>
+                                        <input type="password" name="newpassword" class="form-control" id="new-password" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Repeat new password</label>
+                                        <input type="password" name="newpasswordcheck" class="form-control" id="repeat-password" required>
+                                    </div>
+                                    <div class="text-right mt-3">
+                                        <input type="submit" class="btn btn-primary" value="Save Changes">&nbsp;
+                                        <input type="reset">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <h4 class="font-weight-bold py-3 mb-4">
+            <a href="javascript:history.back()"> &lt; Go Back</a>
+        </h4>
+        
+        
+    </div>
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Wait for the DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Select all flash messages
+            var flashMessages = document.querySelectorAll('.flash-message');
+
+            // Iterate through each flash message
+            flashMessages.forEach(function(message) {
+            // Set a timeout to remove the message after 5 seconds (5000 milliseconds)
+            setTimeout(function() {
+                message.style.display = 'none';
+            }, 5000);
+            });
+        });
+    </script>
+</body>
+
+</html>

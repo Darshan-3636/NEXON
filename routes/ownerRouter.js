@@ -14,9 +14,48 @@ router.get('/users' , isOwner, async (req ,res)=>{
     res.render('admin_dashboard_sidebar/users',{owner:req.owner,emps})
 })
 
-router.get('/history',isOwner, async (req, res)=>{
-    res.render('admin_dashboard_sidebar/history',{owner:req.owner})
-})
+router.get('/history', isOwner, async (req, res) => {
+    try {
+        const { month, year } = req.query; // Get month & year from query parameters
+        let query = {}; // Initialize query
+
+        if (month && year) {
+            // Convert month & year to a date range
+            const startDate = new Date(year, month - 1, 1); // First day of the selected month
+            const endDate = new Date(year, month, 0, 23, 59, 59); // Last day of the selected month
+
+            query.date = { $gte: startDate, $lte: endDate };
+        } else if (month) {
+            // If only month is selected, find all orders from that month across all years
+            query.$expr = { $eq: [{ $month: "$date" }, parseInt(month)] };
+        } else if (year) {
+            // If only year is selected, find all orders from that year across all months
+            query.$expr = { $eq: [{ $year: "$date" }, parseInt(year)] };
+        }
+
+        const Raworders = await orderModel
+            .find(query) // Apply dynamic filtering
+            .populate('productid')
+            .populate('userid')
+            .sort({ date: -1 });
+
+        // Filter only the orders belonging to the logged-in owner
+        const orders = Raworders.filter(order =>
+            order.productid && order.productid.ownerid.toString() === req.owner.ownerid.toString()
+        );
+
+        res.render('admin_dashboard_sidebar/history', {
+            owner: req.owner,
+            orders,
+            selectedMonth: month || '',
+            selectedYear: year || ''
+        });
+    } catch (error) {
+        req.flash('error', 'Something Went Wrong');
+        return res.redirect(req.get("Referrer") || "/");
+    }
+});
+
 
 router.get('/analytics',isOwner , async (req, res)=>{
     
@@ -39,14 +78,48 @@ router.get('/analytics',isOwner , async (req, res)=>{
     res.render('admin_dashboard_sidebar/analytics',{owner:req.owner,orders: processedOrders, totalCustomers})
 })
 
-router.get('/tickets',isOwner , async (req, res)=>{
-    const Raworders = await orderModel.find().populate('productid').populate('userid');
-    
-    const orders = Raworders.filter(order => 
-        order.productid && order.productid.ownerid.toString() === req.owner.ownerid.toString()
-    );
-    res.render('admin_dashboard_sidebar/tickets',{owner:req.owner , orders})
-})
+router.get('/tickets', isOwner, async (req, res) => {
+    try {
+        const { month, year } = req.query; // Get month & year from query parameters
+        let query = {}; // Initialize query
+
+        if (month && year) {
+            // Convert month & year to a date range
+            const startDate = new Date(year, month - 1, 1); // First day of the selected month
+            const endDate = new Date(year, month, 0, 23, 59, 59); // Last day of the selected month
+
+            query.date = { $gte: startDate, $lte: endDate };
+        } else if (month) {
+            // If only month is selected, find all orders from that month across all years
+            query.$expr = { $eq: [{ $month: "$date" }, parseInt(month)] };
+        } else if (year) {
+            // If only year is selected, find all orders from that year across all months
+            query.$expr = { $eq: [{ $year: "$date" }, parseInt(year)] };
+        }
+
+        const Raworders = await orderModel
+            .find(query) // Apply dynamic filtering
+            .populate('productid')
+            .populate('userid')
+            .sort({ date: -1 });
+
+        // Filter only the orders belonging to the logged-in owner
+        const orders = Raworders.filter(order =>
+            order.productid && order.productid.ownerid.toString() === req.owner.ownerid.toString()
+        );
+
+        res.render('admin_dashboard_sidebar/tickets', {
+            owner: req.owner,
+            orders,
+            selectedMonth: month || '',
+            selectedYear: year || ''
+        });
+    } catch (error) {
+        req.flash('error', 'Something Went Wrong');
+        return res.redirect(req.get("Referrer") || "/");
+    }
+});
+
 
 //accept , wait list and decline orders
 
@@ -68,9 +141,61 @@ router.get('/waitlistOrder/:oid',isOwner , async (req, res)=>{
     res.redirect('/owners/tickets');
 })
 
-router.get('/jobs',isOwner , async (req, res)=>{
-    res.render('admin_dashboard_sidebar/jobs',{owner:req.owner})
-})
+router.get('/jobs', isOwner, async (req, res) => {
+    try {
+        let error = req.flash('error');
+        let success = req.flash('success');
+
+        // Fetch all products for the logged-in owner
+        let products = await productModel.find({ ownerid: req.owner.ownerid });
+
+        // Get total number of products
+        let totalProducts = products.length;
+
+        // Get start and end of the current month
+        let startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+        let endOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
+
+        // Fetch all orders for this month
+        let orders = await orderModel.aggregate([
+            {
+                $match: {
+                    date: { $gte: startOfMonth, $lte: endOfMonth }
+                }
+            },
+            {
+                $group: {
+                    _id: "$productid",
+                    quantity: { $sum: "$quantity" }
+                }
+            },
+            { $sort: { quantity: -1 } } // Sort by quantity in descending order
+        ]);
+
+        // Find best and underperforming products
+        let bestProduct = null, underProduct = null;
+
+        if (orders.length > 0) {
+            bestProduct = await productModel.findById(orders[0]._id);
+            underProduct = await productModel.findById(orders[orders.length - 1]._id);
+        }
+
+        res.render('admin_dashboard_sidebar/jobs', {
+            owner: req.owner,
+            error,
+            success,
+            products,
+            totalProducts,
+            bestProduct,
+            underProduct
+        });
+
+    } catch (err) {
+        req.flash('error', `${err}`);
+        res.redirect('/admin_dashboard');
+    }
+});
+
 
 
 
@@ -85,9 +210,6 @@ router.get('/calendar', isOwner, async (req, res) => {
     }
 });
 
-router.get('/settings',isOwner , async (req, res)=>{
-    res.render('admin_dashboard_sidebar/settings',{owner:req.owner})
-})
 
 router.get('/new_emp',isOwner , async (req, res)=>{
     let error = req.flash('error');
@@ -96,7 +218,7 @@ router.get('/new_emp',isOwner , async (req, res)=>{
 })
 
 router.get('/messages',isOwner , async (req, res)=>{
-    let messages = await messageModel.find({company:req.owner.company}).select('-_id');
+    let messages = await messageModel.find({ownerid:req.owner._id}).select('-_id');
     let error = req.flash('error');
     let success = req.flash('success');
     res.render('admin_dashboard_sidebar/messages',{owner:req.owner , error, success, messages})
@@ -124,7 +246,6 @@ router.post('/create', isOwner, upload.single('image'), async (req, res)=>{
             bgcolor,
             panelcolor,
             textcolor,
-            company:req.owner.company,
             ownerid:req.owner._id
          })
          

@@ -15,8 +15,9 @@ module.exports.message = async (req, res) => {
             return res.redirect('/contact');
         }
 
+        let owner = await ownerModel.findOne({company})
         // Create a new message entry in MongoDB
-        await messageModel.create({ name, email, message, company });
+        await messageModel.create({ name, email, message, ownerid:owner._id });
 
         req.flash('success', 'Message sent successfully');
         res.redirect('/contact');

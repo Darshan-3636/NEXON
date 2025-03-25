@@ -169,6 +169,49 @@
     background-color: #ebdc08;
     color: white;
   }
+  .filter-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.filter-form label {
+    font-weight: bold;
+    color: #333;
+}
+
+.filter-form select {
+    padding: 6px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.filter-form select:hover {
+    border-color: #007bff;
+}
+
+.filter-form button {
+    padding: 8px 12px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+}
+
+.filter-form button:hover {
+    background: #0056b3;
+}
+
     </style>
 </head>
 
@@ -229,12 +272,6 @@
                   <span class="fa fa-calendar-o" 
                   style="font-size: 18px;"></span>
                   <h3>Calendar</h3>
-              </a>
-              <a href="/owner/settings">
-                  <span class="material-icons-sharp">
-                      settings
-                  </span>
-                  <h3>Settings</h3>
               </a>
               <a href="/owners/new_emp">
                   <span class="material-icons-sharp">
@@ -302,7 +339,30 @@
                 </div>
             
 
-
+                <form method="GET" action="/owners/tickets" class="filter-form">
+                  <label for="month">Select Month:</label>
+                  <select name="month" id="month">
+                      <option value="">All</option>
+                      <% for(let i=1; i<=12; i++) { %>
+                          <option value="<%= i %>" <%= selectedMonth == i ? 'selected' : '' %>>
+                              <%= new Date(2025, i - 1).toLocaleString('en-IN', { month: 'long' }) %>
+                          </option>
+                      <% } %>
+                  </select>
+              
+                  <label for="year">Select Year:</label>
+                  <select name="year" id="year">
+                      <option value="">All</option>
+                      <% for(let i=2022; i<=new Date().getFullYear(); i++) { %>
+                          <option value="<%= i %>" <%= selectedYear == i ? 'selected' : '' %>><%= i %></option>
+                      <% } %>
+                  </select>
+              
+                  <button type="submit">Filter</button>
+              </form>
+              
+              
+              
 <div class="table-container">       
 <table>
     <thead>
@@ -334,6 +394,11 @@
             <button class="waitlist-btn"><a href="/owners/waitlistOrder/<%= order._id %>">Wait List</a></button>
           </td>
           <% } %>
+          <% if(order.orderStatus === "completed"){%>
+          <td>
+            <button class="waitlist-btn"><a href="/owners/waitlistOrder/<%= order._id %>">Wait List</a></button>
+          </td>
+          <% } %>
         </tr>
       <% }) %>  
     </tbody>
@@ -359,13 +424,18 @@
               </div>
 
               <div class="profile">
-                  <div class="info">
-                      <p>Hey, <b><%= owner.username %></b></p>
-                      <small class="text-muted"><%= owner.role %></small>
-                  </div>
-                  <div class="profile-photo">
-                      <img src="data:image/jpeg;base64,<%= owner.picture.toString('base64') %>" alt="">
-                  </div>
+                  <a href="/profile">
+                      <div class="info">
+                          <p>Hey, <b><%= owner.username %></b></p>
+                          <small class="text-muted"><%= owner.role %></small>
+                      </div></a>
+                      <a href="/profile">
+                          <div class="profile-photo">
+                              <img src="data:image/jpeg;base64,<%= owner.picture.toString('base64') %>" alt="">
+                          </div>
+                      </a>
+                      
+                  
               </div>
 
           </div>

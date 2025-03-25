@@ -10,7 +10,7 @@ module.exports = async (req, res , next )=>{
     else{
         try{
             let decoded = jwt.verify(req.cookies.ownerToken , process.env.JWT_KEY);
-            let owner =  await ownerModel.findOne({email:decoded.email}).select("-password");
+            let owner =  await ownerModel.findOne({_id:decoded.id}).select("-password");
             if(owner){
                 req.owner = {
                     "_id":owner._id,
@@ -25,7 +25,7 @@ module.exports = async (req, res , next )=>{
                 }
                 next();
             }else {
-                let emp = await empModel.findOne({email:decoded.email}).select("-password");
+                let emp = await empModel.findOne({_id:decoded.id}).select("-password");
                 req.owner = {
                     "_id":emp._id,
                     "ownerid":emp.ownerid,
@@ -41,7 +41,6 @@ module.exports = async (req, res , next )=>{
             } 
         }
         catch(err){
-            req.flash('error',`${err}`);
             res.redirect('/login');
         }
     }

@@ -10,6 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>Responsive Dashboard Design #1 | AsmrProg</title>
     <style>
+        
         :root {
             --primary-color: #191b19;
             --secondary-color: #2196f3;
@@ -148,9 +149,17 @@
             grid-template-columns: 0.776fr 0.8fr;
             margin-top: 30px;
             font-size: 14px;
+            width: 100vw; /* Full width */
+            height: auto; /* Full height */
+            gap: 20px; /* Adds spacing between sections */
+            padding: 20px; /* Adds spacing around */
+            box-sizing: border-box; /* Ensures padding doesn't increase the size */
         }
 
+        /* Ensuring list-section and chart-section take full height */
         .list-section, .chart-section {
+            height: 100%;
+            overflow-y: auto; /* Enables scrolling if content exceeds */
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 8px;
@@ -184,26 +193,6 @@
         .job-type {
             color: var(--secondary-color);
         }
-
-        .chart {
-            height: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 18px;
-            color: var(--secondary-color);
-            border: 2px dashed var(--border-color);
-        }
-        .chart-container {
-            width: 100%;
-            max-width: 520px;
-            margin-left: 45px;
-            background: #ffffff;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            max-height: 330px;
-            border-radius: 8px;
-            }
 
         canvas {
             display: block;
@@ -300,10 +289,93 @@
             color: #999;
             }
 
+            .users-section {
+                overflow-y: auto; /* Makes the box scrollable */
+                height: 100%; /* Ensures it uses the available space */
+                max-height: 500px; /* Set a max height for scrolling */
+                padding-right: 5px;
+                width: 100%; /* Take full width of the main section */
+                background-color: #fff;
+                padding: 30px;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                max-height: 100vh; /* Set max height for the box */
+                overflow: hidden; /* Hide overflow of content */
+                position: relative; /* Allow sticky positioning for heading */
+            }
+
+            .users-section h1 {
+                font-size: 24px;
+                font-weight: bold;
+                margin-bottom: 20px;
+                color: #333;
+                position: sticky; /* Keep the heading fixed */
+                top: 0; /* Fix the heading at the top */
+                background-color: #fff; /* Match background with the section */
+                padding-top: 10px; /* Add top padding for better spacing */
+                z-index: 1; /* Ensure it stays on top of the table */
+            }
+
+            .users-table {
+                width: 100%;
+                margin-top: 20px;
+                border-collapse: collapse;
+                max-height: calc(80vh - 60px); /* Allow space for heading */
+                overflow-y: auto; /* Enable vertical scrolling for the table */
+                display: block; /* Make the table block element to enable scrolling */
+            }
+
+            .users-table table {
+                width: 100%;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                overflow: hidden;
+            }
+
+            .users-table th,
+            .users-table td {
+                padding: 12px;
+                text-align: left;
+                font-size: 14px;
+                color: #555;
+            }
+
+            .users-table th {
+                background-color: #f5f5f5;
+                font-weight: bold;
+            }
+
+            .users-table tr:nth-child(even) {
+                background-color: #f9f9f9;
+            }
+
+            .users-table tr:hover {
+                background-color: #f0f0f0;
+            }
+
+            .users-table td button {
+                margin: 0 5px;
+                padding: 6px 12px;
+                font-size: 14px;
+                border: none;
+                cursor: pointer;
+                border-radius: 5px;
+                transition: background-color 0.3s ease;
+            }
         </style>
 </head>
-
 <body>
+    <% if(error.length > 0) { %>
+        <div class="flash-message error">
+            <span><%= error %></span>
+        </div>
+    <% } %>
+    
+    <% if(success.length > 0) { %>
+        <div class="flash-message success">
+            <span><%= success %></span>
+        </div>
+    <% } %>
     <div class="container">
         <!-- Sidebar Section -->
         <aside>
@@ -354,18 +426,12 @@
                     <span class="material-icons-sharp">
                         inventory
                     </span>
-                    <h3>Jobs</h3>
+                    <h3>Products</h3>
                 </a>
                 <a href="/owners/calendar">
                     <span class="fa fa-calendar-o" 
                     style="font-size: 18px;"></span>
                     <h3>Calendar</h3>
-                </a>
-                <a href="/owners/settings">
-                    <span class="material-icons-sharp">
-                        settings
-                    </span>
-                    <h3>Settings</h3>
                 </a>
                 <a href="/owners/new_emp">
                     <span class="material-icons-sharp">
@@ -403,120 +469,50 @@
         
                 <div class="stats-cards">
                     <div class="card">
-                        <h2>256</h2>
-                        <p>Total Employers</p>
+                        <h2><%= totalProducts %></h2>
+                        <p>Total Products</p>
                     </div>
                     <div class="card">
-                        <h2>4026</h2>
-                        <p>Total Candidates</p>
+                        <h2><%= bestProduct %></h2>
+                        <p>Best Performing Product</p>
                     </div>
                     <div class="card">
-                        <h2>48</h2>
-                        <p>Total Locations</p>
-                    </div>
-                    <div class="card">
-                        <h2>34%</h2>
-                        <p>Resume Upload Ratio</p>
+                        <h2><%= underProduct %></h2>
+                        <p>Under Performing Product</p>
                     </div>
                 </div>
         
                 <div class="grid-section">
-                    <div class="list-section">
-                        <div class="recent-jobs">
-                        <h3>Recent Jobs <span class="view-all">View All</span></h3>
-                        <div class="recent-jobs-list scrollable">
-                            <ul>
-                                <li>
-                                <div class="job-details">
-                                    <span class="job-title">UI Developer</span>
-                                    <span class="job-time">Full Time</span>
-                                    <span class="job-status fresher">Fresher</span>
-                                </div>
-                                <small class="job-time-ago">12 hrs ago</small>
-                                </li>
-                                <li>
-                                <div class="job-details">
-                                    <span class="job-title">AWS Engineer</span>
-                                    <span class="job-time">Part Time</span>
-                                    <span class="job-status experience">+1 yrs Experience</span>
-                                </div>
-                                <small class="job-time-ago">2 hrs ago</small>
-                                </li>
-                                <li>
-                                <div class="job-details">
-                                    <span class="job-title">React Developer</span>
-                                    <span class="job-time">Freelancer</span>
-                                    <span class="job-status fresher">Fresher</span>
-                                </div>
-                                <small class="job-time-ago">6 hrs ago</small>
-                                </li>
-                                <li>
-                                <div class="job-details">
-                                    <span class="job-title">Angular Developer</span>
-                                    <span class="job-time">Full Time</span>
-                                    <span class="job-status experience">+2 yrs Experience</span>
-                                </div>
-                                <small class="job-time-ago">14 hrs ago</small>
-                                </li>
-                                <li>
-                                <div class="job-details">
-                                    <span class="job-title">UI Tester</span>
-                                    <span class="job-time">Full Time</span>
-                                    <span class="job-status experience">+3 yrs Experience</span>
-                                </div>
-                                <small class="job-time-ago">2 days ago</small>
-                                </li>
-                                <!-- New 5 Jobs -->
-                                <li>
-                                <div class="job-details">
-                                    <span class="job-title">Backend Engineer</span>
-                                    <span class="job-time">Part Time</span>
-                                    <span class="job-status fresher">Fresher</span>
-                                </div>
-                                <small class="job-time-ago">8 hrs ago</small>
-                                </li>
-                                <li>
-                                <div class="job-details">
-                                    <span class="job-title">DevOps Engineer</span>
-                                    <span class="job-time">Full Time</span>
-                                    <span class="job-status experience">+2 yrs Experience</span>
-                                </div>
-                                <small class="job-time-ago">5 hrs ago</small>
-                                </li>
-                                <li>
-                                <div class="job-details">
-                                    <span class="job-title">Graphic Designer</span>
-                                    <span class="job-time">Freelancer</span>
-                                    <span class="job-status fresher">Fresher</span>
-                                </div>
-                                <small class="job-time-ago">10 hrs ago</small>
-                                </li>
-                                <li>
-                                <div class="job-details">
-                                    <span class="job-title">Data Scientist</span>
-                                    <span class="job-time">Full Time</span>
-                                    <span class="job-status experience">+3 yrs Experience</span>
-                                </div>
-                                <small class="job-time-ago">1 day ago</small>
-                                </li>
-                                <li>
-                                <div class="job-details">
-                                    <span class="job-title">Digital Marketer</span>
-                                    <span class="job-time">Part Time</span>
-                                    <span class="job-status fresher">Fresher</span>
-                                </div>
-                                <small class="job-time-ago">3 hrs ago</small>
-                                </li>
-                            </ul>
-                            </div>
+                    <div class="users-section">
+                        <h1>Products</h1>
+                        <div class="users-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Picture</th>
+                                        <th>Name</th>
+                                        <th>Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% products.forEach(function(product){ %>
+                                            <tr>
+                                                <td>
+                                                    <div class="profile-photo">
+                                                        <img src="data:image/jpeg;base64,<%= product.image.toString('base64') %>" alt="">
+                                                    </div>
+                                                </td>
+                                                <td><%= product.name %></td>
+                                                <td><%= product.price %></td>
+                                                
+                                            </tr>
+                                    <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-                    <div class="chart-container">
-                        <h2>Jobs Overview</h2>
-                        <canvas id="jobsChart"></canvas>
-                      </div>
-                      
-                </div>
+                
             </div>
         </main>
 
@@ -539,13 +535,18 @@
                 </div>
 
                 <div class="profile">
-                    <div class="info">
-                        <p>Hey, <b><%= owner.username %></b></p>
-                        <small class="text-muted"><%= owner.role %></small>
-                    </div>
-                    <div class="profile-photo">
-                        <img src="data:image/jpeg;base64,<%= owner.picture.toString('base64') %>" alt="">
-                    </div>
+                    <a href="/profile">
+                        <div class="info">
+                            <p>Hey, <b><%= owner.username %></b></p>
+                            <small class="text-muted"><%= owner.role %></small>
+                        </div></a>
+                        <a href="/profile">
+                            <div class="profile-photo">
+                                <img src="data:image/jpeg;base64,<%= owner.picture.toString('base64') %>" alt="">
+                            </div>
+                        </a>
+                        
+                    
                 </div>
 
             </div>
@@ -621,79 +622,6 @@
         </div>
     </div>
     <script>
-    // Data for the chart
-    const jobData = {
-      labels: ['Full-Time', 'Part-Time', 'Freelancer', 'Internship'],
-      datasets: [
-        {
-          label: 'Number of Jobs',
-          data: [450, 300, 150, 50], // Example data
-          backgroundColor: ['#4CAF50', '#FFC107', '#FF5722', '#2196F3'],
-          hoverBackgroundColor: ['#66BB6A', '#FFD54F', '#FF7043', '#42A5F5'],
-          borderRadius: 6,
-        },
-      ],
-    };
-
-    // Configuration options
-    const config = {
-      type: 'bar',
-      data: jobData,
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            display: true,
-            position: 'top',
-            labels: {
-              font: {
-                size: 14,
-              },
-              color: '#555',
-            },
-          },
-        },
-        scales: {
-          x: {
-            ticks: {
-              font: {
-                size: 12,
-              },
-              color: '#555',
-            },
-            grid: {
-              display: false,
-            },
-          },
-          y: {
-            ticks: {
-              beginAtZero: true,
-              stepSize: 50,
-              font: {
-                size: 12,
-              },
-              color: '#555',
-            },
-            grid: {
-              color: '#eee',
-            },
-          },
-        },
-      },
-    };
-
-    // Render the chart
-    const ctx = document.getElementById('jobsChart').getContext('2d');
-    const jobsChart = new Chart(ctx, config);
-
-
-
-
-
-
-
-
-
     // Function to animate numbers in stats cards
 document.addEventListener('DOMContentLoaded', () => {
     const cards = document.querySelectorAll('.card h2');
@@ -723,7 +651,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
     </script>
-    <script src="/public/js_files/orders.js"></script>
     <script src="/public/js_files/index.js"></script>
 </body>
 

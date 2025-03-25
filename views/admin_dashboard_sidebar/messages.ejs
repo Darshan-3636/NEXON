@@ -89,23 +89,6 @@ main {
     transition: background-color 0.3s ease;
 }
 
-.edit-btn {
-    background-color: #4CAF50;
-    color: white;
-}
-
-.delete-btn {
-    background-color: #F44336;
-    color: white;
-}
-
-.edit-btn:hover {
-    background-color: #45a049;
-}
-
-.delete-btn:hover {
-    background-color: #e53935;
-}
 
 /* Status Indicator Styles */
 .status {
@@ -202,12 +185,6 @@ main {
                     style="font-size: 18px;"></span>
                     <h3>Calendar</h3>
                 </a>
-                <a href="/owners/settings">
-                    <span class="material-icons-sharp">
-                        settings
-                    </span>
-                    <h3>Settings</h3>
-                </a>
                 <a href="/owners/new_emp">
                     <span class="material-icons-sharp">
                         add
@@ -284,13 +261,18 @@ main {
                 </div>
 
                 <div class="profile">
-                    <div class="info">
-                        <p>Hey, <b><%= owner.username %></b></p>
-                        <small class="text-muted"><%= owner.role %></small>
-                    </div>
-                    <div class="profile-photo">
-                        <img src="data:image/jpeg;base64,<%= owner.picture.toString('base64') %>" alt="">
-                    </div>
+                    <a href="/profile">
+                        <div class="info">
+                            <p>Hey, <b><%= owner.username %></b></p>
+                            <small class="text-muted"><%= owner.role %></small>
+                        </div></a>
+                        <a href="/profile">
+                            <div class="profile-photo">
+                                <img src="data:image/jpeg;base64,<%= owner.picture.toString('base64') %>" alt="">
+                            </div>
+                        </a>
+                        
+                    
                 </div>
 
             </div>

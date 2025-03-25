@@ -116,6 +116,50 @@
     color: #0073e6;
 }
 
+.filter-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.filter-form label {
+    font-weight: bold;
+    color: #333;
+}
+
+.filter-form select {
+    padding: 6px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.filter-form select:hover {
+    border-color: #007bff;
+}
+
+.filter-form button {
+    padding: 8px 12px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+}
+
+.filter-form button:hover {
+    background: #0056b3;
+}
+
+
     </style>
 </head>
 
@@ -177,12 +221,6 @@
                     style="font-size: 18px;"></span>
                     <h3>Calendar</h3>
                 </a>
-                <a href="/owners/settings">
-                    <span class="material-icons-sharp">
-                        settings
-                    </span>
-                    <h3>Settings</h3>
-                </a>
                 <a href="/owners/new_emp">
                     <span class="material-icons-sharp">
                         add
@@ -221,151 +259,51 @@
                     <input type="date" id="filter-date" name="filter-date">
                     <button class="filter-btn">Filter</button>
                 </div> -->
-
+                <form method="GET" action="/owners/history" class="filter-form">
+                    <label for="month">Select Month:</label>
+                    <select name="month" id="month">
+                        <option value="">All</option>
+                        <% for(let i=1; i<=12; i++) { %>
+                            <option value="<%= i %>" <%= selectedMonth == i ? 'selected' : '' %>>
+                                <%= new Date(2025, i - 1).toLocaleString('en-IN', { month: 'long' }) %>
+                            </option>
+                        <% } %>
+                    </select>
+                
+                    <label for="year">Select Year:</label>
+                    <select name="year" id="year">
+                        <option value="">All</option>
+                        <% for(let i=2022; i<=new Date().getFullYear(); i++) { %>
+                            <option value="<%= i %>" <%= selectedYear == i ? 'selected' : '' %>><%= i %></option>
+                        <% } %>
+                    </select>
+                
+                    <button type="submit">Filter</button>
+                </form>
+                <br>
+                
                 <div class="history-table">
                     <table>
                         <thead>
-                            <tr>
-                                <th>Activity ID</th>
-                                <th>Date</th>
-                                <th>Activity Type</th>
-                                <th>Description</th>
-                                <th>Amount</th>
-                                <th>Employee</th>
-                                <th>Actions</th>
-                            </tr>
+                          <tr>
+                            <th>Customer Email </th>
+                            <th>Order</th>
+                            <th>Quantity </th>
+                            <th>Date & Time</th>
+                            <th>Status </th>
+                          </tr>
                         </thead>
                         <tbody>
+                          <% orders.forEach(function(order){ %>
                             <tr>
-                                <td><a href="#activity-001">#001</a></td>
-                                <td>2025-01-15</td>
-                                <td>Sale</td>
-                                <td>Product sold to customer A</td>
-                                <td>$1200</td>
-                                <td>John Doe</td>
-                                <td><button class="view-btn">View</button></td>
-                            </tr>
-                            <tr>
-                                <td><a href="#activity-002">#002</a></td>
-                                <td>2025-01-16</td>
-                                <td>Purchase</td>
-                                <td>Office supplies purchased</td>
-                                <td>$200</td>
-                                <td>Jane Smith</td>
-                                <td><button class="view-btn">View</button></td>
-                            </tr>
-                            <tr>
-                                <td><a href="#activity-003">#003</a></td>
-                                <td>2025-01-18</td>
-                                <td>Refund</td>
-                                <td>Refund processed for customer B</td>
-                                <td>$100</td>
-                                <td>Sam Wilson</td>
-                                <td><button class="view-btn">View</button></td>
-                            </tr>
-                            <tr>
-                                <td><a href="#activity-004">#004</a></td>
-                                <td>2025-01-19</td>
-                                <td>Sale</td>
-                                <td>Product sold to customer C</td>
-                                <td>$300</td>
-                                <td>John Doe</td>
-                                <td><button class="view-btn">View</button></td>
-                            </tr>
-                            <tr>
-                                <td><a href="#activity-005">#005</a></td>
-                                <td>2025-01-20</td>
-                                <td>Employee Update</td>
-                                <td>Promotion for Alice Johnson</td>
-                                <td>N/A</td>
-                                <td>HR Department</td>
-                                <td><button class="view-btn">View</button></td>
-                            </tr>
-                            <tr>
-                                <td><a href="#activity-005">#006</a></td>
-                                <td>2025-01-20</td>
-                                <td>Employee Update</td>
-                                <td>Promotion for Alice Johnson</td>
-                                <td>N/A</td>
-                                <td>HR Department</td>
-                                <td><button class="view-btn">View</button></td>
-                            </tr>
-                            <tr>
-                                <td><a href="#activity-005">#007</a></td>
-                                <td>2025-01-20</td>
-                                <td>Employee Update</td>
-                                <td>Promotion for Alice Johnson</td>
-                                <td>N/A</td>
-                                <td>HR Department</td>
-                                <td><button class="view-btn">View</button></td>
-                            </tr>
-                            <tr>
-                                <td><a href="#activity-005">#008</a></td>
-                                <td>2025-01-20</td>
-                                <td>Employee Update</td>
-                                <td>Promotion for Alice Johnson</td>
-                                <td>N/A</td>
-                                <td>HR Department</td>
-                                <td><button class="view-btn">View</button></td>
-                            </tr>
-                            <tr>
-                                <td><a href="#activity-005">#009</a></td>
-                                <td>2025-01-20</td>
-                                <td>Employee Update</td>
-                                <td>Promotion for Alice Johnson</td>
-                                <td>N/A</td>
-                                <td>HR Department</td>
-                                <td><button class="view-btn">View</button></td>
-                            </tr>
-                            <tr>
-                                <td><a href="#activity-005">#010</a></td>
-                                <td>2025-01-20</td>
-                                <td>Employee Update</td>
-                                <td>Promotion for Alice Johnson</td>
-                                <td>N/A</td>
-                                <td>HR Department</td>
-                                <td><button class="view-btn">View</button></td>
-                            </tr>
-                            <tr>
-                                <td><a href="#activity-005">#011</a></td>
-                                <td>2025-01-20</td>
-                                <td>Employee Update</td>
-                                <td>Promotion for Alice Johnson</td>
-                                <td>N/A</td>
-                                <td>HR Department</td>
-                                <td><button class="view-btn">View</button></td>
-                            </tr>
-                            <tr>
-                                <td><a href="#activity-005">#012</a></td>
-                                <td>2025-01-20</td>
-                                <td>Employee Update</td>
-                                <td>Promotion for Alice Johnson</td>
-                                <td>N/A</td>
-                                <td>HR Department</td>
-                                <td><button class="view-btn">View</button></td>
-                            </tr>
-                            <tr>
-                                <td><a href="#activity-005">#013</a></td>
-                                <td>2025-01-20</td>
-                                <td>Employee Update</td>
-                                <td>Promotion for Alice Johnson</td>
-                                <td>N/A</td>
-                                <td>HR Department</td>
-                                <td><button class="view-btn">View</button></td>
-                            </tr>
-                            <tr>
-                                <td><a href="#activity-005">#014</a></td>
-                                <td>2025-01-20</td>
-                                <td>Employee Update</td>
-                                <td>Promotion for Alice Johnson</td>
-                                <td>N/A</td>
-                                <td>HR Department</td>
-                                <td><button class="view-btn">View</button></td>
-                            </tr>
-
-                            <!-- Add more records as necessary -->
+                              <td><%= order.userid.email %></td>
+                              <td><%= order.productid.name %></td>
+                              <td><%= order.quantity %></td>
+                              <td><%= new Date(order.date).toLocaleString('en-IN', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: true }) %></td>
+                              <td class="status-<%= order.orderStatus %>"><%= order.orderStatus %></td>
+                          <% }) %>  
                         </tbody>
-                    </table>
+                      </table>
                 </div>
             </div>
             
@@ -388,13 +326,18 @@
                 </div>
 
                 <div class="profile">
-                    <div class="info">
-                        <p>Hey, <b><%= owner.username %></b></p>
-                        <small class="text-muted"><%= owner.role %></small>
-                    </div>
-                    <div class="profile-photo">
-                        <img src="data:image/jpeg;base64,<%= owner.picture.toString('base64') %>" alt="">
-                    </div>
+                    <a href="/profile">
+                        <div class="info">
+                            <p>Hey, <b><%= owner.username %></b></p>
+                            <small class="text-muted"><%= owner.role %></small>
+                        </div></a>
+                        <a href="/profile">
+                            <div class="profile-photo">
+                                <img src="data:image/jpeg;base64,<%= owner.picture.toString('base64') %>" alt="">
+                            </div>
+                        </a>
+                        
+                    
                 </div>
 
             </div>

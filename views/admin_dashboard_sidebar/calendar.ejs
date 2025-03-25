@@ -255,12 +255,6 @@ body {
                     style="font-size: 18px;"></span>
                     <h3>Calendar</h3>
                 </a>
-                <a href="/owners/settings">
-                    <span class="material-icons-sharp">
-                        settings
-                    </span>
-                    <h3>Settings</h3>
-                </a>
                 <a href="/owners/new_emp">
                     <span class="material-icons-sharp">
                         add
@@ -315,38 +309,69 @@ body {
                 </div>
 
                 <div class="profile">
-                    <div class="info">
-                        <p>Hey, <b><%= owner.username %></b></p>
-                        <small class="text-muted"><%= owner.role %></small>
-                    </div>
-                    <div class="profile-photo">
-                        <img src="data:image/jpeg;base64,<%= owner.picture.toString('base64') %>" alt="">
-                    </div>
+                    <a href="/profile">
+                        <div class="info">
+                            <p>Hey, <b><%= owner.username %></b></p>
+                            <small class="text-muted"><%= owner.role %></small>
+                        </div></a>
+                        <a href="/profile">
+                            <div class="profile-photo">
+                                <img src="data:image/jpeg;base64,<%= owner.picture.toString('base64') %>" alt="">
+                            </div>
+                        </a>
+                        
+                    
                 </div>
-                
-            </div>
+
+            </div><br>
 
             <!-- End of Nav -->
-            <div class="event-box">
-                <h3>Upcoming Events (Current Month)</h3>
-                <ul class="event-list" id="event-list">
-                    <% owner.events.forEach(event => { %>
-                        <% let eventDate = new Date(event.start); %>
-                        <% let now = new Date(); %>
-                        <% if (eventDate.getMonth() === now.getMonth() && eventDate.getFullYear() === now.getFullYear()) { %>
-                            <li class="event-item" data-event-id="<%= event._id %>">
-                                <strong>
-                                    <%= new Date(event.start).toLocaleString('en-IN', { 
-                                        year: 'numeric', month: '2-digit', day: '2-digit', 
-                                        hour: '2-digit', minute: '2-digit', hour12: true 
-                                    }) %>
-                                </strong> 
-                                <br> <%= event.title %>
-                                <span class="delete-icon" title="Delete Event"><a href="/deleteEvent/<%= event._id %>">🗑️</a></span>  
-                            </li>
+            <div class="filter-section">
+                <label for="month-filter">Month:</label>
+                <select id="month-filter">
+                    <option value="all">All</option>
+                    <% for(let i = 0; i < 12; i++) { %>
+                        <option value="<%= i %>" <%= (new Date().getMonth() === i) ? "selected" : "" %> >
+                            <%= new Date(2025, i).toLocaleString('en-IN', { month: 'long' }) %>
+                        </option>
+                    <% } %>
+                </select>
+                <label for="year-filter">Year:</label>
+                    <select id="year-filter">
+                        <% let currentYear = new Date().getFullYear(); %>
+                        <% for(let i = currentYear - 5; i <= currentYear + 5; i++) { %>
+                            <option value="<%= i %>" <%= (currentYear === i) ? "selected" : "" %> >
+                                <%= i %>
+                            </option>
                         <% } %>
+                    </select>
+                
+            </div><br>
+            
+            <div class="event-box">
+                <h3>Upcoming Events</h3>
+            
+                <!-- Filter Dropdowns -->
+                
+            
+                <ul class="event-list" id="event-list">
+                    <% owner.events
+                        .sort((a, b) => new Date(b.start) - new Date(a.start)) // Sort in descending order
+                        .forEach(event => { 
+                    %>
+                        <li class="event-item" data-event-id="<%= event._id %>" data-month="<%= new Date(event.start).getMonth() %>" data-year="<%= new Date(event.start).getFullYear() %>">
+                            <strong>
+                                <%= new Date(event.start).toLocaleString('en-IN', { 
+                                    year: 'numeric', month: '2-digit', day: '2-digit', 
+                                    hour: '2-digit', minute: '2-digit', hour12: true 
+                                }) %>
+                            </strong> 
+                            <br> <%= event.title %>
+                            <span class="delete-icon" title="Delete Event"><a href="/deleteEvent/<%= event._id %>">🗑️</a></span>  
+                        </li>
                     <% }); %>
                 </ul>
+            
                 <br>
                 <form id="eventform" method="post" action="/calendar">
                     <input type="text" name="title" id="event-title" placeholder="Event Title" required>
@@ -355,6 +380,37 @@ body {
                     <button id="submit" type="submit">Add Event</button>
                 </form>
             </div>
+            
+            <!-- JavaScript to Filter Events -->
+            <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const monthFilter = document.getElementById("month-filter");
+                const yearFilter = document.getElementById("year-filter");
+                const eventList = document.querySelectorAll(".event-item");
+            
+                function filterEvents() {
+                    const selectedMonth = monthFilter.value;
+                    const selectedYear = yearFilter.value;
+            
+                    eventList.forEach(event => {
+                        const eventMonth = event.getAttribute("data-month");
+                        const eventYear = event.getAttribute("data-year");
+            
+                        if ((selectedMonth === "all" || eventMonth === selectedMonth) &&
+                            (selectedYear === "all" || eventYear === selectedYear)) {
+                            event.style.display = "block";
+                        } else {
+                            event.style.display = "none";
+                        }
+                    });
+                }
+            
+                monthFilter.addEventListener("change", filterEvents);
+                yearFilter.addEventListener("change", filterEvents);
+            });
+            </script>
+            
+            
 
            
     </div>

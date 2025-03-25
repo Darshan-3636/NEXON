@@ -144,12 +144,6 @@
                     style="font-size: 18px;"></span>
                     <h3>Calendar</h3>
                 </a>
-                <a href="/owners/settings">
-                    <span class="material-icons-sharp">
-                        settings
-                    </span>
-                    <h3>Settings</h3>
-                </a>
                 <a href="/owners/new_emp">
                     <span class="material-icons-sharp">
                         add
@@ -212,13 +206,18 @@
                 </div>
 
                 <div class="profile">
-                    <div class="info">
-                        <p>Hey, <b><%= owner.username %></b></p>
-                        <small class="text-muted"><%= owner.role %></small>
-                    </div>
-                    <div class="profile-photo">
-                        <img src="data:image/jpeg;base64,<%= owner.picture.toString('base64') %>" alt="">
-                    </div>
+                    <a href="/profile">
+                        <div class="info">
+                            <p>Hey, <b><%= owner.username %></b></p>
+                            <small class="text-muted"><%= owner.role %></small>
+                        </div></a>
+                        <a href="/profile">
+                            <div class="profile-photo">
+                                <img src="data:image/jpeg;base64,<%= owner.picture.toString('base64') %>" alt="">
+                            </div>
+                        </a>
+                        
+                    
                 </div>
 
             </div>

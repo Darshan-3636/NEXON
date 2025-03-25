@@ -205,7 +205,7 @@ router.get('/removeemp/:eid', isOwner , async (req,res)=>{
 router.get('/admin_dashboard',isOwner, async (req, res)=>{
     let emps = await empModel.find({ownerid:req.owner.ownerid})
 
-     const Raworders = await orderModel.find().populate('productid'); // Assuming productid is linked to a product model
+     const Raworders = await orderModel.find().populate('productid').sort({date:-1}); // Assuming productid is linked to a product model
         
         const orders = Raworders.filter(order => 
             order.productid && order.productid.ownerid.toString() === req.owner.ownerid.toString()
@@ -229,6 +229,231 @@ router.get('/admin_dashboard',isOwner, async (req, res)=>{
     let error = req.flash('error')
     res.render('admin_dashboard',{success, error,owner:req.owner,emps,orders: processedOrders, totalCustomers,latestOrders});
 })
+
+//profile route
+
+router.get('/profile',isOwner, async (req,res)=>{
+    let error = req.flash('error')
+    let success = req.flash('success')
+    res.render('profile_info',{owner:req.owner, error , success})
+})
+
+//update profile
+
+router.post('/updateprofile', isOwner , async (req, res)=>{
+    try{
+        let owner = await ownerModel.findOne({_id:req.owner._id})
+        let emp = await empModel.findOne({_id:req.owner._id})
+
+    if(owner){
+        const { company, phone, username , email} = req.body;
+
+        // Check if the company name already exists
+        const companyExists = await ownerModel.findOne({ company });
+
+        if (companyExists) {
+            req.flash('error', 'Company Name Already Taken');
+            return res.redirect(req.get("Referrer") || "/");
+        } 
+        
+        const userExists = await ownerModel.findOne({ username });
+
+        if (userExists) {
+            req.flash('error', 'UserName Already Taken');
+            return res.redirect(req.get("Referrer") || "/");
+        } 
+        
+        const phoneExists = await ownerModel.findOne({ phone });
+
+        if (phoneExists) {
+            req.flash('error', 'Phone Number Already Exists');
+            return res.redirect(req.get("Referrer") || "/");
+        } 
+        
+        const emailExists = await ownerModel.findOne({ email });
+
+        if (emailExists) {
+            req.flash('error', 'Email Already Exists');
+            return res.redirect(req.get("Referrer") || "/");
+        } 
+
+        // Validate that the company name is not empty or invalid
+        if (!company || company.trim() === "") {
+            req.flash('error', 'Company Name Cannot Be Empty');
+            return res.redirect(req.get("Referrer") || "/");
+        }
+        
+        if (!username || username.trim() === "") {
+            req.flash('error', 'Username Cannot Be Empty');
+            return res.redirect(req.get("Referrer") || "/");
+        }
+        
+        if (!phone || phone.trim() === "") {
+            req.flash('error', 'Phone Number Cannot Be Empty');
+            return res.redirect(req.get("Referrer") || "/");
+        }
+        
+        if (!email || email.trim() === "") {
+            req.flash('error', 'Email Cannot Be Empty');
+            return res.redirect(req.get("Referrer") || "/");
+        }
+
+        // Update the owner details in the database
+        await ownerModel.updateOne(
+            { _id: req.owner._id },
+            { company, phone, username, email },
+            { new: true }
+        );
+
+        req.flash('success', 'Details Updated Successfully');
+        return res.redirect(req.get("Referrer") || "/");
+    }
+
+    if(emp){
+        const { company, phone, username , email} = req.body;
+
+        // Check if the company name already exists
+        const companyExists = await empModel.findOne({ company });
+
+        if (companyExists) {
+            req.flash('error', 'Company Name Already Taken');
+            return res.redirect(req.get("Referrer") || "/");
+        } 
+        
+        const userExists = await empModel.findOne({ username });
+
+        if (userExists) {
+            req.flash('error', 'UserName Already Taken');
+            return res.redirect(req.get("Referrer") || "/");
+        } 
+        
+        const phoneExists = await empModel.findOne({ phone });
+
+        if (phoneExists) {
+            req.flash('error', 'Phone Number Already Exists');
+            return res.redirect(req.get("Referrer") || "/");
+        } 
+        
+        const emailExists = await empModel.findOne({ email });
+
+        if (emailExists) {
+            req.flash('error', 'Email Already Exists');
+            return res.redirect(req.get("Referrer") || "/");
+        } 
+
+        // Validate that the company name is not empty or invalid
+        if (!company || company.trim() === "") {
+            req.flash('error', 'Company Name Cannot Be Empty');
+            return res.redirect(req.get("Referrer") || "/");
+        }
+        
+        if (!username || username.trim() === "") {
+            req.flash('error', 'Username Cannot Be Empty');
+            return res.redirect(req.get("Referrer") || "/");
+        }
+        
+        if (!phone || phone.trim() === "") {
+            req.flash('error', 'Phone Number Cannot Be Empty');
+            return res.redirect(req.get("Referrer") || "/");
+        }
+        
+        if (!email || email.trim() === "") {
+            req.flash('error', 'Email Cannot Be Empty');
+            return res.redirect(req.get("Referrer") || "/");
+        }
+
+        // Update the owner details in the database
+        await empModel.updateOne(
+            { _id: req.owner._id },
+            { company, phone, username, email },
+            { new: true }
+        );
+
+        req.flash('success', 'Details Updated Successfully');
+        return res.redirect(req.get("Referrer") || "/");
+    }
+
+    }
+    catch(err){
+        req.flash('error', 'Something went Wrong');
+        return res.redirect(req.get("Referrer") || "/");
+    }   
+})
+
+router.post('/updatepicture', isOwner, upload.single('image'), async (req, res)=>{
+    try{
+        let owner = await ownerModel.findOne({_id:req.owner._id})
+        let emp = await empModel.findOne({_id:req.owner._id})
+
+        if(owner){
+            await ownerModel.updateOne({_id:req.owner._id},{picture:req.file.buffer})
+            req.flash('success', 'Profile Picture Updated');
+            return res.redirect(req.get("Referrer") || "/");
+        }else if(emp){
+            await empModel.updateOne({_id:req.owner._id},{picture:req.file.buffer})
+            req.flash('success', 'Profile Picture Updated');
+            return res.redirect(req.get("Referrer") || "/");
+        } else {
+            req.flash('error', 'Something went Wrong');
+            return res.redirect(req.get("Referrer") || "/");
+        }
+
+    }
+    catch(err){
+        req.flash('error', 'Something went Wrong');
+        return res.redirect(req.get("Referrer") || "/");
+    }
+})
+
+router.post("/updatepass", isOwner, async (req, res) => {
+    try {
+        let { currentpassword, newpassword, newpasswordcheck } = req.body;
+
+        if (newpassword !== newpasswordcheck) {
+            req.flash("error", "New passwords do not match");
+            return res.redirect(req.get("Referrer") || "/");
+        }
+
+        // Fetch owner or employee details along with password
+        let user = await ownerModel.findById(req.owner._id).select("+password");
+        if (!user) {
+            user = await empModel.findById(req.owner._id).select("+password");
+        }
+
+        if (!user) {
+            req.flash("error", "User not found");
+            return res.redirect(req.get("Referrer") || "/");
+        }
+
+        // Compare current password
+        const isMatch = await bcrypt.compare(currentpassword, user.password);
+        if (!isMatch) {
+            req.flash("error", "Incorrect current password");
+            return res.redirect(req.get("Referrer") || "/");
+        }
+
+        // Check if new password is the same as the current password
+        const isSamePassword = await bcrypt.compare(newpassword, user.password);
+        if (isSamePassword) {
+            req.flash("error", "New password cannot be the same as the current password");
+            return res.redirect(req.get("Referrer") || "/");
+        }
+
+        // Hash new password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(newpassword, salt);
+
+        // Update password
+        await user.updateOne({ password: hashedPassword });
+
+        req.flash("success", "Password updated successfully");
+        return res.redirect(req.get("Referrer") || "/");
+    } catch (err) {
+        console.error(err);
+        req.flash("error", "Something went wrong");
+        return res.redirect(req.get("Referrer") || "/");
+    }
+});
 
 //calender
 router.post('/calendar', isOwner, async (req, res) => { 

@@ -37,25 +37,6 @@ if (savedTheme === 'dark') {
     darkMode.querySelector('span:nth-child(2)').classList.add('active');
 }
 
-// Populate table rows dynamically
-orders.forEach(order => {
-    const tr = document.createElement('tr');
-    const trContent = `
-        <td>${order.productName}</td>
-        <td>${order.productNumber}</td>
-        <td>${order.paymentStatus}</td>
-        <td class="${order.status === 'Declined' ? 'danger' : order.status === 'Pending' ? 'warning' : 'primary'}">${order.status}</td>
-        <td class="primary">Details</td>
-    `;
-    tr.innerHTML = trContent;
-
-});
-
-
-
-
-
-
 
 // Wait for the DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
