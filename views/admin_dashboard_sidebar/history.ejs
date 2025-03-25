@@ -205,16 +205,15 @@
                 </a>
                 <a href="/owners/tickets">
                     <span class="material-icons-sharp">
-                        mail_outline
+                        assignment
                     </span>
                     <h3>Tickets</h3>
-                    <span class="message-count">27</span>
                 </a>
                 <a href="/owners/jobs">
                     <span class="material-icons-sharp">
-                        inventory
+                        category
                     </span>
-                    <h3>Jobs</h3>
+                    <h3>Products</h3>
                 </a>
                 <a href="/owners/calendar">
                     <span class="fa fa-calendar-o" 
@@ -345,9 +344,8 @@
 
             <div class="user-profile">
                 <div class="logo">
-                    <img src="/images/logo.jpg">
-                    <h2>Nexon</h2>
-                    <p>Fullstack Web Developer</p>
+                    <img src="data:image/jpeg;base64,<%= owner.companyPicture.toString('base64') %>" alt="">
+                    <h2><%= owner.company %></h2>
                 </div>
             </div>
 

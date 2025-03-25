@@ -10,8 +10,10 @@ const userModel  = require('../models/user-model');
 const empModel = require('../models/emp-model');
 
 router.get('/users' , isOwner, async (req ,res)=>{
+    let error = req.flash('error')
+    let success = req.flash('success')
     const emps = await empModel.find({ownerid:req.owner.ownerid});
-    res.render('admin_dashboard_sidebar/users',{owner:req.owner,emps})
+    res.render('admin_dashboard_sidebar/users',{owner:req.owner,emps,error , success})
 })
 
 router.get('/history', isOwner, async (req, res) => {
@@ -70,7 +72,7 @@ router.get('/analytics',isOwner , async (req, res)=>{
         quantity: order.quantity,
         date: order.date,
         orderStatus: order.orderStatus.charAt(0).toUpperCase() + order.orderStatus.slice(1), // Capitalize order status
-        totalAmount: order.productid.price * order.quantity  // Assuming `productid.price` exists
+        totalAmount: (order.productid.price-order.productid.discount) * order.quantity  // Assuming `productid.price` exists
     }));
 
     const totalCustomers = [...new Set(orders.map(order => order.userid.toString()))].length;
@@ -156,29 +158,40 @@ router.get('/jobs', isOwner, async (req, res) => {
         let startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
         let endOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
 
-        // Fetch all orders for this month
-        let orders = await orderModel.aggregate([
+        // Fetch completed orders for this month, grouped by productId with total quantity
+        let orderStats = await orderModel.aggregate([
             {
                 $match: {
-                    date: { $gte: startOfMonth, $lte: endOfMonth }
+                    orderStatus: 'completed', // Only include completed orders
+                    date: { $gte: startOfMonth, $lte: endOfMonth } // Filter by date
                 }
             },
             {
                 $group: {
-                    _id: "$productid",
-                    quantity: { $sum: "$quantity" }
+                    _id: "$productid", // Group by productid directly
+                    totalQuantity: { $sum: "$quantity" } // Sum the quantity field
                 }
             },
-            { $sort: { quantity: -1 } } // Sort by quantity in descending order
+            { $sort: { totalQuantity: -1 } } // Sort by highest quantity sold
         ]);
+        
+        
 
-        // Find best and underperforming products
-        let bestProduct = null, underProduct = null;
+        let bestProduct = "No completed orders this month";
+        let underProduct = "No completed orders this month";
 
-        if (orders.length > 0) {
-            bestProduct = await productModel.findById(orders[0]._id);
-            underProduct = await productModel.findById(orders[orders.length - 1]._id);
+        if (orderStats.length > 0) {
+            let bestProductData = await productModel.findById(orderStats[0]._id);
+            let underProductData = await productModel.findById(orderStats[orderStats.length - 1]._id);
+        
+            if (bestProductData) bestProduct = `${bestProductData.name} (${orderStats[0].totalQuantity} sold)`;
+            if (underProductData) underProduct = `${underProductData.name} (${orderStats[orderStats.length - 1].totalQuantity} sold)`;
         }
+
+        if(bestProduct === underProduct){
+            underProduct= "Not Sold Enough"
+        }
+        
 
         res.render('admin_dashboard_sidebar/jobs', {
             owner: req.owner,
@@ -191,11 +204,10 @@ router.get('/jobs', isOwner, async (req, res) => {
         });
 
     } catch (err) {
-        req.flash('error', `${err}`);
+        req.flash('error', `Error: ${err.message}`);
         res.redirect('/admin_dashboard');
     }
 });
-
 
 
 
@@ -218,7 +230,7 @@ router.get('/new_emp',isOwner , async (req, res)=>{
 })
 
 router.get('/messages',isOwner , async (req, res)=>{
-    let messages = await messageModel.find({ownerid:req.owner._id}).select('-_id');
+    let messages = await messageModel.find({ownerid:req.owner.ownerid}).select('-_id');
     let error = req.flash('error');
     let success = req.flash('success');
     res.render('admin_dashboard_sidebar/messages',{owner:req.owner , error, success, messages})
@@ -236,16 +248,18 @@ router.get('/createproduct',isOwner ,async  (req, res)=>{
 
 router.post('/create', isOwner, upload.single('image'), async (req, res)=>{
     try{
-        let {name, price, discount, bgcolor, panelcolor, textcolor} = req.body;
+        let {name, price, discount,stock, bgcolor, panelcolor, textcolor, description} = req.body;
 
         let createdProduct = await productModel.create({
             image: req.file.buffer,
             name,
             price,
             discount,
+            stock,
             bgcolor,
             panelcolor,
             textcolor,
+            description,
             ownerid:req.owner._id
          })
          

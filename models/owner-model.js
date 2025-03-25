@@ -10,13 +10,14 @@ const ownerSchema =  mongoose.Schema({
         default:"owner"
     },
     company:String, // sign up details done
+    companyPicture:Buffer, // sign up details done
     products:[{
         type:mongoose.Schema.Types.ObjectId,
         default:[],
         ref:"product"
     }],
-    picture:Buffer, //sign-up details
-    phone:String, //sign-up details done
+    picture:Buffer, // sign-up details
+    phone:String, // sign-up details done
     events: [ 
         {
             _id: { type: mongoose.Schema.Types.ObjectId, auto: true }, // Add unique ID to each event

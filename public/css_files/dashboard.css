@@ -451,10 +451,10 @@ main .recent-orders a{
 }
 
 .right-section .user-profile img{
-    width: 11rem;
-    height: auto;
+    width: 21rem;
+    height: 70%;
     margin-bottom: 0.8rem;
-    border-radius: 50%;
+    border-radius: 5%;
 }
 
 .right-section .user-profile h2{

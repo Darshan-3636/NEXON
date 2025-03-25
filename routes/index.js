@@ -64,63 +64,60 @@ router.get('/signup_details', (req, res)=>{
     res.render('signup_details',{error, success})
 })
 
-router.post('/signup_details', upload.single('profile'), isOwner, async (req, res) => {
+router.post('/signup_details', upload.fields([{ name: 'profile' }, { name: 'companyImage' }]), isOwner, async (req, res) => {
     try {
         const { company, phone, username } = req.body;
 
-        // Check if the company name already exists
-        const companyExists = await ownerModel.findOne({ company });
-
-        if (companyExists) {
+        // Check if the company name, username, or phone number already exist
+        if (await ownerModel.findOne({ company })) {
             req.flash('error', 'Company Name Already Taken');
             return res.redirect('/signup_details');
-        } 
+        }
         
-        const userExists = await ownerModel.findOne({ username });
-
-        if (userExists) {
-            req.flash('error', 'UserName Already Taken');
+        if (await ownerModel.findOne({ username })) {
+            req.flash('error', 'Username Already Taken');
             return res.redirect('/signup_details');
-        } 
+        }
         
-        const phoneExists = await ownerModel.findOne({ phone });
-
-        if (phoneExists) {
+        if (await ownerModel.findOne({ phone })) {
             req.flash('error', 'Phone Number Already Exists');
             return res.redirect('/signup_details');
-        } 
+        }
 
-        // Validate that the company name is not empty or invalid
-        if (!company || company.trim() === "") {
-            req.flash('error', 'Company Name Cannot Be Empty');
-            return res.redirect('/signup_details');
-        }
-        
-        if (!username || username.trim() === "") {
-            req.flash('error', 'Username Cannot Be Empty');
-            return res.redirect('/signup_details');
-        }
-        
-        if (!phone || phone.trim() === "") {
-            req.flash('error', 'Phone Number Cannot Be Empty');
+        // Validate input fields
+        if (!company.trim() || !username.trim() || !phone.trim()) {
+            req.flash('error', 'All fields are required');
             return res.redirect('/signup_details');
         }
 
-        // Update the owner details in the database
+        // Ensure files are uploaded
+        if (!req.files || !req.files.profile || !req.files.companyImage) {
+            req.flash('error', 'Both profile and company pictures are required');
+            return res.redirect('/signup_details');
+        }
+
+        // Update owner details with images
         await ownerModel.updateOne(
             { email: req.owner.email },
-            { company, phone, username, picture: req.file.buffer },
+            { 
+                company, 
+                phone, 
+                username, 
+                picture: req.files.profile[0].buffer, 
+                companyPicture: req.files.companyImage[0].buffer
+            },
             { new: true }
         );
 
         req.flash('success', 'Business created successfully');
         res.redirect('/admin_dashboard');
     } catch (err) {
-        console.error('Error:', err); // Log the error for debugging
+        console.error('Error:', err);
         req.flash('error', 'Something went wrong');
         res.redirect('/login');
     }
 });
+
 
 //create new employee route 
 router.post('/new_login', upload.single('image'), isOwner, async (req, res) => {
@@ -202,33 +199,93 @@ router.get('/removeemp/:eid', isOwner , async (req,res)=>{
 
 //admin_dashboard
 
-router.get('/admin_dashboard',isOwner, async (req, res)=>{
-    let emps = await empModel.find({ownerid:req.owner.ownerid})
+router.get('/admin_dashboard', isOwner, async (req, res) => {
+    let emps = await empModel.find({ ownerid: req.owner.ownerid });
 
-     const Raworders = await orderModel.find().populate('productid').sort({date:-1}); // Assuming productid is linked to a product model
-        
-        const orders = Raworders.filter(order => 
-            order.productid && order.productid.ownerid.toString() === req.owner.ownerid.toString()
-        );
-        const processedOrders = orders.map(order => ({
+    const Raworders = await orderModel.find().populate('productid').sort({ date: -1 });
+
+    // Filter orders belonging to the current owner
+    const orders = Raworders.filter(order => 
+        order.productid && order.productid.ownerid.toString() === req.owner.ownerid.toString()
+    );
+
+    // Process orders and calculate total amount (considering discount as absolute INR)
+    let totalRevenue = 0, totalOrders = 0;
+    let lastMonthRevenue = 0, lastMonthOrders = 0;
+    let currentMonthCustomers = new Set(), lastMonthCustomers = new Set();
+
+    let currentMonth = new Date().getMonth();
+    let lastMonth = currentMonth === 0 ? 11 : currentMonth - 1; // Handle January case
+
+    const processedOrders = orders.map(order => {
+        let price = order.productid.price;
+        let discount = order.productid.discount || 0; // Default to 0 if not present
+        let finalPrice = Math.max(0, price - discount); // Ensure final price is not negative
+        let totalAmount = finalPrice * order.quantity; // Apply discount before calculating amount
+
+        let orderMonth = new Date(order.date).getMonth();
+        let customerId = order.userid.toString(); // Ensure customer ID is a string
+
+        if (orderMonth === currentMonth) {
+            totalOrders++;
+            currentMonthCustomers.add(customerId);
+            if (order.orderStatus.toLowerCase() === "completed") { 
+                totalRevenue += totalAmount; // Use already calculated totalAmount
+            }
+        } else if (orderMonth === lastMonth) {
+            lastMonthOrders++;
+            lastMonthCustomers.add(customerId);
+            if (order.orderStatus.toLowerCase() === "completed") { 
+                lastMonthRevenue += totalAmount; // Use already calculated totalAmount
+            }
+        }
+
+        return {
             userid: order.userid,
             productid: order.productid,
             quantity: order.quantity,
             date: order.date,
-            orderStatus: order.orderStatus.charAt(0).toUpperCase() + order.orderStatus.slice(1), // Capitalize order status
-            totalAmount: order.productid.price * order.quantity  // Assuming `productid.price` exists
-        }));
+            orderStatus: order.orderStatus.charAt(0).toUpperCase() + order.orderStatus.slice(1),
+            totalAmount
+        };
+    });
 
-        const latestOrders = processedOrders
+    // Get latest 3 orders
+    const latestOrders = processedOrders
         .sort((a, b) => new Date(b.date) - new Date(a.date))
         .slice(0, 3);
-    
-        const totalCustomers = [...new Set(orders.map(order => order.userid.toString()))].length;
 
-    let success = req.flash('success')
-    let error = req.flash('error')
-    res.render('admin_dashboard',{success, error,owner:req.owner,emps,orders: processedOrders, totalCustomers,latestOrders});
-})
+    // Find new customers (who didn't order last month)
+    let newCustomers = [...currentMonthCustomers].filter(customer => !lastMonthCustomers.has(customer)).length;
+    let lastMonthNewCustomers = [...lastMonthCustomers].filter(customer => !currentMonthCustomers.has(customer)).length;
+
+    // Function to calculate percentage increase/decrease
+    const getPercentageChange = (current, previous) => {
+        return previous === 0 ? "+100%" : `${Math.round(((current - previous) / previous) * 100)}%`;
+    };
+
+    let revenuePercentage = getPercentageChange(totalRevenue, lastMonthRevenue);
+    let ordersPercentage = getPercentageChange(totalOrders, lastMonthOrders);
+    let newCustomersPercentage = getPercentageChange(newCustomers, lastMonthNewCustomers);
+
+    let success = req.flash('success');
+    let error = req.flash('error');
+
+    res.render('admin_dashboard', { 
+        success, 
+        error, 
+        owner: req.owner, 
+        emps, 
+        orders: processedOrders, 
+        totalRevenue, 
+        totalOrders, 
+        revenuePercentage, 
+        ordersPercentage, 
+        newCustomers, 
+        newCustomersPercentage, 
+        latestOrders 
+    });
+});
 
 //profile route
 
@@ -405,6 +462,31 @@ router.post('/updatepicture', isOwner, upload.single('image'), async (req, res)=
     }
 })
 
+router.post('/updatecompanypicture', isOwner, upload.single('image'), async (req, res)=>{
+    try{
+        let owner = await ownerModel.findOne({_id:req.owner._id})
+        let emp = await empModel.findOne({_id:req.owner._id})
+
+        if(owner){
+            await ownerModel.updateOne({_id:req.owner._id},{companyPicture:req.file.buffer})
+            req.flash('success', 'Company Picture Updated');
+            return res.redirect(req.get("Referrer") || "/");
+        }else if(emp){
+            await empModel.updateOne({_id:req.owner._id},{companyPicture:req.file.buffer})
+            req.flash('success', 'Company Picture Updated');
+            return res.redirect(req.get("Referrer") || "/");
+        } else {
+            req.flash('error', 'Something went Wrong');
+            return res.redirect(req.get("Referrer") || "/");
+        }
+
+    }
+    catch(err){
+        req.flash('error', 'Something went Wrong');
+        return res.redirect(req.get("Referrer") || "/");
+    }
+})
+
 router.post("/updatepass", isOwner, async (req, res) => {
     try {
         let { currentpassword, newpassword, newpasswordcheck } = req.body;
@@ -481,11 +563,9 @@ router.post('/calendar', isOwner, async (req, res) => {
         if (owner) {
             owner.events.push(newEvent);
             await owner.save();
-            console.log("it works in owner")
         } else  {
             emp.events.push(newEvent);
             await emp.save();
-            console.log("it works in emp")
         }
 
         
@@ -532,10 +612,85 @@ router.get('/deleteEvent/:eid', isOwner , async (req, res)=>{
     }
 })
 
+//update product
+router.get('/editproduct/:pid',isOwner, async (req, res)=>{
+    try {
+        let error = req.flash('error')
+        let success = req.flash('success')
+        const product = await productModel.findById(req.params.pid);
+        if (!product) {
+            req.flash('error', 'Product not found');
+            return res.redirect('/owners/jobs');
+        }
+        res.render('editproduct', { product ,owner:req.owner, error , success});
+    } catch (err) {
+        req.flash('error', `Error: ${err.message}`);
+        res.redirect('/owners/jobs');
+    }
+})
 
 router.get('/test',isOwner,(req, res)=>{
     res.send(req.owner)
 })
+
+router.post('/updateproduct/:pid',isOwner, async (req, res) => {
+    try {
+        const { name, price, description, stock, discount, bgcolor, panelcolor, textcolor } = req.body;
+
+        await productModel.updateOne({_id:req.params.pid}, {name, price, description, stock, discount, bgcolor, panelcolor, textcolor}, {new:true});
+        req.flash('success', 'Product updated successfully');
+        return res.redirect('/owners/jobs');
+    } catch (err) {
+        req.flash('error', `Error: ${err.message}`);
+        res.redirect(`/admin_dashboard`);
+    }
+});
+router.post('/productpicture/:pid',isOwner,upload.single('image') ,async (req, res) => {
+    try {
+        await productModel.updateOne({_id:req.params.pid}, {image:req.file.buffer}, {new:true});
+        req.flash('success', 'Product picture updated successfully');
+        return res.redirect('/owners/jobs');
+    } catch (err) {
+        req.flash('error', 'Something Went Wrong');
+        res.redirect(`/editproduct/${req.params.pid}`);
+    }
+});
+
+//assign task for employee
+
+router.post('/assigntask', isOwner , async (req, res)=>{
+    try {
+        const { title, start, description, empid } = req.body;
+
+        // Ensure start is correctly formatted
+        const eventDate = new Date(start);
+
+        if (!start || isNaN(eventDate.getTime())) {
+            req.flash('error', 'Invalid date format');
+            return res.redirect('/owners/calendar');
+        }
+
+        const newEvent = { 
+            title, 
+            start: eventDate.toISOString(),  // Store date in correct format
+            description, 
+            backgroundColor:'#FFC107', 
+            borderColor :'#FFC107'
+        };
+
+        const emp = await empModel.findById(empid);
+            emp.events.push(newEvent);
+            await emp.save();
+
+
+        req.flash('success', 'Created New Assignment');
+        res.redirect('/owners/users');
+    } catch (err) {
+        req.flash('error', `Error: ${err.message}`);
+        res.redirect('/owners/users');
+    }
+})
+
 //logout
 
 router.get('/logoutPage',isOwner,(req, res)=>{

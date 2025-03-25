@@ -304,30 +304,112 @@
             }
 
             .flash-message {
-    position: absolute;
-    top: 20px;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 12px;
-    border-radius: 6px;
-    color: white;
-}
+                position: absolute;
+                top: 20px;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                padding: 12px;
+                border-radius: 6px;
+                color: white;
+            }
 
-.flash-message.error {
-    background-color: #ef4444; /* Red-500 */
-}
+            .flash-message.error {
+                background-color: #ef4444; /* Red-500 */
+            }
 
-.flash-message.success {
-    background-color: #22c55e; /* Green-500 */
-}
+            .flash-message.success {
+                background-color: #22c55e; /* Green-500 */
+            }
 
-.flash-message span {
-    display: inline-block;
-    margin-top: 4px;
-    margin-bottom: 4px;
-}
+            .flash-message span {
+                display: inline-block;
+                margin-top: 4px;
+                margin-bottom: 4px;
+            }
+
+            .form-group {
+            margin-bottom: 0.75rem;
+            position: relative;
+            }
 
 
+            label {
+                display: block;
+                margin-bottom: 0.75rem;
+                color: #030708;
+                font-weight: 500;
+                font-size: 0.95rem;
+            }
+
+            input {
+                width: 100%;
+                padding: 0.875rem 1rem;
+                border: 2px solid #ffffff;
+                border-radius: 12px;
+                font-size: 1rem;
+                transition: all 0.2s;
+                background: rgba(255, 255, 255, 0.9);
+            }
+
+            input:focus {
+                outline: none;
+                border-color: #040709;
+                box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
+                background: white;
+            }
+            
+            textarea {
+                width: 100%;
+                padding: 0.875rem 1rem;
+                border: 2px solid #ffffff;
+                border-radius: 12px;
+                font-size: 1rem;
+                transition: all 0.2s;
+                background: rgba(255, 255, 255, 0.9);
+            }
+
+            textarea:focus {
+                outline: none;
+                border-color: #000000;
+                box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
+                background: white;
+            }
+
+            button {
+                width: 100%;
+                padding: 1rem;
+                background: linear-gradient(to right, #040e12, #03080a);
+                color: white;
+                border: none;
+                border-radius: 12px;
+                font-size: 1rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.2s;
+                position: relative;
+                overflow: hidden;
+            }
+
+            button::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent);
+                transform: translateX(-100%);
+            }
+
+            button:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgba(14, 165, 233, 0.2);
+            }
+
+            button:hover::after {
+                transform: translateX(100%);
+                transition: transform 0.6s;
+            }
 
         </style>
 </head>
@@ -370,7 +452,7 @@
                     <span class="material-icons-sharp">
                         person_outline
                     </span>
-                    <h3>Users</h3></button>
+                    <h3>Employees</h3></button>
                 </a>
                 <a href="/owners/history">
                     <span class="material-icons-sharp">
@@ -386,16 +468,15 @@
                 </a>
                 <a href="/owners/tickets">
                     <span class="material-icons-sharp">
-                        mail_outline
+                        assignment
                     </span>
                     <h3>Tickets</h3>
-                    <span class="message-count">27</span>
                 </a>
                 <a href="/owners/jobs">
                     <span class="material-icons-sharp">
-                        inventory
+                        category
                     </span>
-                    <h3>Jobs</h3>
+                    <h3>Products</h3>
                 </a>
                 <a href="/owners/calendar">
                     <span class="fa fa-calendar-o" 
@@ -438,36 +519,53 @@
                     <main class="w-3/4 bg-white p-8 shadow ml-4">
                         <h2 class="text-xl font-bold mb-4">Create New Product</h2>
                         <form autocomplete="off" action="/owners/create" method="post" enctype="multipart/form-data">
-                            <div class="mb-6">
-                                <h3 class="text-lg font-semibold mb-2">Product Details</h3>
-                                <div class="mb-4">
-                                    <label class="block mb-2 font-medium">Product Image</label>
-                                    <input name="image" type="file" class="py-2 px-4 rounded" value="Select File">
-                                </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <input name="name" type="text" placeholder="Product Name"
-                                        class="border p-2 rounded w-full">
-                                    <input name="price" type="text" placeholder="Product Price"
-                                        class="border p-2 rounded w-full">
-                                    <input name="discount" type="text" placeholder="Discount Price"
-                                        class="border p-2 rounded w-full">
-                                </div>
+                            
+                            <div class="form-group">
+                                <label>Product Image</label>
+                                <input name="image" type="file" value="Select File">
                             </div>
-
-                            <div>
-                                <h3 class="text-lg font-semibold mb-2">Panel Details</h3>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <input name="bgcolor" type="text" placeholder="Background Color"
-                                        class="border p-2 rounded w-full">
-                                    <input name="panelcolor" type="text" placeholder="Panel Color"
-                                        class="border p-2 rounded w-full">
-                                    <input name="textcolor" type="text" placeholder="Text Color"
-                                        class="border p-2 rounded w-full">
-                                </div>
+                            
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input name="name" type="text" placeholder="Product Name">
                             </div>
-                            <input class="px-5 py-2 rounded mt-3 bg-blue-500 text-white" type="submit"
-                                value="Create New Product">
-                        </form>
+                            
+                            <div class="form-group">
+                                <label>Description</label>
+                                <textarea name="description">description of Product</textarea>
+                            </div>
+                             
+                            <div class="form-group">
+                                <label>Price</label>
+                                <input name="price" type="text" placeholder="Product Price">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Discount</label>
+                                <input name="discount" type="text" placeholder="Discount Price">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Stock</label>
+                                <input name="stock" type="text" placeholder="Stock">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>background Color</label>
+                                <input name="bgcolor" type="text" placeholder="Background Color">
+                            </div>
+                            <div class="form-group">
+                                <label>panel Color</label>
+                                <input name="panelcolor" type="text" placeholder="Panel Color">
+                            </div>
+                            <div class="form-group">
+                                <label>Text Color</label>
+                                <input name="textcolor" type="text" placeholder="Text Color">
+                            </div>
+    
+                            <div class="login-options" id="employee-login">
+                                <button type="submit">Create New Product</button>
+                            </div>
                     </main>
                 </div>
             </div>
@@ -511,9 +609,8 @@
 
             <div class="user-profile">
                 <div class="logo">
-                    <img src="/images/logo.jpg">
-                    <h2>Nexon</h2>
-                    <p>Fullstack Web Developer</p>
+                    <img src="data:image/jpeg;base64,<%= owner.companyPicture.toString('base64') %>" alt="">
+                    <h2><%= owner.company %></h2>
                 </div>
             </div>
 

@@ -23,7 +23,10 @@ const productSchema = mongoose.Schema({
     ownerid:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"owner"
-    }
+    },
+    stock:Number,
+    description:String,
+    rating:Number
 })
 
 module.exports = mongoose.model("product",productSchema)

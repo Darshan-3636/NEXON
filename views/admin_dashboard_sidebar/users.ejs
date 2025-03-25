@@ -138,20 +138,87 @@ main {
         font-size: 12px;
         padding: 4px 8px;
     }
-}
-.profile img {
-    width: 100px; /* Adjust width as needed */
-    height: 100px; /* Adjust height to maintain aspect ratio */
-    border-radius: 20%; /* Optional: Makes the image circular */
-    object-fit: cover; /* Ensures the image covers the area properly */
-}
+    }
+    .profile img {
+        width: 100px; /* Adjust width as needed */
+        height: 100px; /* Adjust height to maintain aspect ratio */
+        border-radius: 20%; /* Optional: Makes the image circular */
+        object-fit: cover; /* Ensures the image covers the area properly */
+    }
+    /* Delete Icon (Hidden by default) */
+    .delete-icon {
+        position: left;
+        top: 10%;
+        left: 10%;
+        color: rgb(255, 0, 0);
+        padding: 5px;
+        border-radius: 50%;
+        font-size: 20px;
+        display: none;
+        text-decoration: none;
+    }
 
+    /* Show icon on hover */
+    .profile:hover img {
+        opacity: 0.3;
+    }
+
+    .profile:hover .delete-icon {
+        display: block;
+    }
+
+    /* Modal Styling */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-content {
+        background-color: white;
+        margin: 10% auto;
+        padding: 20px;
+        width: 40%;
+        border-radius: 10px;
+        text-align: center;
+    }
+
+    .close {
+        float: right;
+        font-size: 24px;
+        cursor: pointer;
+    }
+
+    .green-btn {
+        background-color: green;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+    }
 
     </style>
     <title>Responsive Dashboard Design | Users Section</title>
 </head>
 
 <body>
+    <% if(error.length > 0) { %>
+        <div class="flash-message error">
+            <span><%= error %></span>
+        </div>
+    <% } %>
+    
+    <% if(success.length > 0) { %>
+        <div class="flash-message success">
+            <span><%= success %></span>
+        </div>
+    <% } %>
     <div class="container">
         <!-- Sidebar Section -->
         <aside>
@@ -193,16 +260,15 @@ main {
                 </a>
                 <a href="/owners/tickets">
                     <span class="material-icons-sharp">
-                        mail_outline
+                        assignment
                     </span>
                     <h3>Tickets</h3>
-                    <span class="message-count">27</span>
                 </a>
                 <a href="/owners/jobs">
                     <span class="material-icons-sharp">
-                        inventory
+                        category
                     </span>
-                    <h3>Jobs</h3>
+                    <h3>Products</h3>
                 </a>
                 <a href="/owners/calendar">
                     <span class="fa fa-calendar-o" 
@@ -255,20 +321,48 @@ main {
                         <tbody>
                             <% emps.forEach(function(emp){ %>
                             <tr>
-                                <td><div class="profile">
-                                    <img src="data:image/jpeg;base64,<%= emp.picture.toString('base64') %>" alt="">
-                                </div>
+                                <td>
+                                    <div class="profile">
+                                        <img src="data:image/jpeg;base64,<%= emp.picture.toString('base64') %>" alt="Profile">
+                                        <a href="/removeemp/<%= emp._id %>" class="delete-icon">
+                                            <i class="material-icons-sharp">delete</i>
+                                        </a>
+                                    </div>
                                 </td>
                                 <td><%= emp.username %></td>
                                 <td><%= emp.email %></td>
                                 <td><%= emp.role %></td>
                                 <td>
-                                    <button class="delete-btn"><a href="/removeemp/<%= emp._id %>">Delete</a></button>
+                                    <button class="edit-btn assign-task-btn" data-empid="<%= emp._id %>">Assign Task</button>
                                 </td>
                             </tr>
                             <% }) %>
                         </tbody>
                     </table>
+                    
+                    <!-- Task Assignment Modal -->
+                    <div id="taskModal" class="modal">
+                        <div class="modal-content">
+                            <h2>Assign Task</h2><br><br>
+                            <form id="eventform" method="POST" action="/assigntask">
+                                <input type="hidden" name="empid" id="empid">
+                                
+                                <label for="event-title"> <b>Event Title :</b></label><br><br>
+                                <input type="text" name="title" id="event-title" placeholder="Event Title" required><br><br><br>
+                    
+                                <label for="event-datetime"><b>Date :</b></label><br><br>
+                                <input type="datetime-local" name="start" id="event-datetime" required><br><br><br>
+                    
+                                <label for="event-description"><b>Event Description :</b></label><br><br>
+                                <textarea name="description" id="event-description" placeholder="Event Description"></textarea><br><br><br>
+
+                    
+                                <button id="submit" type="submit" class="green-btn">Add Event</button>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    
                 </div>
             </div>
         </main>
@@ -312,9 +406,8 @@ main {
 
             <div class="user-profile">
                 <div class="logo">
-                    <img src="/images/logo.jpg">
-                    <h2>Nexon</h2>
-                    <p>Fullstack Web Developer</p>
+                    <img src="data:image/jpeg;base64,<%= owner.companyPicture.toString('base64') %>" alt="">
+                    <h2><%= owner.company %></h2>
                 </div>
             </div>
 
@@ -379,7 +472,66 @@ main {
 
         </div>
     </div>
-    <script src="/js_files/orders.js"></script>
+    <script >
+        document.addEventListener("DOMContentLoaded", function () {
+    const modal = document.getElementById("taskModal");
+    const closeBtn = document.querySelector(".close");
+    const assignTaskBtns = document.querySelectorAll(".assign-task-btn");
+    const assignTaskForm = document.getElementById("assignTaskForm");
+    const empIdInput = document.getElementById("empid");
+
+    // Open Modal on Assign Task Click
+    assignTaskBtns.forEach(btn => {
+        btn.addEventListener("click", function () {
+            const empId = this.getAttribute("data-empid");
+            empIdInput.value = empId;
+            modal.style.display = "block";
+        });
+    });
+
+    // Close Modal
+    closeBtn.addEventListener("click", function () {
+        modal.style.display = "none";
+    });
+
+    // Close Modal if Clicked Outside
+    window.addEventListener("click", function (e) {
+        if (e.target === modal) {
+            modal.style.display = "none";
+        }
+    });
+
+    // Form Submission
+    assignTaskForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const formData = new FormData(assignTaskForm);
+
+        fetch("/assigntask", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+            modal.style.display = "none";
+        })
+        .catch(error => console.error("Error:", error));
+    });
+});
+          // Wait for the DOM to be fully loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Select all flash messages
+    var flashMessages = document.querySelectorAll('.flash-message');
+
+    // Iterate through each flash message
+    flashMessages.forEach(function(message) {
+      // Set a timeout to remove the message after 5 seconds (5000 milliseconds)
+      setTimeout(function() {
+        message.style.display = 'none';
+      }, 5000);
+    });
+  });
+    </script>
     <script src="/js_files/index.js"></script>
 </body>
 

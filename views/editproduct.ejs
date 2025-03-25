@@ -7,24 +7,161 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
     <link rel="stylesheet" href="/css_files/dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Responsive Dashboard Design #1 | AsmrProg</title>
+    <title>Update Product</title>
+    <style>
+         body {
+      margin: 0;
+      padding: 0;
+    }
+
+    .logout-container {
+      text-align: center;
+      background: linear-gradient(145deg, #1e1e1e, #292929);
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 15px;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .logout-container h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      color: #ff6b6b;
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    }
+
+    .logout-container p {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      color: #ddd;
+    }
+
+    .logout-container .logout-btn {
+      background: linear-gradient(145deg, #ff4d4d, #ff1a1a);
+      color: #fff;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      padding-right: 10px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .logout-container .logout-btn:hover {
+      background: linear-gradient(145deg, #ff1a1a, #ff4d4d);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(255, 107, 107, 0.4);
+    }
+
+    .logout-container .logout-btn:active {
+      transform: translateY(1px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .logout-container .logout-btn i {
+      margin-right: 10px;
+      animation: bounce 1s infinite;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-5px);
+      }
+    }
+    /* Full-width form */
+
+        /* Make form responsive */
+        @media (max-width: 768px) {
+            form {
+                width: 95%;
+                padding: 15px;
+            }
+        }
+        form {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-top: 15px;
+            color: #333;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s ease-in-out;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #28a745;
+            outline: none;
+        }
+
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.3s ease-in-out;
+        }
+
+        button:hover {
+            background: #218838;
+        }
+
+    </style>
 </head>
 
 <body>
-    <link rel="stylesheet" href="/path/to/style.css">
-
-<% if(error.length > 0) { %>
-    <div class="flash-message error">
-        <span><%= error %></span>
-    </div>
-<% } %>
-
-<% if(success.length > 0) { %>
-    <div class="flash-message success">
-        <span><%= success %></span>
-    </div>
-<% } %>
-
+    <% if(error.length > 0) { %>
+        <div class="flash-message error">
+            <span><%= error %></span>
+        </div>
+    <% } %>
+    
+    <% if(success.length > 0) { %>
+        <div class="flash-message success">
+            <span><%= success %></span>
+        </div>
+    <% } %>
     <div class="container">
         <!-- Sidebar Section -->
         <aside>
@@ -99,7 +236,6 @@
                     </span>
                     <h3>Messages</h3>
                 </a>
-                
                 <a href="/logoutPage">
                     <span class="material-icons-sharp">
                         logout
@@ -110,113 +246,53 @@
         </aside>
         <!-- End of Sidebar Section -->
 
-        <!-- Main Content -->
-        <main>    
-            <h1>Admin Dashboard</h1>
-           <!-- Analyses -->
-            <!-- Analyses -->
-            <div class="analyse">
-                <div class="sales">
-                    <div class="status">
-                        <div class="info">
-                            <h3>Total Revenue</h3>
-                            <h1><%= totalRevenue %></h1>
-                        </div>
-                        <div class="progresss">
-                            <svg>
-                                <circle cx="38" cy="38" r="36"></circle>
-                            </svg>
-                            <div class="percentage">
-                                <p><%= revenuePercentage %></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="visits">
-                    <div class="status">
-                        <div class="info">
-                            <h3>Total Orders</h3>
-                            <h1><%= totalOrders %></h1>
-                        </div>
-                        <div class="progresss">
-                            <svg>
-                                <circle cx="38" cy="38" r="36"></circle>
-                            </svg>
-                            <div class="percentage">
-                                <p><%= ordersPercentage %></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="searches">
-                    <div class="status">
-                        <div class="info">
-                            <h3>New Customers</h3>
-                            <h1><%= newCustomers %></h1>
-                        </div>
-                        <div class="progresss">
-                            <svg>
-                                <circle cx="38" cy="38" r="36"></circle>
-                            </svg>
-                            <div class="percentage">
-                                <p><%= newCustomersPercentage %></p> 
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- End of Analyses -->
-            <!-- New Users Section -->
-            <div class="new-users">
-                <h2>Employees</h2>
-                <div class="user-list">
-                    
-                    <% emps.slice(0,4).forEach(function(emp){ %>
-                        <div class="user">
-                            <img src="data:image/jpeg;base64,<%= emp.picture.toString('base64') %>" alt="">
-                            <h2><%= emp.username %></h2>
-                        </div>
-                    <% }) %>
-                    
-                    <div class="user">
-                        <h2><a href="/owners/users">View All</a></h2>
-                    </div>
-                </div>
-            </div>
-            <!-- End of New Users Section -->
 
-            <!-- Recent Orders Table -->
-            <div class="recent-orders">
-                <h2>Latest Orders</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Product</th>
-                            <th>Price</th>
-                            <th>Quantity</th>
-                            <th>Status</th>
-                            <th>Date</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% latestOrders.forEach(function(order){ %>
-                            <tr>
-                            <td><%= order.productid.name %></td>
-                            <td><%= order.productid.price %></td>
-                            <td><%= order.quantity %></td>
-                            <td><%= order.orderStatus %></td>
-                            <td><%= new Date(order.date).toLocaleString('en-IN', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: true }) %></td>
-                            </tr>
-                        <% }) %>
-                    </tbody>
-                </table>
-                <a href="/owners/tickets">Show All</a>
-            </div>
-            <!-- End of Recent Orders -->
 
+        <main>
+            <h2>
+                <a href="javascript:history.back()"> &lt; Go Back</a>
+            </h2><br>
+            <form action="/productpicture/<%= product._id %>" method="post" enctype="multipart/form-data">
+                <label for="image">Product Image</label><br>
+                <div class="profile-photo">
+                    <img src="data:image/jpeg;base64,<%= product.image.toString('base64') %>" alt="">
+                </div>
+                <input type="file" name="image" id="image">
+                <input type="submit" value="Update Picture">
+            </form>
+            
+            <form action="/updateproduct/<%= product._id %>" method="POST">
+                <label for="name">Product Name</label>
+                <input type="text" name="name" id="name" value="<%= product.name %>" required>
+            
+                <label for="price">Price</label>
+                <input type="text" name="price" id="price" value="<%= product.price %>" required>
+            
+                <label for="discount">Discount</label>
+                <input type="number" name="discount" id="discount" value="<%= product.discount %>">
+            
+                <label for="stock">Stock</label>
+                <input type="number" name="stock" id="stock" value="<%= product.stock %>" required>
+            
+                <label for="bgcolor">Background Color</label>
+                <input type="text" name="bgcolor" id="bgcolor" value="<%= product.bgcolor %>">
+            
+                <label for="panelcolor">Panel Color</label>
+                <input type="text" name="panelcolor" id="panelcolor" value="<%= product.panelcolor %>">
+            
+                <label for="textcolor">Text Color</label>
+                <input type="text" name="textcolor" id="textcolor" value="<%= product.textcolor %>">
+            
+                <label for="description">Description</label>
+                <textarea name="description" id="description" required><%= product.description %></textarea>
+            
+                <button type="submit">Update Product</button>
+            </form>            
+            
         </main>
-        <!-- End of Main Content -->
+
+
+
 
         <!-- Right Section -->
         <div class="right-section">
@@ -246,7 +322,9 @@
                                 <img src="data:image/jpeg;base64,<%= owner.picture.toString('base64') %>" alt="">
                             </div>
                         </a>
-                    </div>
+                        
+                    
+                </div>
 
             </div>
             <!-- End of Nav -->
@@ -316,11 +394,27 @@
 
             </div>
 
+
         </div>
 
-
     </div>
-    <script src="/js_files/index.js"></script>
+    <script>
+        // Wait for the DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Select all flash messages
+            var flashMessages = document.querySelectorAll('.flash-message');
+
+            // Iterate through each flash message
+            flashMessages.forEach(function(message) {
+            // Set a timeout to remove the message after 5 seconds (5000 milliseconds)
+            setTimeout(function() {
+                message.style.display = 'none';
+            }, 5000);
+            });
+        });
+
+      </script>
+    <script src="/public/js_files/index.js"></script>
 </body>
 
 </html>

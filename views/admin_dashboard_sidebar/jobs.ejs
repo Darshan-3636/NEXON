@@ -40,6 +40,8 @@
         }
         /* Styling the stat cards */
         .stats-cards {
+            height:auto;
+            width: auto;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
@@ -101,9 +103,9 @@
         }
 
         /* Card title */
-        .card h2 {
+        .card h3 {
             margin: 0;
-            font-size: 36px;
+            font-size: 26px;
             color: var(--primary-color);
             transition: color 0.3s ease;
         }
@@ -122,7 +124,7 @@
             box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
         }
 
-        .card:hover h2 {
+        .card:hover h3 {
             color: var(--secondary-color);
         }
 
@@ -131,163 +133,17 @@
         }
 
         /* Animation for card number */
-        .card h2 {
-            font-size: 36px;
+        .card h3 {
+            font-size: 26px;
             font-weight: bold;
             transition: transform 0.5s ease-out, color 0.3s ease;
         }
 
-        .card h2.animate {
+        .card h3.animate {
             transform: scale(1.2);
             color: var(--primary-color);
         }
 
-        
-
-        .grid-section {
-            display: grid;
-            grid-template-columns: 0.776fr 0.8fr;
-            margin-top: 30px;
-            font-size: 14px;
-            width: 100vw; /* Full width */
-            height: auto; /* Full height */
-            gap: 20px; /* Adds spacing between sections */
-            padding: 20px; /* Adds spacing around */
-            box-sizing: border-box; /* Ensures padding doesn't increase the size */
-        }
-
-        /* Ensuring list-section and chart-section take full height */
-        .list-section, .chart-section {
-            height: 100%;
-            overflow-y: auto; /* Enables scrolling if content exceeds */
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .list-section h3, .chart-section h3 {
-            margin-top: 0;
-        }
-
-        .list-section ul {
-            list-style: none;
-            padding: 0;
-            margin-top: 20px;
-        }
-
-        .list-section ul li {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-        }
-        .list-section h3{
-            font-size: 26px;
-        }
-        .job-title {
-            font-weight: bold;
-            color: var(--primary-color);
-        }
-
-        .job-type {
-            color: var(--secondary-color);
-        }
-
-        canvas {
-            display: block;
-            max-width: 100%;
-            }
-
-        h2 {
-            text-align: center;
-            color: #333;
-            font-family: Arial, sans-serif;
-            margin-bottom: 10px;
-            }
-            .recent-jobs {
-            background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            height: 592 px; /* Adjust the height as per your layout */
-            display: flex;
-            flex-direction: column;
-            }
-
-            .recent-jobs h3 {
-            font-size: 18px;
-            color: #333;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            }
-
-            .recent-jobs-list {
-            overflow-y: auto; /* Makes the box scrollable */
-            height: 100%; /* Ensures it uses the available space */
-            max-height: 500px; /* Set a max height for scrolling */
-            padding-right: 5px; /* Add padding for a clean scroll */
-            }
-
-            .recent-jobs-list ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            }
-
-            .recent-jobs-list li {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid #f0f0f0;
-            font-size: 12px;
-            }
-
-            .recent-jobs-list li:last-child {
-            border-bottom: none;
-            }
-
-            .job-details {
-            display: flex;
-            gap: 8px;
-            flex-direction: column;
-            }
-
-            .job-title {
-            font-weight: bold;
-            color: #444;
-            font-size: 14px;
-            }
-
-            .job-time {
-            color: #777;
-            font-size: 12px;
-            }
-
-            .job-status {
-            font-size: 10px;
-            font-weight: bold;
-            padding: 2px 6px;
-            border-radius: 10px;
-            display: inline-block;
-            }
-
-            .job-status.fresher {
-            background-color: #e0f7fa;
-            color: #00796b;
-            }
-
-            .job-status.experience {
-            background-color: #ffecb3;
-            color: #ff9800;
-            }
-
-            .job-time-ago {
-            font-size: 10px;
-            color: #999;
-            }
 
             .users-section {
                 overflow-y: auto; /* Makes the box scrollable */
@@ -417,14 +273,13 @@
                 </a>
                 <a href="/owners/tickets">
                     <span class="material-icons-sharp">
-                        mail_outline
+                        assignment
                     </span>
                     <h3>Tickets</h3>
-                    <span class="message-count">27</span>
                 </a>
                 <a href="/owners/jobs">
                     <span class="material-icons-sharp">
-                        inventory
+                        category
                     </span>
                     <h3>Products</h3>
                 </a>
@@ -464,23 +319,24 @@
         <main>
             <div class="job-container">
                 <div class="dashboard-header">
-                    <h1>Jobs Dashboard</h1>
+                    <h1>Products Dashboard</h1>
                 </div>
-        
+                
                 <div class="stats-cards">
                     <div class="card">
-                        <h2><%= totalProducts %></h2>
+                        <h3><%= totalProducts %></h3>
                         <p>Total Products</p>
                     </div>
                     <div class="card">
-                        <h2><%= bestProduct %></h2>
+                        <h3><%= bestProduct ? bestProduct : "N/A" %></h3>
                         <p>Best Performing Product</p>
                     </div>
                     <div class="card">
-                        <h2><%= underProduct %></h2>
+                        <h3><%= underProduct ? underProduct : "N/A" %></h3>
                         <p>Under Performing Product</p>
                     </div>
                 </div>
+                <br><br>
         
                 <div class="grid-section">
                     <div class="users-section">
@@ -492,6 +348,8 @@
                                         <th>Picture</th>
                                         <th>Name</th>
                                         <th>Price</th>
+                                        <th>Stock available</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -503,7 +361,9 @@
                                                     </div>
                                                 </td>
                                                 <td><%= product.name %></td>
-                                                <td><%= product.price %></td>
+                                                <td>₹ <%= product.price %></td>
+                                                <td><%= product.stock %> Units</td>
+                                                <td><a href="/editproduct/<%= product._id %>"><b><span class="material-icons-sharp">edit</span>EDIT</b></a></td>
                                                 
                                             </tr>
                                     <% }) %>
@@ -554,9 +414,8 @@
 
             <div class="user-profile">
                 <div class="logo">
-                    <img src="/images/logo.jpg">
-                    <h2>Nexon</h2>
-                    <p>Fullstack Web Developer</p>
+                    <img src="data:image/jpeg;base64,<%= owner.companyPicture.toString('base64') %>" alt="">
+                    <h2><%= owner.company %></h2>
                 </div>
             </div>
 
@@ -622,35 +481,21 @@
         </div>
     </div>
     <script>
-    // Function to animate numbers in stats cards
-document.addEventListener('DOMContentLoaded', () => {
-    const cards = document.querySelectorAll('.card h2');
+        // Wait for the DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Select all flash messages
+            var flashMessages = document.querySelectorAll('.flash-message');
 
-    // Animation effect for each card
-    cards.forEach(card => {
-        let currentValue = 0;
-        const targetValue = parseInt(card.textContent);
+            // Iterate through each flash message
+            flashMessages.forEach(function(message) {
+            // Set a timeout to remove the message after 5 seconds (5000 milliseconds)
+            setTimeout(function() {
+                message.style.display = 'none';
+            }, 5000);
+            });
+        });
 
-        const animateValue = () => {
-            if (currentValue < targetValue) {
-                currentValue += Math.ceil(targetValue / 100);
-                card.textContent = currentValue;
-                setTimeout(animateValue, 20);
-            } else {
-                card.textContent = targetValue;
-            }
-        };
-        
-        animateValue();
-        
-        // Add class for scale animation after a slight delay
-        setTimeout(() => {
-            card.classList.add('animate');
-        }, 100);
-    });
-});
-
-    </script>
+      </script>
     <script src="/public/js_files/index.js"></script>
 </body>
 

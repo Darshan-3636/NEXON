@@ -21,7 +21,8 @@ module.exports = async (req, res , next )=>{
                     "company":owner.company,
                     "picture":owner.picture,
                     "phone":owner.phone,
-                    "events":owner.events
+                    "events":owner.events,
+                    "companyPicture":owner.companyPicture
                 }
                 next();
             }else {
@@ -35,7 +36,8 @@ module.exports = async (req, res , next )=>{
                     "company":emp.company,
                     "picture":emp.picture,
                     "phone":emp.phone,
-                    "events":emp.events
+                    "events":emp.events,
+                    "companyPicture":owner.companyPicture
                 }
                 next();
             } 
