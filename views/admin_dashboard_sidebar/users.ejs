@@ -139,7 +139,7 @@ main {
         padding: 4px 8px;
     }
     }
-    .profile img {
+    .profiles img {
         width: 100px; /* Adjust width as needed */
         height: 100px; /* Adjust height to maintain aspect ratio */
         border-radius: 20%; /* Optional: Makes the image circular */
@@ -159,11 +159,11 @@ main {
     }
 
     /* Show icon on hover */
-    .profile:hover img {
+    .profiles:hover img {
         opacity: 0.3;
     }
 
-    .profile:hover .delete-icon {
+    .profiles:hover .delete-icon {
         display: block;
     }
 
@@ -322,7 +322,7 @@ main {
                             <% emps.forEach(function(emp){ %>
                             <tr>
                                 <td>
-                                    <div class="profile">
+                                    <div class="profiles">
                                         <img src="data:image/jpeg;base64,<%= emp.picture.toString('base64') %>" alt="Profile">
                                         <a href="/removeemp/<%= emp._id %>" class="delete-icon">
                                             <i class="material-icons-sharp">delete</i>
