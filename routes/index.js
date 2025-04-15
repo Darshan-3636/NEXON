@@ -8,7 +8,6 @@ const productModel = require('../models/product-model');
 const empModel = require('../models/emp-model');
 const bcrypt = require('bcrypt');
 const orderModel = require('../models/order-model');
-const todoModel = require('../models/todo-model');
 const userModel = require('../models/user-model');
 const messageModel = require('../models/message-model');
 
