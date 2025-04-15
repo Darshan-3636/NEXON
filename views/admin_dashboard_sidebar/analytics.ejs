@@ -322,17 +322,29 @@
     </div>
     <div id="orders-data" data-orders='<%- JSON.stringify(orders) %>'></div>
     <script>
-        // Get the orders data from the server
+         // Get the orders data from the server
         const orders = JSON.parse(document.getElementById('orders-data').dataset.orders);
-    
+
+        // Get current month and year
+        const now = new Date();
+        const currentMonth = now.getMonth(); // 0-indexed
+        const currentYear = now.getFullYear();
+
+        // Filter orders to only include those from the current month and year
+        const currentMonthOrders = orders.filter(order => {
+            if (!order.date) return false;
+            const orderDate = new Date(order.date);
+            return orderDate.getMonth() === currentMonth && orderDate.getFullYear() === currentYear;
+        });
+
         // Process order statuses for Pie Chart
         const orderStatusCounts = {
             'Completed': 0,
             'Pending': 0,
             'Cancelled': 0
         };
-    
-        orders.forEach(order => {
+
+        currentMonthOrders.forEach(order => {
             const status = order.orderStatus.toLowerCase(); // Convert to lowercase for consistency
             if (status === 'completed') {
                 orderStatusCounts['Completed']++;
@@ -342,7 +354,7 @@
                 orderStatusCounts['Cancelled']++;
             }
         });
-    
+
         // Initialize the Orders Pie Chart (Order Status Overview)
         const ordersChart = document.getElementById('ordersChart').getContext('2d');
         new Chart(ordersChart, {
@@ -401,7 +413,7 @@
         });
     
         // Convert monthlySales into an array for Chart.js
-        const currentYear = new Date().getFullYear();
+        
         const salesChartData = monthlySales[currentYear] ? Object.values(monthlySales[currentYear]) : new Array(12).fill(0);
     
         // Initialize the Sales Bar Chart (Sales Revenue by Month)

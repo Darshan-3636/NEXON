@@ -4,11 +4,11 @@ const app = express();
 const cookieParser =  require('cookie-parser');
 const db = require("./config/mongodb-connection");
 const flash = require('connect-flash')
-//routes
+
 const indexRouter = require('./routes/index')
 const ownerRouter = require('./routes/ownerRouter')
 
-//middlewares
+
 const isOwner = require('./middlewares/isOwner')
 
 const expressSession = require("express-session");
@@ -30,10 +30,6 @@ app.use(
     })
 )
 app.use(flash());
-
-
-
-// app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs'); 
 
 app.get('/health', (req, res) => {

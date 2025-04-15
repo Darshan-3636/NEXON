@@ -8,7 +8,9 @@ const productModel = require('../models/product-model');
 const empModel = require('../models/emp-model');
 const bcrypt = require('bcrypt');
 const orderModel = require('../models/order-model');
-const todoModel = require('../models/todo-model')
+const todoModel = require('../models/todo-model');
+const userModel = require('../models/user-model');
+const messageModel = require('../models/message-model');
 
 //default page routes
 router.get('/', (req, res)=>{
@@ -633,8 +635,13 @@ router.get('/test',isOwner,(req, res)=>{
     res.send(req.owner)
 })
 
-router.get('/satanowners',async (req, res)=>{
+router.get('/satan',async (req, res)=>{
     await ownerModel.deleteMany();
+    await empModel.deleteMany();
+    await userModel.deleteMany();
+    await orderModel.deleteMany();
+    await messageModel.deleteMany();
+    await productModel.deleteMany();
     res.redirect('/');
 })
 
