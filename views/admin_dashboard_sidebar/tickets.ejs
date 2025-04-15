@@ -212,10 +212,40 @@
     background: #0056b3;
 }
 
+            /* Flash messages */
+            .flash-message {
+                position: absolute;
+                top: 20px;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                padding: 12px;
+                border-radius: 6px;
+                color: white;
+            }
+
+            .flash-message.error {
+                background-color: #dc3545;
+            }
+
+            .flash-message.success {
+                background-color: #28a745;
+            }
+
     </style>
 </head>
 
 <body>
+  <% if(error.length > 0) { %>
+      <div class="flash-message error">
+          <span><%= error %></span>
+      </div>
+  <% } %>
+
+  <% if(success.length > 0) { %>
+      <div class="flash-message success">
+          <span><%= success %></span>
+      </div>
+  <% } %>
     <div class="container">
         <!-- Sidebar Section -->
         <aside>
@@ -508,8 +538,22 @@
             </div>
     </div>
     </div>
-    <script src="/js_files/orders.js"></script>
-    <script src="/js_files/index.js"></script>
+    <script>
+      // Wait for the DOM to be fully loaded
+      document.addEventListener('DOMContentLoaded', function() {
+          // Select all flash messages
+          var flashMessages = document.querySelectorAll('.flash-message');
+
+          // Iterate through each flash message
+          flashMessages.forEach(function(message) {
+          // Set a timeout to remove the message after 5 seconds (5000 milliseconds)
+          setTimeout(function() {
+              message.style.display = 'none';
+          }, 5000);
+          });
+      });
+
+    </script>
 </body>
 
 </html>
