@@ -188,9 +188,9 @@ router.get('/jobs', isOwner, async (req, res) => {
             if (underProductData) underProduct = `${underProductData.name} (${orderStats[orderStats.length - 1].totalQuantity} sold)`;
         }
 
-        if(bestProduct === underProduct){
-            underProduct= "Not Sold Enough"
-        }
+        if (bestProduct === underProduct && bestProduct !== "No completed orders this month") {
+            underProduct = "Not Sold Enough";
+        }        
         
 
         res.render('admin_dashboard_sidebar/jobs', {
