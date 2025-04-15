@@ -110,7 +110,12 @@ router.get('/tickets', isOwner, async (req, res) => {
             order.productid && order.productid.ownerid.toString() === req.owner.ownerid.toString()
         );
 
+        let error = req.flash('error')
+        let success = req.flash('success')
+
         res.render('admin_dashboard_sidebar/tickets', {
+            error,
+            success,
             owner: req.owner,
             orders,
             selectedMonth: month || '',
