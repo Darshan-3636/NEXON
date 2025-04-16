@@ -219,10 +219,7 @@ router.get('/admin_dashboard', isOwner, async (req, res) => {
     let lastMonth = currentMonth === 0 ? 11 : currentMonth - 1; // Handle January case
 
     const processedOrders = orders.map(order => {
-        let price = order.productid.price;
-        let discount = order.productid.discount || 0; // Default to 0 if not present
-        let finalPrice = Math.max(0, price - discount); // Ensure final price is not negative
-        let totalAmount = finalPrice * order.quantity; // Apply discount before calculating amount
+        let totalAmount = order.totalAmount
 
         let orderMonth = new Date(order.date).getMonth();
         let customerId = order.userid.toString(); // Ensure customer ID is a string

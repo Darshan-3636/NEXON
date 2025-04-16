@@ -72,7 +72,7 @@ router.get('/analytics',isOwner , async (req, res)=>{
         quantity: order.quantity,
         date: order.date,
         orderStatus: order.orderStatus.charAt(0).toUpperCase() + order.orderStatus.slice(1), // Capitalize order status
-        totalAmount: (order.productid.price-order.productid.discount) * order.quantity  // Assuming `productid.price` exists
+        totalAmount: order.totalAmount
     }));
 
     const totalCustomers = [...new Set(orders.map(order => order.userid.toString()))].length;
