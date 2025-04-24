@@ -374,6 +374,23 @@
                 box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
                 background: white;
             }
+            
+            select {
+                width: 100%;
+                padding: 0.875rem 1rem;
+                border: 2px solid #ffffff;
+                border-radius: 12px;
+                font-size: 1rem;
+                transition: all 0.2s;
+                background: rgba(255, 255, 255, 0.9);
+            }
+
+            select:focus {
+                outline: none;
+                border-color: #000000;
+                box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
+                background: white;
+            }
 
             button {
                 width: 100%;
@@ -522,12 +539,12 @@
                             
                             <div class="form-group">
                                 <label>Product Image</label>
-                                <input name="image" type="file" value="Select File">
+                                <input name="image" type="file" value="Select File" required>
                             </div>
                             
                             <div class="form-group">
                                 <label>Name</label>
-                                <input name="name" type="text" placeholder="Product Name">
+                                <input name="name" type="text" placeholder="Product Name" required>
                             </div>
                             
                             <div class="form-group">
@@ -537,19 +554,47 @@
                              
                             <div class="form-group">
                                 <label>Price</label>
-                                <input name="price" type="text" placeholder="Product Price">
+                                <input name="price" type="text" placeholder="Product Price" required>
                             </div>
                             
                             <div class="form-group">
                                 <label>Discount</label>
-                                <input name="discount" type="text" placeholder="Discount Price">
+                                <input name="discount" type="text" placeholder="Discount Price" required>
                             </div>
                             
                             <div class="form-group">
                                 <label>Stock</label>
-                                <input name="stock" type="text" placeholder="Stock">
+                                <input name="stock" type="text" placeholder="Stock" required>
                             </div>
                             
+                            <div class="form-group">
+                                <label>Category</label>
+                                <select name="category" required>
+                                    <option value="">-- Select Category --</option>
+                                    <option value="electronics">Electronics</option>
+                                    <option value="fashion">Fashion</option>
+                                    <option value="home_appliances">Home Appliances</option>
+                                    <option value="books">Books</option>
+                                    <option value="furniture">Furniture</option>
+                                    <option value="beauty_health">Beauty & Health</option>
+                                    <option value="sports">Sports & Outdoors</option>
+                                    <option value="automotive">Automotive</option>
+                                    <option value="toys_games">Toys & Games</option>
+                                    <option value="groceries">Groceries</option>
+                                    <option value="stationery">Stationery</option>
+                                    <option value="pet_supplies">Pet Supplies</option>
+                                    <option value="tools_hardware">Tools & Hardware</option>
+                                    <option value="musical_instruments">Musical Instruments</option>
+                                    <option value="baby_products">Baby Products</option>
+                                    <option value="gardening">Gardening</option>
+                                    <option value="art_crafts">Art & Crafts</option>
+                                    <option value="travel_accessories">Travel Accessories</option>
+                                    <option value="office_supplies">Office Supplies</option>
+                                    <option value="jewelry_accessories">Jewelry & Accessories</option>
+                                </select>
+                            </div>
+                            
+
                             <div class="form-group">
                                 <label>background Color</label>
                                 <input name="bgcolor" type="text" placeholder="Background Color">
@@ -561,11 +606,12 @@
                             <div class="form-group">
                                 <label>Text Color</label>
                                 <input name="textcolor" type="text" placeholder="Text Color">
-                            </div>
+                            </div><br>
     
                             <div class="login-options" id="employee-login">
                                 <button type="submit">Create New Product</button>
                             </div>
+                        </form><br><br><br>
                     </main>
                 </div>
             </div>

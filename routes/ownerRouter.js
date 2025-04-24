@@ -164,21 +164,30 @@ router.get('/jobs', isOwner, async (req, res) => {
         let endOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
 
         // Fetch completed orders for this month, grouped by productId with total quantity
+        // Step 1: Get all product IDs of the current owner
+        const ownerProducts = await productModel.find({ ownerid: req.owner.ownerid }, { _id: 1 });
+        const ownerProductIds = ownerProducts.map(product => product._id);
+
+        // Step 2: Use those product IDs to filter orders
         let orderStats = await orderModel.aggregate([
             {
                 $match: {
-                    orderStatus: 'completed', // Only include completed orders
-                    date: { $gte: startOfMonth, $lte: endOfMonth } // Filter by date
+                    orderStatus: 'completed',
+                    date: { $gte: startOfMonth, $lte: endOfMonth },
+                    productid: { $in: ownerProductIds }
                 }
             },
             {
                 $group: {
-                    _id: "$productid", // Group by productid directly
-                    totalQuantity: { $sum: "$quantity" } // Sum the quantity field
+                    _id: "$productid",
+                    totalQuantity: { $sum: "$quantity" }
                 }
             },
-            { $sort: { totalQuantity: -1 } } // Sort by highest quantity sold
+            {
+                $sort: { totalQuantity: -1 }
+            }
         ]);
+
         
         
 
@@ -253,7 +262,7 @@ router.get('/createproduct',isOwner ,async  (req, res)=>{
 
 router.post('/create', isOwner, upload.single('image'), async (req, res)=>{
     try{
-        let {name, price, discount,stock, bgcolor, panelcolor, textcolor, description} = req.body;
+        let {name, price, discount,stock, bgcolor, panelcolor, textcolor, description, category} = req.body;
 
         let createdProduct = await productModel.create({
             image: req.file.buffer,
@@ -265,7 +274,8 @@ router.post('/create', isOwner, upload.single('image'), async (req, res)=>{
             panelcolor,
             textcolor,
             description,
-            ownerid:req.owner._id
+            ownerid:req.owner._id,
+            category
          })
          
          let owner = await ownerModel.findOne({email:req.owner.email});
@@ -275,7 +285,7 @@ router.post('/create', isOwner, upload.single('image'), async (req, res)=>{
          res.redirect('/owners/createproduct')
     }
     catch(err){
-        req.flash('error',`${err}`);
+        req.flash('error',`Something Went Wrong`);
         res.redirect('/owners/createproduct')
     }
 })

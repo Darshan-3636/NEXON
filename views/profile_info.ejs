@@ -319,7 +319,7 @@
                             </div>
                             
                                 <form action="/updatepicture" enctype="multipart/form-data" method="post">
-                                    <input type="file" name="image" id="upload-photo">
+                                    <input type="file" name="image" id="upload--photo">
                                     <input type="submit" class="btn btn-outline-primary" value="Upload new photo">
                                 </form>
 
@@ -350,7 +350,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label">Phone</label>
-                                        <input type="text" name="phone" class="form-control mb-1" id="email" value="<%= owner.phone.trim() %>">
+                                        <input type="text" name="phone" class="form-control mb-1" id="phone" value="<%= owner.phone.trim() %>">
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label">Company</label>
@@ -393,7 +393,7 @@
             
         </div>
         <h4 class="font-weight-bold py-3 mb-4">
-            <a href="javascript:history.back()"> &lt; Go Back</a>
+            <a href="/admin_dashboard"> &lt; Go Back</a>
         </h4>
         
         

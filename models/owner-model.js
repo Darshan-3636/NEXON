@@ -29,6 +29,8 @@ const ownerSchema =  mongoose.Schema({
             backgroundColor: { type: String, default: '#007BFF' },
             borderColor: { type: String, default: '#007BFF' }
         }
-    ]
+    ],
+    merchantid:String,
+    saltkey:String
 });
 module.exports = mongoose.model('owner',ownerSchema)

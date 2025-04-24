@@ -67,7 +67,7 @@ router.get('/signup_details', (req, res)=>{
 
 router.post('/signup_details', upload.fields([{ name: 'profile' }, { name: 'companyImage' }]), isOwner, async (req, res) => {
     try {
-        const { company, phone, username } = req.body;
+        const { company, phone, username , merchantid , saltkey} = req.body;
 
         // Check if the company name, username, or phone number already exist
         if (await ownerModel.findOne({ company })) {
@@ -103,9 +103,11 @@ router.post('/signup_details', upload.fields([{ name: 'profile' }, { name: 'comp
             { 
                 company, 
                 phone, 
-                username, 
+                username,
+                merchantid,
+                saltkey,
                 picture: req.files.profile[0].buffer, 
-                companyPicture: req.files.companyImage[0].buffer
+                companyPicture: req.files.companyImage[0].buffer,
             },
             { new: true }
         );
@@ -114,8 +116,8 @@ router.post('/signup_details', upload.fields([{ name: 'profile' }, { name: 'comp
         res.redirect('/admin_dashboard');
     } catch (err) {
         console.error('Error:', err);
-        req.flash('error', 'Something went wrong');
-        res.redirect('/login');
+        req.flash('error', err.message);
+        res.redirect('/signup_details');
     }
 });
 
@@ -455,6 +457,11 @@ router.post('/updatepicture', isOwner, upload.single('image'), async (req, res)=
 
     }
     catch(err){
+        if(req.file === undefined){
+            req.flash('error', 'Select Picture First');
+            return res.redirect(req.get("Referrer") || "/");
+        }
+        
         req.flash('error', 'Something went Wrong');
         return res.redirect(req.get("Referrer") || "/");
     }
@@ -480,6 +487,11 @@ router.post('/updatecompanypicture', isOwner, upload.single('image'), async (req
 
     }
     catch(err){
+        if(req.file === undefined){
+            req.flash('error', 'Select Picture First');
+            return res.redirect(req.get("Referrer") || "/");
+        }
+        
         req.flash('error', 'Something went Wrong');
         return res.redirect(req.get("Referrer") || "/");
     }
