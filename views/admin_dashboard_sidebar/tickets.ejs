@@ -211,25 +211,9 @@
 .filter-form button:hover {
     background: #0056b3;
 }
-
-            /* Flash messages */
-            .flash-message {
-                position: absolute;
-                top: 20px;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                padding: 12px;
-                border-radius: 6px;
-                color: white;
-            }
-
-            .flash-message.error {
-                background-color: #dc3545;
-            }
-
-            .flash-message.success {
-                background-color: #28a745;
-            }
+.user{
+  text-align: center;
+}
 
     </style>
 </head>
@@ -432,7 +416,14 @@
       <% }) %>  
     </tbody>
   </table>
-</div></div>
+</div>
+<br>
+  <% if(orders.length === 0){ %>
+    <div class="user">
+        <h2>No Orders Yet</h2>
+    </div>
+    <% }%>
+  </div>
               
         </main> 
         <!-- Right Section -->

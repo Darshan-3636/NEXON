@@ -159,6 +159,9 @@
     background: #0056b3;
 }
 
+.user{
+    text-align: center;
+}
 
     </style>
 </head>
@@ -224,7 +227,7 @@
                     <span class="material-icons-sharp">
                         add
                     </span>
-                    <h3>New Login</h3>
+                    <h3>Add Employee</h3>
                 </a>
                 <a href="/owners/createProduct">
                     <span class="material-icons-sharp">
@@ -302,7 +305,12 @@
                               <td class="status-<%= order.orderStatus %>"><%= order.orderStatus %></td>
                           <% }) %>  
                         </tbody>
-                      </table>
+                      </table><br>
+                      <% if(orders.length === 0){ %>
+                        <div class="user">
+                            <h2>No Orders Yet</h2>
+                        </div>
+                        <% }%>
                 </div>
             </div>
             

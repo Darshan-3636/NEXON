@@ -202,6 +202,10 @@ main {
         cursor: pointer;
         border-radius: 5px;
     }
+    .user{
+
+        text-align: center;
+    }
 
     </style>
     <title>Responsive Dashboard Design | Users Section</title>
@@ -338,7 +342,12 @@ main {
                             </tr>
                             <% }) %>
                         </tbody>
-                    </table>
+                    </table><br>
+                    <% if(emps.length === 0){ %>
+                        <div class="user">
+                            <h2>No Employees Yet</h2>
+                        </div>
+                    <% }%>
                     
                     <!-- Task Assignment Modal -->
                     <div id="taskModal" class="modal">

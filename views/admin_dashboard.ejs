@@ -170,6 +170,12 @@
             <div class="new-users">
                 <h2>Employees</h2>
                 <div class="user-list">
+                    <% if(emps.length === 0){ %>
+                        <div class="user">
+                            <h2><a href="/owners/users">No Employees Yet</a></h2>
+                        </div>
+                    <% }%>
+                    
                     
                     <% emps.slice(0,4).forEach(function(emp){ %>
                         <div class="user">
@@ -177,10 +183,11 @@
                             <h2><%= emp.username %></h2>
                         </div>
                     <% }) %>
-                    
+                    <% if(emps.length > 0){ %>
                     <div class="user">
                         <h2><a href="/owners/users">View All</a></h2>
                     </div>
+                    <% }%>
                 </div>
             </div>
             <!-- End of New Users Section -->
@@ -211,7 +218,18 @@
                         <% }) %>
                     </tbody>
                 </table>
-                <a href="/owners/tickets">Show All</a>
+
+                <% if(latestOrders.length === 0){ %>
+                    <div class="user">
+                        <h2><a href="/owners/tickets">No Orders Yet</a></h2>
+                    </div>
+                <% }%>
+
+                <% if(latestOrders.length > 0){ %>
+                    <div class="user">
+                        <a href="/owners/tickets">Show All</a>
+                    </div>
+                <% }%>
             </div>
             <!-- End of Recent Orders -->
 

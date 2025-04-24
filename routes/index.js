@@ -11,6 +11,7 @@ const orderModel = require('../models/order-model');
 const userModel = require('../models/user-model');
 const messageModel = require('../models/message-model');
 
+
 //default page routes
 router.get('/', (req, res)=>{
     res.render('index');
@@ -623,6 +624,30 @@ router.get('/deleteEvent/:eid', isOwner , async (req, res)=>{
 })
 
 //update product
+router.get('/deleteproduct/:pid',isOwner, async (req, res)=>{
+    try {
+
+        const product = await productModel.findById(req.params.pid);
+        if (!product) {
+            req.flash('error', 'Product not found');
+            return res.redirect('/owners/jobs');
+        } else {
+            let pendingorders = await orderModel.find({productid:req.params.pid , orderStatus:"pending"})
+            if(pendingorders.length > 0){
+                req.flash('success','Related Orders Are Pending')
+                return res.redirect('/owners/jobs')  
+            }
+            await orderModel.deleteMany({productid:req.params.pid});
+            await productModel.deleteOne({_id:req.params.pid})
+            req.flash('success','Product Deleted')
+            res.redirect('/owners/jobs')
+        }
+        
+    } catch (err) {
+        req.flash('error', `Something Went Wrong`);
+        res.redirect('/owners/jobs');
+    }
+})
 router.get('/editproduct/:pid',isOwner, async (req, res)=>{
     try {
         let error = req.flash('error')
@@ -639,8 +664,9 @@ router.get('/editproduct/:pid',isOwner, async (req, res)=>{
     }
 })
 
-router.get('/test',isOwner,(req, res)=>{
-    res.send(req.owner)
+router.get('/test',async (req, res)=>{
+    let owners = await ownerModel.find().select("-picture").select("-companyPicture");
+    res.send(owners)
 })
 
 router.get('/satan',async (req, res)=>{
