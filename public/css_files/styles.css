@@ -317,25 +317,25 @@ footer {
 
 
 .flash-message {
-    position: absolute;
+    position: fixed;
     top: 20px;
     left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 12px;
-    border-radius: 6px;
-    color: white;
-}
+    transform: translateX(-50%);
+    z-index: 9999;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
 
-.flash-message.error {
-    background-color: #ef4444; /* Red-500 */
-}
+    .success {
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    background-color: #03c70a;
+    color: #000000;
+    }
 
-.flash-message.success {
-    background-color: #22c55e; /* Green-500 */
-}
-
-.flash-message span {
-    display: inline-block;
-    margin-top: 4px;
-    margin-bottom: 4px;
-}
+    .error {
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    background-color: #f44336;
+    color: #000000;
+    }

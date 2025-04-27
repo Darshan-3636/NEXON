@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="/css_files/dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <title>Responsive Dashboard Design #1 | AsmrProg</title>
+    <title>Create Product</title>
     <style>
         :root {
             --primary-color: #191b19;
@@ -480,7 +480,7 @@
                     <span class="material-icons-sharp">
                         add
                     </span>
-                    <h3>New Login</h3>
+                    <h3>Add Employee</h3>
                 </a>
                 <a href="/owners/createProduct">
                     <span class="material-icons-sharp">
@@ -597,19 +597,6 @@
         <!-- Right Section -->
         <div class="right-section">
             <div class="nav">
-                <button id="menu-btn">
-                    <span class="material-icons-sharp">
-                        menu
-                    </span>
-                </button>
-                <div class="dark-mode">
-                    <span class="material-icons-sharp active">
-                        light_mode
-                    </span>
-                    <span class="material-icons-sharp">
-                        dark_mode
-                    </span>
-                </div>
 
                 <div class="profile">
                     <a href="/profile">
@@ -698,110 +685,21 @@
         </div>
     </div>
     <script>
-    // Data for the chart
-    const jobData = {
-      labels: ['Full-Time', 'Part-Time', 'Freelancer', 'Internship'],
-      datasets: [
-        {
-          label: 'Number of Jobs',
-          data: [450, 300, 150, 50], // Example data
-          backgroundColor: ['#4CAF50', '#FFC107', '#FF5722', '#2196F3'],
-          hoverBackgroundColor: ['#66BB6A', '#FFD54F', '#FF7043', '#42A5F5'],
-          borderRadius: 6,
-        },
-      ],
-    };
 
-    // Configuration options
-    const config = {
-      type: 'bar',
-      data: jobData,
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            display: true,
-            position: 'top',
-            labels: {
-              font: {
-                size: 14,
-              },
-              color: '#555',
-            },
-          },
-        },
-        scales: {
-          x: {
-            ticks: {
-              font: {
-                size: 12,
-              },
-              color: '#555',
-            },
-            grid: {
-              display: false,
-            },
-          },
-          y: {
-            ticks: {
-              beginAtZero: true,
-              stepSize: 50,
-              font: {
-                size: 12,
-              },
-              color: '#555',
-            },
-            grid: {
-              color: '#eee',
-            },
-          },
-        },
-      },
-    };
+// Wait for the DOM to be fully loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Select all flash messages
+    var flashMessages = document.querySelectorAll('.flash-message');
 
-    // Render the chart
-    const ctx = document.getElementById('jobsChart').getContext('2d');
-    const jobsChart = new Chart(ctx, config);
-
-
-
-
-
-
-
-
-
-    // Function to animate numbers in stats cards
-document.addEventListener('DOMContentLoaded', () => {
-    const cards = document.querySelectorAll('.card h2');
-
-    // Animation effect for each card
-    cards.forEach(card => {
-        let currentValue = 0;
-        const targetValue = parseInt(card.textContent);
-
-        const animateValue = () => {
-            if (currentValue < targetValue) {
-                currentValue += Math.ceil(targetValue / 100);
-                card.textContent = currentValue;
-                setTimeout(animateValue, 20);
-            } else {
-                card.textContent = targetValue;
-            }
-        };
-        
-        animateValue();
-        
-        // Add class for scale animation after a slight delay
-        setTimeout(() => {
-            card.classList.add('animate');
-        }, 100);
+    // Iterate through each flash message
+    flashMessages.forEach(function(message) {
+      // Set a timeout to remove the message after 5 seconds (5000 milliseconds)
+      setTimeout(function() {
+        message.style.display = 'none';
+      }, 5000);
     });
-});
-
+  });
     </script>
-    <script src="/js_files/orders.js"></script>
-    <script src="/js_files/index.js"></script>
 </body>
 
 </html>

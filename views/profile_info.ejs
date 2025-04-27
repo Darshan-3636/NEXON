@@ -7,10 +7,34 @@
     <title>Profile</title>
 
     <style>
+          .flash-message {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            }
+
+            .success {
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            background-color: #03c70a;
+            color: #000000;
+            }
+
+            .error {
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            background-color: #f44336;
+            color: #000000;
+            }
+
         body {
-    background: #f8f9fa;
-    margin-top: 20px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+            margin-top: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         .container-p-y {
@@ -245,29 +269,7 @@
             object-fit: cover; /* Ensures the image fills the space without distortion */
             border-radius: 20%; /* Ensures the image remains circular */
         }
-        .flash-message {
-    position: absolute;
-    top: 20px;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 12px;
-    border-radius: 6px;
-    color: white;
-}
-
-.flash-message.error {
-    background-color: #ef4444; /* Red-500 */
-}
-
-.flash-message.success {
-    background-color: #22c55e; /* Green-500 */
-}
-
-.flash-message span {
-    display: inline-block;
-    margin-top: 4px;
-    margin-bottom: 4px;
-}
+        
 .profile img {
     width: 100px; /* Adjust width as needed */
     height: 100px; /* Adjust height to maintain aspect ratio */

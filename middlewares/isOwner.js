@@ -37,12 +37,13 @@ module.exports = async (req, res , next )=>{
                     "picture":emp.picture,
                     "phone":emp.phone,
                     "events":emp.events,
-                    "companyPicture":owner.companyPicture
+                    "companyPicture":emp.companyPicture
                 }
                 next();
             } 
         }
         catch(err){
+            req.flash('error',err.message)
             res.redirect('/login');
         }
     }

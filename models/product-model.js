@@ -26,7 +26,8 @@ const productSchema = mongoose.Schema({
     },
     stock:Number,
     description:String,
-    category:String
+    category:String,
+    rating:Number,
 })
 
 module.exports = mongoose.model("product",productSchema)

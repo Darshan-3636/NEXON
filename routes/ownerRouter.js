@@ -131,14 +131,19 @@ router.get('/tickets', isOwner, async (req, res) => {
 //accept , wait list and decline orders
 
 router.get('/completeOrder/:oid',isOwner , async (req, res)=>{
+    let order = await orderModel.findById({_id:req.params.oid})
+    if(order.refund === "required"){
+        req.flash('error','Refund required');
+        return res.redirect('/owners/tickets');
+    }
     await orderModel.updateOne({_id:req.params.oid},{orderStatus:"completed"},{new:true})
-    req.flash('success','Order Accepted');
-    res.redirect('/owners/tickets');
+    req.flash('success','Order Completed');
+    return res.redirect('/owners/tickets');
 })
 
 router.get('/declineOrder/:oid',isOwner , async (req, res)=>{
-    await orderModel.updateOne({_id:req.params.oid},{orderStatus:"cancelled"},{new:true})
-    req.flash('error','Order Cancelled');
+    await orderModel.updateOne({_id:req.params.oid},{orderStatus:"cancelled",refund:"refund-completed"},{new:true})
+    req.flash('Success','Refund Successfull & Order Declined');
     res.redirect('/owners/tickets');
 })
 
@@ -244,7 +249,7 @@ router.get('/new_emp',isOwner , async (req, res)=>{
 })
 
 router.get('/messages',isOwner , async (req, res)=>{
-    let messages = await messageModel.find({ownerid:req.owner.ownerid}).select('-_id');
+    let messages = await messageModel.find({ownerid:req.owner.ownerid}).select('-_id').sort({date:-1});
     let error = req.flash('error');
     let success = req.flash('success');
     res.render('admin_dashboard_sidebar/messages',{owner:req.owner , error, success, messages})
@@ -274,18 +279,18 @@ router.post('/create', isOwner, upload.single('image'), async (req, res)=>{
             panelcolor,
             textcolor,
             description,
-            ownerid:req.owner._id,
+            ownerid:req.owner.ownerid,
             category
-         })
-         
-         let owner = await ownerModel.findOne({email:req.owner.email});
+         });
+
+         let owner = await ownerModel.findOne({_id:req.owner.ownerid});
          owner.products.push(`${createdProduct._id}`);
          await owner.save();
          req.flash('success','product created successfully');
          res.redirect('/owners/createproduct')
     }
     catch(err){
-        req.flash('error',`Something Went Wrong`);
+        req.flash('error',err.message);
         res.redirect('/owners/createproduct')
     }
 })

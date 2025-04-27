@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
     <link rel="stylesheet" href="/css_files/dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Responsive Dashboard Design #1 | AsmrProg</title>
+    <title>Tickets</title>
     <style>
     .tickets-container {
       max-width: 1200px;
@@ -290,7 +290,7 @@
                   <span class="material-icons-sharp">
                       add
                   </span>
-                  <h3>New Login</h3>
+                  <h3>Add Employee</h3>
               </a>
               <a href="/owners/createProduct">
                 <span class="material-icons-sharp">
@@ -394,22 +394,22 @@
           <td><%= order.userid.email %></td>
           <td><%= order.productid.name %></td>
           <td><%= order.quantity %></td>
-          <td><%= new Date(order.date).toLocaleString('en-IN', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: true }) %> UTC</td>
+          <td><%= new Date(order.date).toLocaleString('en-IN', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: true }) %> </td>
           <td class="status-<%= order.orderStatus %>"><%= order.orderStatus %></td>
-          <% if(order.orderStatus === "pending"){%>
+          <% if(order.orderStatus === "pending" && order.refund !== "required"){%>
           <td>
             <button class="edit-btn"><a href="/owners/completeOrder/<%= order._id %>">Completed</a></button>
-            <button class="delete-btn"><a href="/owners/declineOrder/<%= order._id %>">Decline</a></button>
+            <button class="delete-btn"><a href="/refund/<%= order.totalAmount %>/<%= order._id %>">Decline</a></button>
           </td>
           <% } %>
-          <% if(order.orderStatus === "cancelled"){%>
+          <% if(order.orderStatus === "completed" && order.refund !== "required"){%>
           <td>
             <button class="waitlist-btn"><a href="/owners/waitlistOrder/<%= order._id %>">Wait List</a></button>
           </td>
           <% } %>
-          <% if(order.orderStatus === "completed"){%>
+          <% if(order.refund === "required"){%>
           <td>
-            <button class="waitlist-btn"><a href="/owners/waitlistOrder/<%= order._id %>">Wait List</a></button>
+            <button class="delete-btn"><a href="/refund/<%= order.totalAmount %>/<%= order._id %>">Refund Required!!</a></button>
           </td>
           <% } %>
         </tr>
@@ -429,19 +429,6 @@
         <!-- Right Section -->
         <div class="right-section">
           <div class="nav">
-              <button id="menu-btn">
-                  <span class="material-icons-sharp">
-                      menu
-                  </span>
-              </button>
-              <div class="dark-mode">
-                  <span class="material-icons-sharp active">
-                      light_mode
-                  </span>
-                  <span class="material-icons-sharp">
-                      dark_mode
-                  </span>
-              </div>
 
               <div class="profile">
                   <a href="/profile">

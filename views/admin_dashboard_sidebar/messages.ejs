@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
     <link rel="stylesheet" href="/css_files/dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Messages</title>
     <style>
 /* Main Section Styles */
 main {
@@ -188,7 +189,7 @@ main {
                     <span class="material-icons-sharp">
                         add
                     </span>
-                    <h3>New Login</h3>
+                    <h3>Add Employee</h3>
                 </a>
                 <a href="/owners/createProduct">
                     <span class="material-icons-sharp">
@@ -222,7 +223,8 @@ main {
                             <tr>
                                 <th>Name</th>
                                 <th>Email</th>
-                                <th>message</th>
+                                <th>Message</th>
+                                <th>Date & Time</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -231,11 +233,17 @@ main {
                                         <td><%= message.name %></td>
                                         <td><%= message.email %></td>
                                         <td><%= message.message %></td>
+                                        <td><%= new Date(message.date).toLocaleString('en-IN', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: true }) %> </td>
                                         
                                     </tr>
                             <% }) %>
                         </tbody>
-                    </table>
+                    </table><br>
+                    <% if(messages.length === 0){ %>
+                        <div class="user">
+                            <h2>No Messages Yet</h2>
+                        </div>
+                    <% }%>
                 </div>
             </div>
         </main>
@@ -245,19 +253,6 @@ main {
         <!-- Right Section -->
         <div class="right-section">
             <div class="nav">
-                <button id="menu-btn">
-                    <span class="material-icons-sharp">
-                        menu
-                    </span>
-                </button>
-                <div class="dark-mode">
-                    <span class="material-icons-sharp active">
-                        light_mode
-                    </span>
-                    <span class="material-icons-sharp">
-                        dark_mode
-                    </span>
-                </div>
 
                 <div class="profile">
                     <a href="/profile">

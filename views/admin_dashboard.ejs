@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
     <link rel="stylesheet" href="/css_files/dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Responsive Dashboard Design #1 | AsmrProg</title>
+    <title>Dashboard</title>
 </head>
 
 <body>
@@ -85,7 +85,7 @@
                     <span class="material-icons-sharp">
                         add
                     </span>
-                    <h3>New Login</h3>
+                    <h3>Add Employee</h3>
                 </a>
                 <a href="/owners/createProduct">
                     <span class="material-icons-sharp">
@@ -120,7 +120,7 @@
                     <div class="status">
                         <div class="info">
                             <h3>Total Revenue</h3>
-                            <h1><%= totalRevenue %></h1>
+                            <h1>₹ <%= totalRevenue %></h1>
                         </div>
                         <div class="progresss">
                             <svg>
@@ -179,8 +179,8 @@
                     
                     <% emps.slice(0,4).forEach(function(emp){ %>
                         <div class="user">
-                            <img src="data:image/jpeg;base64,<%= emp.picture.toString('base64') %>" alt="">
-                            <h2><%= emp.username %></h2>
+                            <a href="/owners/users"><img src="data:image/jpeg;base64,<%= emp.picture.toString('base64') %>" alt=""></a>
+                            <a href="/owners/users"><h2><%= emp.username %></h2></a>
                         </div>
                     <% }) %>
                     <% if(emps.length > 0){ %>
@@ -201,7 +201,7 @@
                             <th>Product</th>
                             <th>Price</th>
                             <th>Quantity</th>
-                            <th>Status</th>
+                            <th>Order Status</th>
                             <th>Date</th>
                             <th></th>
                         </tr>
@@ -239,19 +239,6 @@
         <!-- Right Section -->
         <div class="right-section">
             <div class="nav">
-                <button id="menu-btn">
-                    <span class="material-icons-sharp">
-                        menu
-                    </span>
-                </button>
-                <div class="dark-mode">
-                    <span class="material-icons-sharp active">
-                        light_mode
-                    </span>
-                    <span class="material-icons-sharp">
-                        dark_mode
-                    </span>
-                </div>
 
                 <div class="profile">
                     <a href="/profile">

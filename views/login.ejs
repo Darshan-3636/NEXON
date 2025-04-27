@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Welcome to Nexon</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="/css_files/dashboard.css">
     <!-- <script src="https://cdn.tailwindcss.com"></script> -->
     <style>
         * {
@@ -319,6 +320,17 @@
     </style>
 </head>
 <body>
+    <% if(error.length > 0) { %>
+        <div class="flash-message error">
+            <span><%= error %></span>
+        </div>
+    <% } %>
+    
+    <% if(success.length > 0) { %>
+        <div class="flash-message success">
+            <span><%= success %></span>
+        </div>
+    <% } %>
    
     <div class="split-layout">
         <div class="brand-section">
@@ -350,10 +362,9 @@
             <div class="login-container">
                 
                 <div class="login-header">
-                    <img src="/images/logo.jpg">
                     <h2>Welcome Back</h2>
                     <p>Access your project dashboard</p>
-                    <% if(error.length>0){ %>
+                    <!-- <% if(error.length>0){ %>
                         <div class="absolute top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-red-500 flash-message">
                             <span class="inline-block mt-1 mb-1 text-white">
                                 <br><%= error %>
@@ -366,7 +377,7 @@
                                 <br><%= success %>
                             </span>
                         </div>
-                        <% } %>
+                        <% } %> -->
                 </div>
                 
                 
@@ -386,7 +397,7 @@
                             <input type="checkbox" id="remember">
                             <span>Remember me</span>
                         </label>
-                        <a href="#" class="forgot-password">Forgot password?</a>
+                        <!-- <a href="#" class="forgot-password">Forgot password?</a> -->
                     </div>
 
                     <div class="login-options" id="employee-login">

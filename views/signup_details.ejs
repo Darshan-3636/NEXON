@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>Welcome to Nexon</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="/css_files/dashboard.css">
+    
     <style>
         /* General Styles */
         * {
@@ -148,33 +150,35 @@
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(14, 165, 233, 0.2);
         }
-
-        .flash-message {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            padding: 12px;
-            border-radius: 6px;
-            color: white;
-        }
-
-        .flash-message.error {
-            background-color: #ef4444; /* Red-500 */
-        }
-
-        .flash-message.success {
-            background-color: #22c55e; /* Green-500 */
-        }
-
-        .flash-message span {
-            display: inline-block;
-            margin-top: 4px;
-            margin-bottom: 4px;
-        }
+        ul {
+        list-style-type: disc; /* Default bullets */
+        padding-left: 20px;    /* Nice left spacing */
+    }
+    li {
+        margin-bottom: 8px;     /* Space between points */
+        font-size: 15px;
+        line-height: 1.6;
+    }
+    h2 {
+        margin-top: 20px;
+        font-size: 22px;
+        color: #000000; /* Soft Indigo color */
+    }
+        
     </style>
 </head>
 <body>
+    <% if(error.length > 0) { %>
+        <div class="flash-message error">
+            <span><%= error %></span>
+        </div>
+    <% } %>
+    
+    <% if(success.length > 0) { %>
+        <div class="flash-message success">
+            <span><%= success %></span>
+        </div>
+    <% } %>
     <div class="split-layout">
         <!-- Left Section -->
         <div class="brand-section">
@@ -187,20 +191,6 @@
             <div class="login-container">
                 <div class="login-header">
                     <h2>Business Details</h2>
-                    <% if(error.length>0){ %>
-                        <div class="absolute top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-red-500 flash-message">
-                            <span class="inline-block mt-1 mb-1 text-white">
-                                <br><%= error %>
-                            </span>
-                        </div>
-                    <% } %>
-                    <% if(success.length>0){ %>
-                        <div class="absolute top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-green-500 flash-message">
-                            <span class="inline-block mt-1 mb-1 text-white">
-                                <br><%= success %>
-                            </span>
-                        </div>
-                        <% } %>
                 </div>
 
                 <form action="/signup_details" method="post" enctype="multipart/form-data" id="businessForm">
@@ -241,10 +231,98 @@
                         <input type="submit" value="CONTINUE TO DASHBOARD">
                     </div>
                 </form>
+                <!-- Modal Structure -->
+                
             </div>
         </div>
     </div>
-
+    <div id="termsModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:rgba(0,0,0,0.6);z-index:1000;overflow:hidden;">
+        <div style="position:relative;top:50px;margin:auto;background:white;width:90%;max-width:700px;height:80%;border-radius:12px;padding:20px;overflow:hidden;">
+        <span id="closeModalBtn" style="position:absolute;top:10px;right:20px;font-size:24px;cursor:pointer;">&times;</span>
+        <h2 style="margin-top:0;">Terms of Use & Privacy Policy</h2>
+        <div style="font-size:14px;line-height:1.6;height:calc(100% - 100px);overflow-y:auto;padding-right:10px;">
+    
+            <!-- Your Terms Content -->
+            <br>
+            <h2>To Know :</h2>
+            <ul>
+                <li><strong>Nexon</strong> will not maintain any record and will not be responsible for any payments Received.</li>
+                <li><strong>Nexon</strong> will not be responsible for and won't be able to help if any damage is done to your business by leaked credentials.</li>
+                <li>Orders can only be declined before 7 days of receiving the order.</li>
+                <li>Employees created under your account will have full access to your business dashboard and functionalities.</li>
+                <li>Platform payments should be made at the end of each month (fees are based on the products sold i.e 2% of every order).</li>
+                <li>No Refund Policy-All payments made to us are non-refundable.</li>
+                <li>Platform usage signifies acceptance of the Terms of Use and Privacy Policy.</li>
+            </ul>
+            <br>
+            <h2>Terms of Use :</h2>
+            <ul>
+                <li>This document complies with the Information Technology Act, 2000.</li>
+                <li>Published under IT (Intermediaries Guidelines) Rules, 2011.</li>
+                <li>Platform owned by Darshan Raj S, Karnataka, India.</li>
+                <li>Use of the platform signifies agreement to the terms.</li>
+                <li>Information provided must be accurate; usage is at own risk.</li>
+                <li>All content is proprietary; intellectual property protected.</li>
+                <li>Unauthorized use may lead to legal actions.</li>
+                <li>Payments required for services; no unlawful activities allowed.</li>
+                <li>External links governed by their own policies.</li>
+                <li>All transactions form legally binding contracts.</li>
+                <li>Users must indemnify the platform for breaches or violations.</li>
+                <li>Force Majeure events exempt liabilities.</li>
+                <li>Disputes under Bangalore jurisdiction.</li>
+                <li>Using the platform means you agree to the Terms.</li>
+                <li>All data must be accurate.</li>
+                <li>Intellectual property is protected.</li>
+            </ul>
+            <br>
+            <h2>Privacy Policy :</h2>
+            <ul>
+                <li>Personal data collected includes name, contact info etc.</li>
+                <li>Used for service delivery, fraud prevention, marketing, and analysis.</li>
+                <li>Data may be shared internally, with partners, or law enforcement if needed.</li>
+                <li>Security measures in place but internet transmission risks exist.</li>
+                <li>Users can request account deletion; some data may be retained.</li>
+                <li>Users have rights to access, rectify, and delete personal information.</li>
+                <li>Consent required for data processing and communications.</li>
+                <li>Privacy Policy may be updated; users should review periodically.</li>
+            </ul>
+      
+            <!-- Agree Button -->
+            
+      
+          </div>
+          <button id="agreeBtn" style="margin-top:20px;padding:10px 20px;background-color:#4F46E5;color:white;border:none;border-radius:8px;cursor:pointer;">
+            Agree and Continue
+          </button>
+        </div>
+        
+    </div>
+    <script>
+        const form = document.getElementById('businessForm');
+        const modal = document.getElementById('termsModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const agreeBtn = document.getElementById('agreeBtn');
+      
+        form.addEventListener('submit', function(event) {
+          event.preventDefault(); // Stop form from submitting immediately
+          modal.style.display = 'block'; // Show Modal
+        });
+      
+        closeModalBtn.onclick = () => {
+          modal.style.display = 'none';
+        };
+      
+        agreeBtn.onclick = () => {
+          modal.style.display = 'none';
+          form.submit(); // Now really submit the form
+        };
+      
+        window.onclick = (event) => {
+          if (event.target == modal) {
+            modal.style.display = 'none';
+          }
+        };
+      </script>
     <script>
         // Wait for the DOM to be fully loaded
         document.addEventListener('DOMContentLoaded', function() {

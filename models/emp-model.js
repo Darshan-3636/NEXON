@@ -9,7 +9,8 @@ const empSchema =  mongoose.Schema({
         type:String,
         default:"emp"
     },
-    company:String, 
+    company:String,
+    companyPicture:Buffer,
     picture:Buffer,  
     phone:String, 
     ownerid:{

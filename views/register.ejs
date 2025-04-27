@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Welcome to Nexon</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="/css_files/dashboard.css">
     <style>
         * {
             margin: 0;
@@ -292,12 +293,23 @@
     </style>
 </head>
 <body>
+    <% if(error.length > 0) { %>
+        <div class="flash-message error">
+            <span><%= error %></span>
+        </div>
+    <% } %>
+    
+    <% if(success.length > 0) { %>
+        <div class="flash-message success">
+            <span><%= success %></span>
+        </div>
+    <% } %>
     <div class="split-layout">
         <div class="brand-section">
             <div class="brand-content">
                 <h1>Nexon</h1>
                 <p>Transform your Business management with our intelligent enterprise solution</p>
-                <% if(error.length>0){ %>
+                <!-- <% if(error.length>0){ %>
                     <div class="absolute top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-red-500 flash-message">
                         <span class="inline-block mt-1 mb-1 text-white">
                             <br><%= error %>
@@ -310,7 +322,7 @@
                             <br><%= success %>
                         </span>
                     </div>
-                    <% } %>
+                    <% } %> -->
                 <div class="features-list">
                     <div>
                         <span class="feature-icon">🏗</span>
@@ -335,7 +347,6 @@
         <div class="login-section">
             <div class="login-container">
                 <div class="login-header">
-                    <img src="/images/logo.jpg">
                     <h2>Sign-Up with us</h2>
                     <p>Create your project dashboard</p>
                 </div>

@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/css_files/dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Analytics</title>
     <style>
         main {
     margin-left: 0px;
@@ -143,7 +144,7 @@
                     <span class="material-icons-sharp">
                         add
                     </span>
-                    <h3>New Login</h3>
+                    <h3>Add Employee</h3>
                 </a>
                 <a href="/owners/createProduct">
                     <span class="material-icons-sharp">
@@ -169,10 +170,16 @@
 
         <% 
         let totalRevenue = 0;
+        let LifetimeRevenue = 0;
         let totalOrders = 0;
         let currentMonth = new Date().getMonth(); // Get current month (0-11)
 
 
+        orders.forEach(order => {
+            if (order.orderStatus === "Completed") { 
+                LifetimeRevenue += order.totalAmount; // Sum revenue for accepted orders
+            }
+        });
         orders.forEach(order => {
             let orderMonth = new Date(order.date).getMonth(); // Extract month from order date
 
@@ -191,6 +198,10 @@
 
                 <div class="overview">
                     <div class="card">
+                        <h3>Lifetime Revenue</h3>
+                        <p class="amount">₹ <%= LifetimeRevenue.toFixed(2) %></p>
+                    </div>
+                    <div class="card">
                         <h3>Total Revenue</h3>
                         <p class="amount">₹ <%= totalRevenue.toFixed(2) %></p>
                     </div>
@@ -201,6 +212,10 @@
                     <div class="card">
                         <h3>Total Customers</h3>
                         <p class="amount"><%= totalCustomers %></p>
+                    </div>
+                    <div class="card">
+                        <h3>Platform Fee</h3>
+                        <p class="amount">₹ <%= (totalRevenue.toFixed(2)/100)*2 %></p>
                     </div>
                 </div>
 
@@ -221,19 +236,6 @@
 <!-- Right Section -->
 <div class="right-section">
     <div class="nav">
-        <button id="menu-btn">
-            <span class="material-icons-sharp">
-                menu
-            </span>
-        </button>
-        <div class="dark-mode">
-            <span class="material-icons-sharp active">
-                light_mode
-            </span>
-            <span class="material-icons-sharp">
-                dark_mode
-            </span>
-        </div>
 
         <div class="profile">
             <a href="/profile">
