@@ -260,7 +260,7 @@ router.get('/admin_dashboard', isOwner, async (req, res) => {
     // Get latest 3 orders
     const latestOrders = processedOrders
         .sort((a, b) => new Date(b.date) - new Date(a.date))
-        .slice(0, 3);
+        .slice(0, 7);
 
     // Find new customers (who didn't order last month)
     let newCustomers = [...currentMonthCustomers].filter(customer => !lastMonthCustomers.has(customer)).length;
@@ -799,7 +799,8 @@ const MERCHANT_ID = 'PGTESTPAYUAT86';
 const PHONE_PE_HOST_URL = "https://api-preprod.phonepe.com/apis/pg-sandbox";
 const SALT_INDEX = 1;
 const SALT_KEY = '96434309-7796-489d-8924-ab56988a6076';
-const APP_BE_URL = "https://nexon-dashboard.onrender.com"; // our application
+// const APP_BE_URL = "https://nexon-dashboard.onrender.com"; // our application
+const APP_BE_URL = "http://localhost:3000"; // our application
 
 
 // endpoint to initiate a payment

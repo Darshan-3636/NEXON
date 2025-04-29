@@ -28,6 +28,10 @@ const productSchema = mongoose.Schema({
     description:String,
     category:String,
     rating:Number,
+    rating:{
+        type:Number,
+        default:0
+    }
 })
 
 module.exports = mongoose.model("product",productSchema)
